@@ -1,0 +1,67 @@
+<form class="setup_frm">
+    <fieldset class="item">
+      <table class="repair_detail">
+        <tr>
+          <td scope="rowgroups" colspan="2">
+            <h2> <b>{LNG_Details of} {LNG_Informer} %JOB%</b> </h2>
+          </td>
+        </tr>
+        <tr>
+          <td class="icon-customer" >{LNG_Name}</td>
+          <td>%NAME%</td>
+        </tr>
+        
+      <!--  <tr>
+          <td class="icon-phone">{LNG_Phone}</td>
+          <td><a href="tel:%PHONE%">%PHONE%</a></td>
+        </tr> -->
+  
+        <tr>
+          <td class="icon-users">{LNG_Member status}</td>
+          <td>%GROUP%</td>
+        </tr>
+        <tr>
+          <td scope="rowgroups" colspan="2">
+            <h2><b>{LNG_Repair job description}</b></h2>
+          </td>
+        </tr>
+        <tr>
+          <td class="icon-modules" >{LNG_Equipment}</td>
+          <td>%TOPIC%</td>
+        </tr>
+        <tr>
+          <td class="icon-number">{LNG_Serial/Registration No.}</td>
+          <td>%PRODUCT_NO%</td>
+        </tr>
+        <tr>
+          <td class="icon-calendar">{LNG_Received date}</td>
+          <td>%CREATE_DATE%</td>
+        </tr>
+        <tr>
+          <td class="icon-tools">{LNG_Problems and repairs details}</td>
+          <td>%JOB_DESCRIPTION%</td>
+        </tr>
+        <tr>
+          <td class="icon-number">{LNG_Approve}</td>
+          <td>%NAMEAPPROVE%</td>
+        </tr>
+        
+        <tr>
+          <td class="icon-calendar">{LNG_Approve_date}</td>
+          <td>%DATE_APPROVE%</td>
+        </tr> 
+        <tr>
+            <td class="icon-file">{LNG_signature approve}{LNG_Approve}</td>
+            <td><img src="%ESIG%" width="100" height="110"> </td>
+          </tr>
+        
+        
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend>
+        <span><b>{LNG_Transaction history}</b></span>
+      </legend>
+      %DETAILS%
+    </fieldset>
+  </form>
