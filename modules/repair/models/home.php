@@ -110,11 +110,8 @@ class Model extends \Kotchasan\Model
         return 0;
     }
 
-    
-    //Test commit
     public static function getAlltoday($login)
     {
-
         $q3 =  date('Y-m' . '-01 00:00:00');
         $q2 = SQL::LAST_DAY(date('Y-m-d 23:59:59'));
 
