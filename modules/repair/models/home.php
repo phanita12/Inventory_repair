@@ -99,8 +99,6 @@ class Model extends \Kotchasan\Model
             $q2 = SQL::LAST_DAY(date('Y-m-d 23:59:59'));
             $query->andwhere(SQL::BETWEEN('R.create_date', $q3, $q2));
         }
-
-
         $search = $query->toArray()
             ->execute();
 
