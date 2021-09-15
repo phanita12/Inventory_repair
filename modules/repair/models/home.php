@@ -109,6 +109,7 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
+    
     //Test commit
     public static function getAlltoday($login)
     {
