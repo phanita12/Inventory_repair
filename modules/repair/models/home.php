@@ -101,7 +101,6 @@ class Model extends \Kotchasan\Model
         }
         $search = $query->toArray()
             ->execute();
-
         if (!empty($search)) {
             return (object) array(
                 'isStaff' => $isStaff,
