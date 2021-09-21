@@ -123,6 +123,307 @@ class Date
             );
         }
     }
+    /**
+     * คืนค่าวันเวลาที่แตกต่าง โดยตัดช่วงเวลาทำงาน ตัดเริ่ม 08:00 ถึง 17:00 และตัดเวลาพัก 12:00-13:00  format "yyyy-mm-dd hh:ii:ss"
+     *
+     * @assert ("2021-08-16 17:36:36", "2021-08-16 12:30:00") [==] "2021-08-16 17:00:00","2021-08-16 13:00:00"
+     *
+     * @param  $firstTime
+     * @param  $lastTime
+     *
+     * @return int
+     */
+    public static function DATEDiff($first, $last)
+    {
+       //var_dump($first, $last); //
+       
+        $firstdate = date("Y-m-d",strtotime($first));
+        $lastdate = date("Y-m-d",strtotime($last));
+
+        $starttime = intval(str_replace(array(':'),'',date("H:i:s",strtotime($first)))) ;
+        $endtime =intval(str_replace(array(':'),'',date("H:i:s",strtotime($last)))) ;
+
+        $a = intval(str_replace(array('-',' ',':'),'', $first));
+        $b = intval(str_replace(array('-',' ',':'),'',$last));
+
+        $a_datetime = intval(str_replace(array('-',' ',':'),'', $firstdate));
+        $b_endtime = intval(str_replace(array('-',' ',':'),'',  $lastdate));
+
+        //เทียบค่าวันเวลาเป็น int
+        if( $a < $b ){
+            //เช็ควันเริ่มและวันจบเป็น int และ เวลาเริ่มและเวลาจบเป็น int ต้องเท่ากัน
+            if( $a_datetime ==  $b_endtime && $starttime == $endtime){
+                $result = DATE::_date_diff_same($first,$last); ("1");
+            }else if( $a_datetime ==  $b_endtime){
+               
+                    $S_date = DATE::_timedate($first);
+                    $E_date = DATE::_timedate($last);
+
+                    if($starttime  > intval('170000') && $endtime  > intval('170000')){
+                      $result = DATE::_date_diff_same($S_date, $E_date); //var_dump("1.1");
+                    }else{
+                        $result = DATE::_date_diff_same( $first,$last); //var_dump("1.2");      
+                    }
+            }else if($starttime == $endtime){
+                $result = DATE::_date_diff_same($first,$last); //var_dump("2.0");
+                
+            }else{
+                $S_date = DATE::_timedate($first);
+                $E_date = DATE::_timedate($last);
+               // var_dump(intval(str_replace(array('-',' ',':'),'', $S_date))  , intval(str_replace(array('-',' ',':'),'', $E_date)));
+               if(intval(str_replace(array('-',' ',':'),'', $S_date)) == intval(str_replace(array('-',' ',':'),'', $E_date))){
+                    $result = DATE::_date_diff_same($S_date,$E_date); //var_dump("3.1");
+                }else{
+                    $result = DATE::_date_diff_time($first,$last,$S_date,$E_date); //var_dump("3.2");
+                }   
+            }
+
+        }else{
+            $result = DATE::_date_diff_same($first,$last); //var_dump("B");
+        }
+           $s = DATE::_date_diff($first,$last); 
+           return DATE::_date_normalize($s,$result);  
+    }
+    //หาเวลา
+    public static function _timedate($date){
+
+        $firstdate = date("Y-m-d",strtotime($date));
+        $starttime = intval(str_replace(array(':'),'',date("H:i:s",strtotime($date)))) ;
+        $S_date = '';
+        if( $starttime < intval('080000') ){$S_date = $firstdate.' 08:00:00'; 
+        }else if(  $starttime < intval('120000') || $starttime  < intval('130000')){$S_date = $firstdate.' 12:00:00'; 
+        }else if($starttime  > intval('130000') && $starttime < intval('170000')){$S_date = $firstdate.' 13:00:00';
+        }else if($starttime  > intval('170000') ){$S_date = $firstdate.' 17:00:00';  } 
+       
+        return $S_date;
+    }
+
+   // วันและเวลาแปลงเป็น int แล้วเท่ากัน
+    public static function _date_diff_same($one, $two)
+    {
+        
+        $s = DATE::_date_diff($one,$two);
+        $result = array();
+
+        IF(DATE::getWorkdays($one,$two) >= 1 )$result["d"] = $s["d"];
+        else{$result["d"] = DATE::getWorkdays($one,$two);}
+
+        $result["y"] = $s["y"];
+        $result["m"] = $s["m"];
+        
+        $result["h"] = $s["h"];
+        $result["i"] = $s["i"];
+        $result["s"] = $s["s"];
+
+        //var_dump(DATE::getWorkdays($one,$two));
+       // var_dump($result);
+        return  $result;
+    }
+    // วันและเวลาแปลงเป็น int แล้วเท่ากัน
+    public static function _date_diff_time($one, $two,$tree,$four)
+    {
+        $stime = DATE::_date_diff($one,$tree);
+        $etime = DATE::_date_diff($two,$four);
+        $s = DATE::_date_diff($one,$two);
+
+        $result = array();
+
+        IF(DATE::getWorkdays($one,$two) == 1 )$result["d"] = $s["d"];
+        else{$result["d"] = DATE::getWorkdays($one,$two);}
+
+        $result["y"] = $s["y"];
+        $result["m"] = $s["m"];
+       // $result["d"] = $s["d"];
+        $result["h"] = $etime["h"] - $stime["h"];
+        $result["i"] = $etime["i"] - $stime["i"];
+        $result["s"] = $etime["s"] - $stime["s"];
+
+       /* var_dump(DATE::getWorkdays($one,$two));
+       var_dump($stime);
+        var_dump($etime);
+        var_dump($result);*/
+        return  $result;
+    }
+    // เวลาแปลงเป็น int แล้วเท่ากัน
+    public static function _date_diff_datetime($one, $two,$tree,$four)
+    {
+        
+        $stime = DATE::_date_diff($one,$tree);
+        $etime = DATE::_date_diff($two,$four);
+        $s = DATE::_date_diff($one,$two);
+
+        $result = array();
+
+        IF(DATE::getWorkdays($one,$two) == 1 )$result["d"] = $s["d"];
+        else{$result["d"] = DATE::getWorkdays($one,$two);}
+
+        $result["y"] = $s["y"];
+        $result["m"] = $s["m"];
+       // $result["d"] = $s["d"];
+        $result["h"] = $etime["h"] - $stime["h"];
+        $result["i"] = $etime["i"] - $stime["i"];
+        $result["s"] = $etime["s"] - $stime["s"];
+
+        //var_dump(DATE::getWorkdays($one,$two));
+        //var_dump($result);
+        return  $result;
+    }
+    /**
+     * Accepts two unix timestamps.
+     */
+    public static function _date_diff($one, $two)
+    {
+    
+        $invert = false;
+        if ($one > $two) {
+            list($one, $two) = array($two, $one);
+            $invert = true;
+        }
+
+        $a = DATE::parse($one);
+        $b = DATE::parse($two);
+
+        $result = array();
+        $result["y"] = $b["y"] - $a["y"];
+        $result["m"] = $b["m"] - $a["m"];
+        $result["d"] = $b["d"] - $a["d"];
+        $result["h"] = $b["h"] - $a["h"];
+        $result["i"] = $b["i"] - $a["i"];
+        $result["s"] = $b["s"] - $a["s"];
+    
+        if ($invert) {
+            DATE::_date_normalize($a, $result);
+        } else {
+            DATE::_date_normalize($b, $result);
+        }
+
+        return $result;
+    }
+    public static function _date_normalize($base, $result)
+    {
+        $result = DATE::_date_range_limit(0, 60, 60, "s", "i", $result);
+        $result = DATE::_date_range_limit(0, 60, 60, "i", "h", $result);
+        $result = DATE::_date_range_limit(0, 24, 24, "h", "d", $result);
+        $result = DATE::_date_range_limit(0, 12, 12, "m", "y", $result);
+
+        $result = DATE::_date_range_limit_days($base, $result);
+
+        $result = DATE::_date_range_limit(0, 12, 12, "m", "y", $result);
+        
+        return $result;
+    }
+    public static function _date_range_limit($start, $end, $adj, $a, $b, $result)
+    {
+        if ($result[$a] < $start) {
+            $result[$b] -= intval(($start - $result[$a] - 1) / $adj) + 1;
+            $result[$a] += $adj * intval(($start - $result[$a] - 1) / $adj + 1);
+        }
+
+        if ($result[$a] >= $end) {
+            $result[$b] += intval($result[$a] / $adj);
+            $result[$a] -= $adj * intval($result[$a] / $adj);
+        }
+
+        return $result;
+    }
+
+    public static function _date_range_limit_days($base, $result)
+    {
+        $days_in_month_leap = array(31, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+        $days_in_month = array(31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+
+        DATE::_date_range_limit(1, 13, 12, "m", "y", $base);
+
+        $year = $base["y"];
+        $month = $base["m"];
+
+        if (!$result["invert"]) {
+            while ($result["d"] < 0) {
+                $month--;
+                if ($month < 1) {
+                    $month += 12;
+                    $year--;
+                }
+
+                $leapyear = $year % 400 == 0 || ($year % 100 != 0 && $year % 4 == 0);
+                $days = $leapyear ? $days_in_month_leap[$month] : $days_in_month[$month];
+
+                $result["d"] += $days;
+                $result["m"]--;
+            }
+        } else {
+            while ($result["d"] < 0) {
+                $leapyear = $year % 400 == 0 || ($year % 100 != 0 && $year % 4 == 0);
+                $days = $leapyear ? $days_in_month_leap[$month] : $days_in_month[$month];
+
+                $result["d"] += $days;
+                $result["m"]--;
+
+                $month++;
+                if ($month > 12) {
+                    $month -= 12;
+                    $year++;
+                }
+            }
+        }
+
+        return $result;
+    }
+    /**
+     * Count the number of working days between two dates.
+     *
+     * This function calculate the number of working days between two given dates,
+     * taking account of the Public festivities, Easter and Easter Morning days,
+     * the day of the Patron Saint (if any) and the working Saturday.
+     *
+     * @param   string  $date1    Start date ('YYYY-MM-DD' format)
+     * @param   string  $date2    Ending date ('YYYY-MM-DD' format)
+     * @param   boolean $workSat  TRUE if Saturday is a working day
+     * @param   string  $patron   Day of the Patron Saint ('MM-DD' format)
+     * @return  integer           Number of working days ('zero' on error)
+     *
+     * @author Massimo Simonini <massiws@gmail.com>
+     */
+    public static function getWorkdays($date1, $date2, $workSat = FALSE, $patron = NULL) {
+        if (!defined('SATURDAY')) define('SATURDAY', 6);
+        if (!defined('SUNDAY')) define('SUNDAY', 0);
+    
+        // Array of all public festivities
+        $publicHolidays = array('01-01', '01-06', '04-25', '05-01', '06-02', '08-15', '11-01', '12-08', '12-25', '12-26');
+        // The Patron day (if any) is added to public festivities
+        if ($patron) {
+        $publicHolidays[] = $patron;
+        }
+    
+        /*
+        * Array of all Easter Mondays in the given interval
+        */
+        $yearStart = date('Y', strtotime($date1));
+        $yearEnd   = date('Y', strtotime($date2));
+    
+        for ($i = $yearStart; $i <= $yearEnd; $i++) {
+        $easter = date('Y-m-d', easter_date($i));
+        list($y, $m, $g) = explode("-", $easter);
+        $monday = mktime(0,0,0, date($m), date($g)+1, date($y));
+        $easterMondays[] = $monday;
+        }
+    
+        $start = strtotime($date1);
+        $end   = strtotime($date2);
+        $workdays = 0;
+        for ($i = $start; $i <= $end; $i = strtotime("+1 day", $i)) {
+        $day = date("w", $i);  // 0=sun, 1=mon, ..., 6=sat
+        $mmgg = date('m-d', $i);
+        if ($day != SUNDAY &&
+            !in_array($mmgg, $publicHolidays) &&
+            !in_array($i, $easterMondays) &&
+            !($day == SATURDAY && $workSat == FALSE)) {
+            $workdays++;
+        }
+        }
+    
+        return intval($workdays); //intval($workdays)
+    }
 
     /**
      * คืนค่าเวลาที่แตกต่าง หน่วย msec

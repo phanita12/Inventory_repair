@@ -161,6 +161,24 @@ class Sql
         return self::create('DATEDIFF('.self::fieldName($column_name1).', '.self::fieldName($column_name2).')'.($alias ? " AS `$alias`" : ''));
     }
 
+       /**
+     * ตัดเอาเฉพาะเวลา
+     *
+     * @assert ('create_date', Sql::NOW())->text() [==] "TIME(`create_date`, NOW())"
+     * @assert ('2017-04-04', 'create_date')->text() [==] "TIME('2017-04-04', `create_date`)"
+     *
+     * @param string $column_name1
+     * @param string $column_name2
+     * @param string $alias
+     *
+     * @return \static
+     */
+    public static function TIME($column_name1, $alias = null)
+    {
+        return self::create('TIME('.self::fieldName($column_name1).')'.($alias ? " AS `$alias`" : ''));
+    }
+
+
     /**
      * จัดรูปแบบของวันที่ตอนแสดงผล
      *

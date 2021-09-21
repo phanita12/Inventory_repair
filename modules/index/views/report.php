@@ -159,13 +159,41 @@ class View extends \Gcms\View
        
         // URL สำหรับส่งให้ตาราง
         $uri = self::$request->createUriWithGlobals(WEB_URL.'index.php');
+        
+            /*   1 วัน=24 ชั่วโมง / 24 ชั่วโมง=3,600 นาที / 3,600 นาที=86,400 วินาที */$i=0;
+            foreach(\index\Report\Model::toDataTable2($params) as $value){
+                
+                $time = DATE::DATEDiff($value->create_date,$value->end_date);
+                $Alltime = $time['d'].':'.$time['h'].':'.$time['i'];//.':'.$time['s']; $time['m'].':'.
+                
+                if( $Alltime <> ''){
+                        $in[$i]["id"]       = $value->id;
+                        $in[$i]["job_id"]   = $value->job_id;
+                        $in[$i]["status"]   = $value->status;
+                        $in[$i]["create_date"]  = $value->create_date;
+                      //  $in[$i]["end_date"]     = $value->end_date;
+                        $in[$i]["product_no"]   = $value->product_no;
+                        $in[$i]["topic"]        = $value->topic;
+                        $in[$i]["cost"]         = $value->cost ;
+                        //$in[$i]["Alltime2"]      = $value->Alltime2;
+                        $in[$i]["Alltime"]      = $Alltime;
+
+                    $i+=1;
+                }
+               // var_dump($time['m'].':'.$time['d'].':'.$time['h'].':'.$time['i'].':'.$time['s']);
+               // var_dump( $value->create_date,$value->end_date ,$Alltime.'/'.$value->id);
+               // $index = (\index\Report\Model::toDataTable2($params,$Alltime,$value->id));
+               
+                
+                } 
 
         // ตาราง
         $table = new DataTable(array(
             /* Uri */
             'uri' => $uri,
             /* Model */
-            'model' => \index\Report\Model::toDataTable($params),
+           // 'model' => //\index\Report\Model::toDataTable($params),
+            'datas' => $in,
             'perPage' => $request->cookie('report_perPage', 30)->toInt(),
             /* เรียงลำดับ */
             'sort' => $request->cookie('report_sort', 'create_date desc')->toString(),
@@ -290,8 +318,8 @@ class View extends \Gcms\View
                     'class' => 'left',
                 ),
                 'Alltime' => array(
-                    'text' => '{LNG_working_hours}',
-                    'class' => 'center',
+                    'text' => '{LNG_working_hours} (d:h:i)',
+                    'class' => 'right',
                 ),
                 'name' => array(
                     'text' => '{LNG_Informer}',
@@ -330,6 +358,7 @@ class View extends \Gcms\View
                 ),
                 'Alltime' => array(
                     'class' => 'right',
+                   
                 ),
             ),
             /* ปุ่มแสดงในแต่ละแถว */

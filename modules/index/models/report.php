@@ -237,14 +237,38 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-        return static::createQuery() //return  $a =
-            ->select('R.id', 'R.job_id','S.status', 'R.create_date'  //,'S.create_date as enddate'
+            return  static::createQuery() //return  $a =
+            ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as enddate'
             , 'R.product_no'
             , 'V.topic'
            // , 'U.name'
-            ,'S.cost'//,array( $endtime,'endtime') //'S.operator_id',
-            ,SQL::CONCAT(array(SQL::IFOVER(SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),SQL::IFHOUR(SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),'')),'Alltime', ':') 
-            //,SQL::CONCAT(array(SQL::IFOVER(SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),SQL::IFHOUR(SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),(SQL::IFMINUTES(SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('HOUR','R.create_date',$endtime),0)),(SQL::IFSECOND(SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('MINUTE','R.create_date',$endtime)))),'Alltime', ':') 
+           ,'S.cost'//,array( $endtime,'endtime') //'S.operator_id',
+           // ,SQL::CONCAT(array(SQL::IFOVER(SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),SQL::IFHOUR(SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),'')),'Alltime', ':') 
+            ,SQL::CONCAT(
+                array(
+                    SQL::IFOVER(
+                        SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,
+                        SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
+
+                        SQL::IFHOUR(
+                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                            SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
+                            
+                            (SQL::IFMINUTES(
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('HOUR','R.create_date',$endtime),0)
+                            ),
+                            
+                            (SQL::IFSECOND(
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('MINUTE','R.create_date',$endtime)
+                            )
+                        )
+                    ),'Alltime', ':'
+                    )
+            
             )
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
@@ -252,7 +276,102 @@ class Model extends \Kotchasan\Model
             ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
-            ->where($where);
+            ->where($where)
+            
+            ;
+
+            //print_r($a->text());
+
+    }
+   
+    public static function toDataTable2($params)
+    {
+
+        $where = array();
+        if (!empty($params['product_no'])) {
+           // $where[] = array('R.product_no', $params['product_no']); 
+            $where[] =array('R.product_no', 'LIKE', '%'.$params['product_no'].'%');
+        }
+        if (!empty($params['operator_id'])) {
+            $where[] = array('S.operator_id', $params['operator_id']);
+        }
+        if ($params['status'] > -1) {
+            $where[] = array('S.status', $params['status']);
+        }
+        if (!empty($params['user_id'])) {
+            $where[] = array('R.customer_id', $params['user_id']);
+        }
+        if ($params['memberstatus'] > -1) {
+            $where[] = array('U.status', $params['memberstatus']); 
+        }
+        if ($params['begindate'] != '' || $params['enddate'] != '') {
+                $where[] = Sql::BETWEEN('R.create_date', $params['begindate']." 00:00:00", $params['enddate']." 23:59:59");
+        }
+       if (!empty($params['category_id'])) {
+            $where[] = array('V.category_id', $params['category_id']); 
+        }
+        if (!empty($params['model_id'])) {
+            $where[] = array('V.model_id', $params['model_id']);   
+        }
+        if (!empty($params['type_id'])) {
+            $where[] = array('V.type_id', $params['type_id']); 
+        }
+        if (!empty($params['topic_id'])) {
+            $where[] = array('V.id', $params['topic_id']); 
+        }
+        
+
+        $endtime = static::createQuery()
+            ->select('create_date')
+            ->from('repair_status')
+            ->where(array('id','T.max_id'));
+        $q1 = static::createQuery()
+            ->select('repair_id', Sql::MAX('id', 'max_id'))
+            ->from('repair_status')
+            ->groupBy('repair_id');
+
+        return static::createQuery() //return  $a =
+            ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
+            , 'R.product_no'
+            , 'V.topic'
+   
+           ,'S.cost' //'S.operator_id',
+           ,SQL::CONCAT(
+            array(
+                SQL::IFOVER(
+                    SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,
+                    SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
+
+                    SQL::IFHOUR(
+                        SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                        SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                        SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
+                        
+                        (SQL::IFMINUTES(
+                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                            SQL::TIMESTAMPDIFF('HOUR','R.create_date',$endtime),0)
+                        ),
+                        
+                        (SQL::IFSECOND(
+                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                            SQL::TIMESTAMPDIFF('MINUTE','R.create_date',$endtime)
+                        )
+                    )
+                ),'Alltime2', ':'
+                )
+            
+            )
+            ->from('repair R')
+            ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
+            ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
+            ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
+            ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
+            ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+            ->where($where)
+           // ->andWhere(array('R.id',132))
+            ->execute()  
+            ;
 
 
     }
