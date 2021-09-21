@@ -179,12 +179,7 @@ class View extends \Gcms\View
                         $in[$i]["Alltime"]      = $Alltime;
 
                     $i+=1;
-                }
-               // var_dump($time['m'].':'.$time['d'].':'.$time['h'].':'.$time['i'].':'.$time['s']);
-               // var_dump( $value->create_date,$value->end_date ,$Alltime.'/'.$value->id);
-               // $index = (\index\Report\Model::toDataTable2($params,$Alltime,$value->id));
-               
-                
+                } 
                 } 
 
         // ตาราง
