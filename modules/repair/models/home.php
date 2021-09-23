@@ -18,6 +18,8 @@ use Gcms\Config;
 use Kotchasan\Http\Request;
 
 /** 
+ * module=repair-home
+ * 
  * โมเดลสำหรับอ่านข้อมูลแสดงในหน้า  Home
  *
  * @author Goragod Wiriya <admin@goragod.com>
@@ -411,22 +413,15 @@ class Model extends \Kotchasan\Model
     }
     public static function get_type()
     {
-        /*  $where = array();
-            if (!empty($params['operator_id'])) {
-                $where[] = array('S.operator_id', $params['operator_id']);
-            }
-            if ($params['status'] > -1) {
-                $where[] = array('S.status', $params['status']);
-            }*/
 
         $q1 = static::createQuery()
             ->select('repair_id', Sql::MAX('id', 'max_id'))
             ->from('repair_status')
             ->groupBy('repair_id');
 
-             return static::createQuery() //return
-            ->select(
-                (array(
+        return static::createQuery() //return
+            ->select(SQL::COUNT('R.id','count')
+               /* (array(
                     Sql::SUM(Sql::IF('V.type_id', 1, 1, 0), '1'),
                     Sql::SUM(Sql::IF('V.type_id', 2, 1, 0), '2'),
                     Sql::SUM(Sql::IF('V.type_id', 3, 1, 0), '3'),
@@ -457,19 +452,20 @@ class Model extends \Kotchasan\Model
                     Sql::SUM(Sql::IF('V.type_id', 28, 1, 0), '28'),
                     Sql::SUM(Sql::IF('V.type_id', 29, 1, 0), '29'),
                     Sql::SUM(Sql::IF('V.type_id', 30, 1, 0), '30'),
-                ))
+                ))*/
             )
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
             ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
             ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
-            ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
-            // ->where($where)
-            ->where(array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))))
+           // ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+            ->where(SQL::BETWEEN(SQL::MONTH('R.create_date'),SQL::MONTH(date('Y-m-d H:i:s')),SQL::MONTH(date('Y-m-d H:i:s'))))
+            //->andWhere(array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))))
+            ->groupby('V.type_id')
             ->toArray()
             ->execute();
-        // print_r( $a->text());
+       // print_r( $a->text());
     }
 
    /**
@@ -505,5 +501,40 @@ class Model extends \Kotchasan\Model
         }
         // คืนค่าเป็น JSON
         echo json_encode($ret);
+    }   
+
+    /**
+     * อ่านรายชื่อ Category
+     *
+     * @return \static
+     */
+    public static function createCategory($type)
+    {    
+        $obj = new static();
+        $obj->$type = array();
+
+        foreach (\Repair\Home\Model::allCategory($type) as $item) {
+            $obj->$type[$item['type_id']] = $item['topic'];
+        }
+        return $obj;
+    }
+    public static function allCategory($type)
+    {
+       
+            $q2 = static::createQuery() 
+            ->select('C.topic')
+            ->from('category C')
+            ->Where(array('C.category_id','V.type_id'))
+            ->andWhere(array( array('c.type', $type)));
+            
+            return static::createQuery()  //return
+            ->select('V.type_id',array($q2,'topic')) //'V.type_id',
+            ->from('repair R')
+            ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
+            ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
+            ->groupBy('V.type_id')
+            ->toArray()
+            ->execute(); 
+       
     }
 }
