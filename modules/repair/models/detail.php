@@ -113,6 +113,7 @@ class Model extends \Kotchasan\Model
                         $ret['remove'] = 'item_'.$match[1];
                     }
                 }elseif ($action === 'file_attachment') {
+                  //  var_dump('AAAA');
                     
                     // อ่านรายการที่เลือก
                     $result = (\Repair\Detail\Model::getFilename($id)) ;

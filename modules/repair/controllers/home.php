@@ -57,7 +57,7 @@ class Controller extends \Kotchasan\KBase
     //ส่วนแสดงกราฟ
     public static function addBlock(Request $request, $card, $login)
     {
-
+        
         $datas = \Repair\Home\Model::getNew($login);
         $data_monthly = \Repair\Home\Model::get_monthly($login);
         $data_status = \Repair\Home\Model::get_status($login);

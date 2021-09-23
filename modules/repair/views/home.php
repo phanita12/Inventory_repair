@@ -68,6 +68,6 @@ class View extends \Gcms\View
             'value' => '{LNG_Save}',
         ));
         // คืนค่า HTML
-        return $form->render();
+        return $form->render();    
     }
 }

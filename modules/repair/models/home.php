@@ -17,7 +17,7 @@ use Kotchasan\Language;
 use Gcms\Config;
 use Kotchasan\Http\Request;
 
-/**
+/** 
  * โมเดลสำหรับอ่านข้อมูลแสดงในหน้า  Home
  *
  * @author Goragod Wiriya <admin@goragod.com>
@@ -109,7 +109,6 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-
     public static function getAlltoday($login)
     {
         $q3 =  date('Y-m' . '-01 00:00:00');
@@ -156,7 +155,6 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-
     public static function getSendapprove($login)
     {
         $where = array();
@@ -243,7 +241,6 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-
     public static function getApprove($login)
     {
         $where = array();
@@ -287,8 +284,6 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-
-
     public static function get_monthly($login)
     {
         /*  $where = array();
@@ -381,7 +376,6 @@ class Model extends \Kotchasan\Model
             ->toArray()
             ->execute();
     }
-
     public static function get_category()
     {
         /*  $where = array();
@@ -430,7 +424,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-        return static::createQuery() //return
+             return static::createQuery() //return
             ->select(
                 (array(
                     Sql::SUM(Sql::IF('V.type_id', 1, 1, 0), '1'),
@@ -439,6 +433,30 @@ class Model extends \Kotchasan\Model
                     Sql::SUM(Sql::IF('V.type_id', 4, 1, 0), '4'),
                     Sql::SUM(Sql::IF('V.type_id', 5, 1, 0), '5'),
                     Sql::SUM(Sql::IF('V.type_id', 6, 1, 0), '6'),
+                    Sql::SUM(Sql::IF('V.type_id', 7, 1, 0), '7'),
+                    Sql::SUM(Sql::IF('V.type_id', 8, 1, 0), '8'),
+                    Sql::SUM(Sql::IF('V.type_id', 9, 1, 0), '9'),
+                    Sql::SUM(Sql::IF('V.type_id', 10, 1, 0), '10'),
+                    Sql::SUM(Sql::IF('V.type_id', 11, 1, 0), '11'),
+                    Sql::SUM(Sql::IF('V.type_id', 12, 1, 0), '12'),
+                    Sql::SUM(Sql::IF('V.type_id', 13, 1, 0), '13'),
+                    Sql::SUM(Sql::IF('V.type_id', 14, 1, 0), '14'),
+                    Sql::SUM(Sql::IF('V.type_id', 15, 1, 0), '15'),
+                    Sql::SUM(Sql::IF('V.type_id', 16, 1, 0), '16'),
+                    Sql::SUM(Sql::IF('V.type_id', 17, 1, 0), '17'),
+                    Sql::SUM(Sql::IF('V.type_id', 18, 1, 0), '18'),
+                    Sql::SUM(Sql::IF('V.type_id', 19, 1, 0), '19'),
+                    Sql::SUM(Sql::IF('V.type_id', 20, 1, 0), '20'),
+                    Sql::SUM(Sql::IF('V.type_id', 21, 1, 0), '21'),
+                    Sql::SUM(Sql::IF('V.type_id', 22, 1, 0), '22'),
+                    Sql::SUM(Sql::IF('V.type_id', 23, 1, 0), '23'),
+                    Sql::SUM(Sql::IF('V.type_id', 24, 1, 0), '24'),
+                    Sql::SUM(Sql::IF('V.type_id', 25, 1, 0), '25'),
+                    Sql::SUM(Sql::IF('V.type_id', 26, 1, 0), '26'),
+                    Sql::SUM(Sql::IF('V.type_id', 27, 1, 0), '27'),
+                    Sql::SUM(Sql::IF('V.type_id', 28, 1, 0), '28'),
+                    Sql::SUM(Sql::IF('V.type_id', 29, 1, 0), '29'),
+                    Sql::SUM(Sql::IF('V.type_id', 30, 1, 0), '30'),
                 ))
             )
             ->from('repair R')
@@ -454,12 +472,12 @@ class Model extends \Kotchasan\Model
         // print_r( $a->text());
     }
 
-    /**
+   /**
      * รับค่าจาก settings.php
      *
      * @param Request $request
      */
-    public function submit(Request $request)
+     public function submit(Request $request)
     {
         $ret = array();
         // session, token, can_config, ไม่ใช่สมาชิกตัวอย่าง
@@ -481,7 +499,7 @@ class Model extends \Kotchasan\Model
                     $ret['alert'] = sprintf(Language::get('File %s cannot be created or is read-only.'), 'settings/config.php');
                 }
             }
-        }
+        }  
         if (empty($ret)) {
             $ret['alert'] = Language::get('Unable to complete the transaction');
         }

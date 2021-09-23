@@ -17,7 +17,7 @@ use Kotchasan\Date;
 use Kotchasan\Http\Request;
 
 /**
- * module=home
+ * module=repair-home
  *
  * @author Goragod Wiriya <admin@goragod.com>
  *
@@ -351,6 +351,10 @@ class Controller extends \Gcms\Controller
     }
     public static function renderCard5($card, $value ,$title,$headtitle,$bodytitle,$list) 
     { 
+
+
+      
+
        $content5 = '<br><section class=clear>
       <h4>'.$title.' '.$list.'</h4>
       <div id="table5" class="graphcs">
@@ -359,12 +363,32 @@ class Controller extends \Gcms\Controller
           <thead>
             <tr>
               <th>'.$headtitle.'</th>
-              <th>เครื่องคอมพิวเตอร์</th>            
-              <th>เครื่องพิมพ์</th>
-              <th>โปรเจ็คเตอร์</th>
-              <th>จอมอนิเตอร์</th>            
-              <th>โปรแกรมERP</th>
-              <th>โปรแกรมMicrosoft Power BI</th>
+              <th>Adaptor</th>            
+              <th>CCTV</th>
+              <th>Camera + Tripod</th>
+              <th>Speaker</th>            
+              <th>SSD + Monitor</th>
+              <th>Notebook +Program MBAIR</th>
+              <th>Computer</th>
+              <th>Notebook</th>
+              <th>Printer</th>
+              <th>Projector</th>
+              <th>CPU</th>
+              <th>ตู้ Rack</th>
+              <th>Camera</th>
+              <th>Monitor + Windows</th>
+              <th>Backup</th>
+              <th>Vmware</th>
+              <th>Switch</th>
+              <th>Server</th>
+              <th>Hard Disk</th>
+              <th>PC</th>
+              <th>Scaner</th>
+              <th>UPS</th>
+              <th>DVR</th>
+              <th>Monitor</th>
+              <th>โปรแกรม ERP</th>
+              <th>Access Point</th>
             </tr>
           </thead>
           <tbody>
@@ -376,6 +400,27 @@ class Controller extends \Gcms\Controller
               <td>'.$value[0]['4'].'</td>
               <td>'.$value[0]['5'].'</td>
               <td>'.$value[0]['6'].'</td>
+              <td>'.$value[0]['7'].'</td>
+              <td>'.$value[0]['8'].'</td>
+              <td>'.$value[0]['9'].'</td>
+              <td>'.$value[0]['10'].'</td>
+              <td>'.$value[0]['11'].'</td>
+              <td>'.$value[0]['12'].'</td>
+              <td>'.$value[0]['13'].'</td>
+              <td>'.$value[0]['14'].'</td>
+              <td>'.$value[0]['15'].'</td>
+              <td>'.$value[0]['16'].'</td>
+              <td>'.$value[0]['17'].'</td>
+              <td>'.$value[0]['18'].'</td>
+              <td>'.$value[0]['19'].'</td>
+              <td>'.$value[0]['20'].'</td>
+              <td>'.$value[0]['21'].'</td>
+              <td>'.$value[0]['22'].'</td>
+              <td>'.$value[0]['23'].'</td>
+              <td>'.$value[0]['24'].'</td>
+
+              
+             
           </tbody>
         </table>
       </div>

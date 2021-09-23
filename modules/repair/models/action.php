@@ -45,10 +45,13 @@ class Model extends \Kotchasan\Model
                      /* @var $file \Kotchasan\Http\UploadedFile */        
                     foreach ($request->getUploadedFiles() as $item => $file) {
                         if ($item == 'file_attachment') {
+                           // var_dump($file->hasUploadFile());
 
-                            if (is_file($file->hasUploadFile())) {
+                           // if (is_file($file->hasUploadFile())) {
+                               // var_dump('AAA');
            
                                 if ($file->hasUploadFile()) {
+                                   // var_dump('BBB');
                                     if (!File::makeDirectory($dir)) {
                                         // ไดเรคทอรี่ไม่สามารถสร้างได้
                                         $ret['ret_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'file_attachment/');
@@ -67,7 +70,7 @@ class Model extends \Kotchasan\Model
                                     $ret['ret_'.$item] = Language::get($file->getErrorMessage());
 
                                 }
-                            }
+                        //    }
                         }
 
                     }
@@ -83,9 +86,10 @@ class Model extends \Kotchasan\Model
                             'create_date' => date('Y-m-d H:i:s'),
                             'repair_id' => $request->post('repair_id')->toInt(),
                             'attachment' => $fi,
+                            'operator_id' => $request->post('operator_id', $login['id'])->toInt(),
                         );
     
-                         //'operator_id' => $request->post('operator_id', $login['id'])->toInt(),
+                         
                     if (empty($save['status'])) {
                         // ไม่ได้เลือก status
                         $ret['ret_status'] = 'Please select';

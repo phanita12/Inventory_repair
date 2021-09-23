@@ -43,7 +43,7 @@ class Controller extends \Gcms\Controller
         $this->menu = 'report';
         // สมาชิก
         $login = Login::isMember();
-        // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
+        // สามารถดูรายงาน
         if (Login::checkPermission($login, array('report'))) {
             // แสดงผล
             $section = Html::create('section', array(
@@ -99,80 +99,6 @@ class Controller extends \Gcms\Controller
     }
 
 
-    public static function renderCard2($card, $value ,$title,$headtitle,$bodytitle) 
-    {		
-
-      $content2 = '<br><section class=clear>
-        <h4>'.$title.'</h4>
-        <div id="table2" class="graphcs">
-          <canvas></canvas>
-          <table class="hidden">
-            <thead>
-              <tr>
-                <th> '.$headtitle.'</th>
-                <th>'.Date::monthName(1).'</th>
-                <th>'.Date::monthName(2).'</th>
-                <th>'.Date::monthName(3).'</th>
-                <th>'.Date::monthName(4).'</th>
-                <th>'.Date::monthName(5).'</th>
-                <th>'.Date::monthName(6).'</th>
-                <th>'.Date::monthName(7).'</th>
-                <th>'.Date::monthName(8).'</th>
-                <th>'.Date::monthName(9).'</th>
-                <th>'.Date::monthName(10).'</th>
-                <th>'.Date::monthName(11).'</th>
-                <th>'.Date::monthName(12).'</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th> '.$bodytitle.'</th>
-                <td>'.$value[0]['1'].'</td>
-                <td>'.$value[0]['2'].'</td>
-                <td>'.$value[0]['3'].'</td>
-                <td>'.$value[0]['4'].'</td>
-                <td>'.$value[0]['5'].'</td>
-                <td>'.$value[0]['6'].'</td>
-                <td>'.$value[0]['7'].'</td>
-                <td>'.$value[0]['8'].'</td>
-                <td>'.$value[0]['9'].'</td>
-                <td>'.$value[0]['10'].'</td>
-                <td>'.$value[0]['11'].'</td>
-                <td>'.$value[0]['12'].'</td>
-              </tr>'
-              /* ต้องกลับมาเขียนเพิ่มถ้าข้ามปี
-              <tr>
-                <th> '.$bodytitle.'</th>
-                <td>'.$value[1]['1'].'</td>
-                <td>'.$value[2]['2'].'</td>
-                <td>'.$value[3]['3'].'</td>
-                <td>'.$value[4]['4'].'</td>
-                <td>'.$value[5]['5'].'</td>
-                <td>'.$value[6]['6'].'</td>
-                <td>'.$value[7]['7'].'</td>
-                <td>'.$value[8]['8'].'</td>
-                <td>'.$value[9]['9'].'</td>
-                <td>'.$value[10]['10'].'</td>
-                <td>'.$value[11]['11'].'</td>
-                <td>'.$value[12]['12'].'</td>
-              </tr>*/
-              .'
-            </tbody>
-          </table>
-        </div>
-        <script>
-          new GGraphs("table2", {
-            type: "bar",
-            colors: [
-              "#7E57C2",
-              "#FF5722",
-            ]
-          });
-        </script>
-      </section>';
-          $card->set(\Kotchasan\Password::uniqid(), $content2); 
-
-          
-    }
+   
    
 }
