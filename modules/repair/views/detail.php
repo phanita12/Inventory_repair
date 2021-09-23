@@ -95,36 +95,29 @@ class View extends \Gcms\View
                 ),
             ),
         ));
-        
-       // if(is_file(ROOT_PATH.DATA_FOLDER.'approve/'.'R'.$index->id.'-'.Date::format($index->date_approve, 'md').'.jpg')){
-                if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
 
-                        $table->buttons = array(
-                            'file_attachment' => array(
-                                'class' => 'button purple notext notext icon-download',
-                                'id' => ':id',
-                                'title' => '{LNG_File}',             
-                            ),
-                            
-                            'delete' => array(
-                                'class' => 'icon-delete button red notext',
-                                'id' => ':id',
-                                'title' => '{LNG_Delete}',
-                            ),
-                    );
-                }else{
-                        $table->buttons = array(
-                                    'file_attachment' => array(
-                                        'class' => 'icon-file button blue notext',
-                                        'id' => ':id',
-                                        'title' => '{LNG_File}',             
-                                    ),
-                            );
-                }
-      /*  }else{
-            $table->buttons = array();
+        if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+            /* ปุ่มแสดงในแต่ละแถว */
+            $table->buttons = array(
+                'file_attachment' => array(
+                    'class' => 'button purple notext notext icon-download',
+                    'id' => ':id',
+                    'title' => '{LNG_File}',             
+                ),   
+                'delete' => array(
+                    'class' => 'icon-delete button red notext',
+                    'id' => ':id',
+                    'title' => '{LNG_Delete}',
+                ),
+            );
+            // สามารถลบไฟล์แนบได้
+           // $canDelete = true;
+        }
+        /* else {
+            // สามารถลบไฟล์แนบได้
+            $canDelete = $index->status == self::$cfg->repair_first_status;
         }*/
-
+ 
 
         //เช็คกลุ่มผู้ใช้งาน
         if($index->s_group == 1){

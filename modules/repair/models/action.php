@@ -45,10 +45,7 @@ class Model extends \Kotchasan\Model
                      /* @var $file \Kotchasan\Http\UploadedFile */        
                     foreach ($request->getUploadedFiles() as $item => $file) {
                         if ($item == 'file_attachment') {
-                           // var_dump($file->hasUploadFile());
-
                            // if (is_file($file->hasUploadFile())) {
-                               // var_dump('AAA');
            
                                 if ($file->hasUploadFile()) {
                                    // var_dump('BBB');
@@ -138,9 +135,6 @@ class Model extends \Kotchasan\Model
                         'repair_id' => $request->post('repair_id')->toInt(),
                         
                     );
-
-                    
-  
                     // อัปโหลดไฟล์
                     $dir = ROOT_PATH.DATA_FOLDER.'approve/';  
                      /* @var $file \Kotchasan\Http\UploadedFile */        

@@ -96,25 +96,37 @@ class Model extends \Kotchasan\Model
         $ret = array();
         // session, referer, member, ไม่ใช่สมาชิกตัวอย่าง
         if ($request->initSession() && $request->isReferer() && $login = Login::isMember()) {
-            if (Login::notDemoMode($login)) {
+           
+            if (Login::notDemoMode($login)) {  
                 // รับค่าจากการ POST
                 $action = $request->post('action')->toString();
                 $id = $request->post('id')->toString();
-                $repair_id = $request->post('repair_id')->toString();              
+               // $repair_id = $request->post('repair_id')->toString();  
 
-                // id ที่ส่งมา
-                if (preg_match('/^delete_([0-9a-z]+)$/', $id, $match)) {
+                //var_dump(preg_match('/^delete_([0-9a-z]+)$/', $id, $match));
+               // var_dump(preg_match('/(foo)(bar)(baz)/', 'foobarbaz', $matches, PREG_OFFSET_CAPTURE));
+
+                 // id ที่ส่งมา
+                 if (preg_match('/^delete_([0-9a-z]+)$/', $id, $match)) {
                     if (isset($_SESSION[$match[1]])) {
                         $file = $_SESSION[$match[1]];
                         if (is_file($file['file'])) {
                             unlink($file['file']);
                         }
                         // คืนค่ารายการที่ลบ
-                        $ret['remove'] = 'item_'.$match[1];
+                        $ret['remove'] = 'item_' . $match[1];
                     }
-                }elseif ($action === 'file_attachment') {
-                  //  var_dump('AAAA');
-                    
+                } elseif (preg_match_all('/,?([0-9]+),?/', $id, $match)) {
+                    if ($action === 'delete' && Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+                        // ลบรายละเอียดซ่อม
+                        $this->db()->delete($this->getTableName('repair_status'), array('id', (int) $match[1][0]));
+                        // reload
+                        $ret['location'] = 'reload';
+                    }
+                }
+
+                if ($action === 'file_attachment') {
+
                     // อ่านรายการที่เลือก
                     $result = (\Repair\Detail\Model::getFilename($id)) ;
                         if ($result) { 
