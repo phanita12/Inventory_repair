@@ -54,16 +54,9 @@ class Controller extends \Kotchasan\Controller //extends \Gcms\Controller
                 $imgU = is_file(ROOT_PATH.DATA_FOLDER.'E-signature/'.'Esig_'.$item->user.'.jpg') ? WEB_URL.DATA_FOLDER.'E-signature/'.'Esig_'.$item->user.'.jpg' : WEB_URL.'modules/inventory/img/noesig.png';
                 /*เอารูปภาพE-sig User ที่ปิด Job   */
                 $imgUC = is_file(ROOT_PATH.DATA_FOLDER.'E-signature/'.'Esig_'.$item->operator_id.'.jpg') ? WEB_URL.DATA_FOLDER.'E-signature/'.'Esig_'.$item->operator_id.'.jpg' : WEB_URL.'modules/inventory/img/noesig.png';
+               
                 //เช็คกลุ่มผู้ใช้งาน
-                if($index->s_group == 1){
-                    $gmember = "ผู้ดูแลระบบ";
-                }elseif($index->s_group == 2){
-                    $gmember = "แผนกช่างซ่อม";
-                }elseif($index->s_group == 3){
-                    $gmember = "แผนกไอที";
-                }elseif($index->s_group == 4){
-                    $gmember = "แผนกบัญชี";
-                } 
+                $gmember = \Index\Member\Model::getMemberstatus($index->s_group);
 
                     // ข้อมูลการทำรายการ
                     $detail = '';

@@ -123,26 +123,27 @@ class Model extends \Kotchasan\Model
                    
                 }elseif ($request->post('approve')->exists()) {
 
-                    $sqlgmember = \Kotchasan\Model::createQuery()
+                   /* $sqlgmember = \Kotchasan\Model::createQuery()
                     ->select('U1.status')
-                    ->from('user U1');
+                    ->from('user U1');*/
                     //->where(array('U1.id', 'U2.id'));
                  
                     //$gmember='';
-                    $arr_getstatusmember = Login::isMember();
-                    $getstatusmember = $arr_getstatusmember['status'];
-          
-                   
+                  //  $arr_getstatusmember = Login::isMember();
+                   // $getstatusmember = $arr_getstatusmember['status'];
+                    $login = Login::isMember();
+
                             $query = $this->db()->createQuery()
-                            ->select(
-                                'U2.name as approve',
-                                'U2.id as approve_id'
-                            ,)
+                            ->select('U2.name as approve','U2.id as approve_id',)
                             ->from('user U2')
                             ->where($where)
-                            ->andwhere(array('U2.status',$getstatusmember))
-                            ->order('U2.name')  
-                            ->toArray();              
+                            ->andwhere(array('U2.id',$login['id']))       
+                            //->andwhere(array('U2.status',$getstatusmember))
+                            //->order('U2.name')  
+                            ->toArray();  
+
+                          // print_r($query); //$login['id']
+                            
                 }
                 if (isset($order)) {
                     $query->order($order);

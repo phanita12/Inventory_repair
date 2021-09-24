@@ -129,4 +129,38 @@ class Model extends \Kotchasan\Model
         // คืนค่า JSON
         echo json_encode($ret);
     }
+    /**
+     * ฟังก์ชั่นอ่านจำนวนสมาชิกทั้งหมด
+     *
+     * @return int
+     */
+    public static function getMemberstatus($id)
+    {
+        //เช็คกลุ่มผู้ใช้งาน
+          if($id == 0)$gmember = "IT Support";
+        elseif($id == 1)$gmember    = "ผู้ดูแลระบบ (IT)";
+        elseif($id == 2)$gmember   = "บุคคล ธุรการ";
+        elseif($id == 3)$gmember   = "บัญชี การเงิน";
+        elseif($id == 4)$gmember    = "จัดซื้อ";
+        elseif($id == 5)$gmember    = "ซ่อมบำรุง";
+        elseif($id == 6)$gmember   = "วางแผนการตลาด";
+        elseif($id == 7)$gmember    = "คลังวัตถุดิบ";
+        elseif($id == 8)$gmember    = "คลังสินค้าฯจัดส่ง";
+        elseif($id == 9)$gmember    = "ขายฮาร์ดแวร์";
+        elseif($id == 10)$gmember    = "ขายอุตสาหกรรม";
+        elseif($id == 11)$gmember    = "เทคนิคQC Lab3";
+        elseif($id == 12)$gmember    = "เทคนิคQC Lab6";
+        elseif($id == 13)$gmember   = "ส่วนผลิต"; 
+        elseif($id == 14)$gmember   = "ผลิต บรรจุ G1";
+        elseif($id == 15)$gmember   = "ผลิต G2-4";
+        elseif($id == 16)$gmember   = "บรรจุ G2-4";
+        elseif($id == 17)$gmember   = "ผลิต บรรจุ G5-6";
+        elseif($id == 18)$gmember   = "บริหาร";
+        
+        
+
+
+        return  $gmember;
+    }
+    
 }

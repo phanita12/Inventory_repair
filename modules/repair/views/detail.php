@@ -120,7 +120,8 @@ class View extends \Gcms\View
  
 
         //เช็คกลุ่มผู้ใช้งาน
-        if($index->s_group == 1){
+        $gmember = \Index\Member\Model::getMemberstatus($index->s_group);
+       /* if($index->s_group == 1){
             $gmember = "ผู้ดูแลระบบ";
         }elseif($index->s_group == 2){
             $gmember = "แผนกช่างซ่อม";
@@ -128,7 +129,7 @@ class View extends \Gcms\View
             $gmember = "แผนกไอที";
         }elseif($index->s_group == 4){
             $gmember = "แผนกบัญชี";
-        }
+        }*/
         
         if($index->status == '9' || $index->status == '10'){
             // template for approve/none approve

@@ -164,14 +164,14 @@ class View extends \Gcms\View
         ));
         // สามารถแก้ไขใบรับซ่อมได้
         if ($isAdmin) {
-            $table->actions[] = array(
+          /*  $table->actions[] = array(
                 'id' => 'action',
                 'class' => 'ok',
                 'text' => '{LNG_With selected}',
                 'options' => array(
                     'delete' => '{LNG_Delete}',
                 ),
-            );
+            );*/
             $table->buttons['edit'] = array(
                 //'class' => 'icon-edit button green',
                 'href' => $uri->createBackUri(array('module' => 'repair-receive', 'id' => ':id')),

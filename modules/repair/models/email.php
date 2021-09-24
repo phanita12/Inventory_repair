@@ -77,7 +77,8 @@ class Model extends \Kotchasan\KBase
                     
 
                 //เช็คกลุ่มผู้ใช้งาน
-                if($order->s_group == 1){
+                $gmember = \Index\Member\Model::getMemberstatus($order->s_group);
+               /* if($order->s_group == 1){
                     $gmember = "ผู้ดูแลระบบ";
                 }elseif($order->s_group == 2){
                     $gmember = "แผนกช่างซ่อม";
@@ -85,7 +86,7 @@ class Model extends \Kotchasan\KBase
                     $gmember = "แผนกไอที";
                 }elseif($order->s_group == 4){
                     $gmember = "แผนกบัญชี";
-                }     
+                } */    
 
             if ($order) {
             
