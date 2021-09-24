@@ -279,15 +279,15 @@ class Model extends \Kotchasan\Model
             ->where($where)
             
             ;
-
-            //print_r($a->text());
-
     }
    
     public static function toDataTable2($params)
     {
 
         $where = array();
+        if (!empty($params['type_id'])) {
+            $where[] = array('V.type_id', $params['type_id']); 
+        }
         if (!empty($params['product_no'])) {
            // $where[] = array('R.product_no', $params['product_no']); 
             $where[] =array('R.product_no', 'LIKE', '%'.$params['product_no'].'%');
@@ -313,9 +313,7 @@ class Model extends \Kotchasan\Model
         if (!empty($params['model_id'])) {
             $where[] = array('V.model_id', $params['model_id']);   
         }
-        if (!empty($params['type_id'])) {
-            $where[] = array('V.type_id', $params['type_id']); 
-        }
+       
         if (!empty($params['topic_id'])) {
             $where[] = array('V.id', $params['topic_id']); 
         }
@@ -330,7 +328,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-        return static::createQuery() //return  $a =
+            return static::createQuery() //return  $a =
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
             , 'R.product_no'
             , 'V.topic'

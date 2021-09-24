@@ -242,12 +242,12 @@ class View extends \Gcms\View
                     'options' => $userrepair,
                     'value' => $params['user_id'],
                 ),
-               /* array(
+                array(
                     'name' => 'operator_id',
                     'text' => '{LNG_Operator}',
                     'options' => $operators,
                     'value' => $params['operator_id'],
-                ),*/
+                ),
                 
                 array(
                     'name' => 'category_id',
@@ -263,19 +263,12 @@ class View extends \Gcms\View
                     'maxlength' => 20,
                     'value' => $params['type_id']
                 ),
-              /*  array(
+                array(
                     'name' => 'model_id',
                     'text' => '{LNG_Model}',
                     'options' => $model_id,
                     'maxlength' => 20,
                     'value' => $params['model_id'],
-                ),*/
-                array(
-                    'name' => 'topic_id',
-                    'text' => '{LNG_Equipment}',
-                    'options' => $topic_id,
-                    'maxlength' => 20,
-                    'value' => $params['topic_id'], 
                 ),
                 array(
                     'name' => 'product_no',
@@ -283,6 +276,13 @@ class View extends \Gcms\View
                     'options' => $product_no,
                     'maxlength' => 20,
                     'value' => $params['product_no'],
+                ),
+                array(
+                    'name' => 'topic_id',
+                    'text' => '{LNG_Equipment}',
+                    'options' => $topic_id,
+                    'maxlength' => 50,
+                    'value' => $params['topic_id'],
                 ),
                 array(
                     'class' => 'icon-reset button brown notext',
@@ -322,6 +322,7 @@ class View extends \Gcms\View
 
                 'topic' => array(
                     'text' => '{LNG_Equipment}',
+                   
                 ),
                   
                 'cost' => array(
@@ -330,10 +331,10 @@ class View extends \Gcms\View
                 ),
                 
                 
-             /*   'operator_id' => array(
+                'operator_id' => array(
                     'text' => '{LNG_Operator}',
                     'class' => 'center',
-                ),*/
+                ),
                 
             ),
             /* รูปแบบการแสดงผลของคอลัมน์ (tbody) */
@@ -367,7 +368,7 @@ class View extends \Gcms\View
                     'href' => $uri->createBackUri(array('module' => 'repair-detail', 'id' => ':id')),
                     'title' => '{LNG_Repair job description}',
                 ),
-               /* 'printrepair' => array(
+               /*'printrepair' => array(
                     'class' => 'icon-print button brown notext',
                     'href' =>  $uri->createBackUri(array('module' => 'repair-printrepair', 'id' => ':id')),
                     'target' => '_export',
