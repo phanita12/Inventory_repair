@@ -137,7 +137,7 @@ class Model extends \Kotchasan\Model
                             ->select('U2.name as approve','U2.id as approve_id',)
                             ->from('user U2')
                             ->where($where)
-                            ->andwhere(array('U2.id',$login['id']))       
+                            ->andwhere(array('U2.id',$login['head']))       
                             //->andwhere(array('U2.status',$getstatusmember))
                             //->order('U2.name')  
                             ->toArray();  
