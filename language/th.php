@@ -141,7 +141,7 @@ return array(
   'Login by' => 'เข้าระบบโดย',
   'Login information' => 'ข้อมูลการเข้าระบบ',
   'Login per one account' => 'การเข้าระบบต่อหนึ่งบัญชี',
-  'Login with an existing account' => 'เข้าระบบด้วยบัญชีสมาชิกที่มีอยู่แล้ว',
+  'Login with an existing account' => 'ระบบบันทึกข้อมูลงานแจ้งซ่อม', //เข้าระบบด้วยบัญชีสมาชิกที่มีอยู่แล้ว
   'LOGIN_FIELDS' => array(
     'username' => 'อีเมล',
     'phone' => 'เบอร์โทรศัพท์'

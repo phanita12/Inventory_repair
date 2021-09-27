@@ -101,10 +101,6 @@ class Model extends \Kotchasan\Model
                 // รับค่าจากการ POST
                 $action = $request->post('action')->toString();
                 $id = $request->post('id')->toString();
-               // $repair_id = $request->post('repair_id')->toString();  
-
-                //var_dump(preg_match('/^delete_([0-9a-z]+)$/', $id, $match));
-               // var_dump(preg_match('/(foo)(bar)(baz)/', 'foobarbaz', $matches, PREG_OFFSET_CAPTURE));
 
                  // id ที่ส่งมา
                  if (preg_match('/^delete_([0-9a-z]+)$/', $id, $match)) {
@@ -124,9 +120,8 @@ class Model extends \Kotchasan\Model
                         $ret['location'] = 'reload';
                     }
                 }
-
-                if ($action === 'file_attachment') {
-
+               if ($action === 'file_attachment') {
+                 
                     // อ่านรายการที่เลือก
                     $result = (\Repair\Detail\Model::getFilename($id)) ;
                         if ($result) { 
@@ -145,6 +140,7 @@ class Model extends \Kotchasan\Model
                                 $ret['location'] = WEB_URL . 'modules/repair/filedownload.php?id=' . $id;
                             } else {
                                 // ไม่พบไฟล์
+                            
                                 $ret['alert'] = Language::get('Sorry, Item not found It&#39;s may be deleted');
                             }
                     }                       
@@ -152,6 +148,7 @@ class Model extends \Kotchasan\Model
             }
         }
         if (empty($ret)) {
+            
             $ret['alert'] = Language::get('Unable to complete the transaction');
         }
         // คืนค่า JSON

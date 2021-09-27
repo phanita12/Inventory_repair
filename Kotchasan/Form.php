@@ -491,13 +491,20 @@ class Form extends \Kotchasan\KBase
                     if (isset($previewSrc_disable)) {
                         if (preg_match_all('/\.([a-z0-9]+)(\?|$)/i', $previewSrc_disable, $match)) {
                             $ext = strtoupper($match[1][0]);
-                            if (in_array($ext, array('JPG', 'JPEG', 'GIF', 'PNG'))) {
-                                $input .= '<img  src="'.$previewSrc_disable.'" class="file-thumb" target="preview" >'; 
-                                
-                            } else {
-                                $input .= '<img src="'.$ext.'" class="file-thumb" target="preview">';
+
+                           // var_dump($previewSrc_disable);
+                            
+                                if (in_array($ext, array('JPG', 'JPEG', 'GIF', 'PNG', 'BMP', 'WEBP', 'TIFF', 'ICO'))) {
+                                    if($previewSrc_disable <> 'http://localhost/inventory-main/modules/inventory/img/noimage.png'){
+                                        $input .= '<img  src="'.$previewSrc_disable.'" class="file-thumb" target="preview" >'; 
+                                     }else{
+                                        $input .= '<a href="'.$previewSrc.'" target="preview" class="file-thumb" style="background-image:url('.$previewSrc.')"></a>';
+                                     }
+                                } else {
+                                    $input .= '<a href="'.$previewSrc_disable.'" target="preview" class="file-thumb">'.$ext.'</a>';
+                                }
                             }
-                        }
+                        
                     }
                     if (isset($previewSrc)) {
                         if (preg_match_all('/\.([a-z0-9]+)(\?|$)/i', $previewSrc, $match)) {

@@ -21,6 +21,7 @@ use Kotchasan\Http\Uri;
  */
 class DataTable extends \Kotchasan\KBase
 {
+   
     /**
      * id ของตาราง
      *
@@ -460,6 +461,7 @@ class DataTable extends \Kotchasan\KBase
     //create table for Report 
     public function render2()
     {
+        
         if (!empty($this->actions) && $this->checkCol == -1) {
             $this->checkCol = 1;
         }
@@ -731,6 +733,7 @@ class DataTable extends \Kotchasan\KBase
                 if ($colspan === 0) {
                     if (!$this->explain) {
                         if (!$this->hideCheckbox && $i == $this->checkCol) {
+                            //Close Check box
                            // $row[] = '<th class="check-column"><a class="checkall icon-uncheck"></a></th>';
                             ++$colCount;
                         }
@@ -750,6 +753,7 @@ class DataTable extends \Kotchasan\KBase
                 ++$colCount;
             }
             if (!$this->explain && !$this->hideCheckbox && $colCount == $this->checkCol) {
+                //Close Check box
                 //$row[] = '<th class="check-column"><a class="checkall icon-uncheck"></a></th>';
                 ++$colCount;
             }
@@ -874,7 +878,7 @@ class DataTable extends \Kotchasan\KBase
                     if (!empty($this->buttons)) {
                         foreach ($this->buttons as $btn => $attributes) {
                             if (isset($this->onCreateButton)) {
-                                // event ปุ่มหลัก
+                                // event ปุ่มหลัก  
                                 $attributes = call_user_func($this->onCreateButton, $btn, $attributes, $items);
                             }
                             if ($attributes && $attributes !== false) {
@@ -960,6 +964,7 @@ class DataTable extends \Kotchasan\KBase
      */
     public function render()
     {
+        
         if (!empty($this->actions) && $this->checkCol == -1) {
             $this->checkCol = 1;
         }
