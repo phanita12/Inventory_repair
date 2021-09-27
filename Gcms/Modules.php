@@ -94,6 +94,7 @@ class Modules extends \Kotchasan\KBase
      */
     public function getControllers($className)
     {
+        
         $result = array();
         $file = strtolower($className);
         foreach ($this->modules as $module) {

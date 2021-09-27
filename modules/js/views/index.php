@@ -88,4 +88,6 @@ class View extends \Kotchasan\KBase
             ->withContent(preg_replace($patt, $replace, implode("\n", $js)))
             ->send();
     }
+
+
 }

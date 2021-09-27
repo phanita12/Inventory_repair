@@ -295,6 +295,7 @@ class Form extends \Kotchasan\KBase
                 case 'value':
                 case 'dataPreview':
                 case 'previewSrc':
+                case 'previewSrc_disable':
                 case 'accept':
                 case 'options':
                 case 'optgroup':
@@ -486,6 +487,18 @@ class Form extends \Kotchasan\KBase
             } else {
                 if (isset($dataPreview)) {
                     $input .= '<div class="file-preview" id="'.$dataPreview.'">';
+                   
+                    if (isset($previewSrc_disable)) {
+                        if (preg_match_all('/\.([a-z0-9]+)(\?|$)/i', $previewSrc_disable, $match)) {
+                            $ext = strtoupper($match[1][0]);
+                            if (in_array($ext, array('JPG', 'JPEG', 'GIF', 'PNG'))) {
+                                $input .= '<img  src="'.$previewSrc_disable.'" class="file-thumb" target="preview" >'; 
+                                
+                            } else {
+                                $input .= '<img src="'.$ext.'" class="file-thumb" target="preview">';
+                            }
+                        }
+                    }
                     if (isset($previewSrc)) {
                         if (preg_match_all('/\.([a-z0-9]+)(\?|$)/i', $previewSrc, $match)) {
                             $ext = strtoupper($match[1][0]);

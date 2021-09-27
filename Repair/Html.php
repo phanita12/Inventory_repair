@@ -59,6 +59,7 @@ class Html extends \Kotchasan\KBase
         $this->attributes = $attributes;
         $this->rows = array();
         $this->javascript = array();
+	
     }
 
     /**
@@ -626,4 +627,5 @@ class Html extends \Kotchasan\KBase
         }
         return $obj;
     }
+
 }

@@ -465,7 +465,6 @@ class Model extends \Kotchasan\Model
             ->groupby('V.type_id')
             ->toArray()
             ->execute();
-       // print_r( $a->text());
     }
 
    /**

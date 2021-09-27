@@ -152,6 +152,15 @@ class View extends \Gcms\View
         // picture E-signature
 
         $img = is_file(ROOT_PATH.DATA_FOLDER.'E-signature/'.'Esig_'.$user['id'].'.jpg') ? WEB_URL.DATA_FOLDER.'E-signature/'.'Esig_'.$user['id'].'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';
+      /*  $id = md5(uniqid());
+                    // บันทึกรายละเอียดการดาวน์โหลดลง SESSION
+                    $_SESSION[$id] = array(
+                        'file' => $img,
+                        'name' =>'esig',
+                        'mime' => array('JPG', 'JPEG', 'GIF', 'PNG', 'BMP', 'WEBP', 'TIFF', 'ICO'),
+                      
+                    );*/
+ 
         $fieldset->add('file', array(
         'id' => 'Esignature',
         'labelClass' => 'g-input icon-upload',
@@ -159,7 +168,8 @@ class View extends \Gcms\View
         'label' => '{LNG_signature approve}',
         'comment' => Language::replace('Browse image uploaded, type :type', array(':type' => 'jpg, jpeg, png')).' ({LNG_resized automatically})',
         'dataPreview' => 'imgPicture',
-        'previewSrc' => $img,
+        'previewSrc_disable' => $img,
+       // 'previewSrc_disable' =>    $img2,
         'accept' => array('jpg', 'jpeg', 'png'), 
         ));  
 

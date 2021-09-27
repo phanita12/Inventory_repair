@@ -142,7 +142,6 @@ class Model extends \Kotchasan\Model
                             //->order('U2.name')  
                             ->toArray();  
 
-                          // print_r($query); //$login['id']
                             
                 }
                 if (isset($order)) {

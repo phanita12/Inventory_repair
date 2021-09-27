@@ -40,7 +40,7 @@ class Model extends \Kotchasan\KBase
             ->from('user')
             ->where(array(
                 array('active', 1),
-                array('permission', 'LIKE', '%can_manage_repair,can_repair%'),
+                array('permission', 'LIKE', '%,can_repair,%'), //can_manage_repair
             ))
             ->order('id')
             ->toArray()
