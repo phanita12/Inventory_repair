@@ -141,7 +141,7 @@ return array(
   'Login by' => 'เข้าระบบโดย',
   'Login information' => 'ข้อมูลการเข้าระบบ',
   'Login per one account' => 'การเข้าระบบต่อหนึ่งบัญชี',
-  'Login with an existing account' => 'ระบบบันทึกข้อมูลงานแจ้งซ่อม', //เข้าระบบด้วยบัญชีสมาชิกที่มีอยู่แล้ว
+  'Login with an existing account' => 'เข้าระบบด้วยบัญชีสมาชิกที่มีอยู่แล้ว',
   'LOGIN_FIELDS' => array(
     'username' => 'อีเมล',
     'phone' => 'เบอร์โทรศัพท์'
@@ -314,7 +314,7 @@ return array(
   'When enabled Social accounts can be logged in as an administrator. (Some abilities will not be available)' => 'เมื่อเปิดใช้งาน บัญชีโซเชียลจะสามารถเข้าระบบเป็นผู้ดูแลได้ (ความสามารถบางอย่างจะไม่สามารถใช้งานได้)',
   'Width' => 'กว้าง',
   'With selected' => 'ทำกับที่เลือก',
-  'working_hours' => 'ชั่วโมงทำงาน',
+  'working_hours' => 'ชั่วโมงทำงาน(วัน:ชม.:นาที)',
   'YEAR_OFFSET' => 543,
   'You want to' => 'คุณต้องการ',
   'Your message was sent successfully' => 'ส่งข้อความไปยังผู้ที่เกี่ยวข้องเรียบร้อยแล้ว',

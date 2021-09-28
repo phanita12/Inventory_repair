@@ -122,6 +122,6 @@ return array(
   ),
   'Summary' => 'Summary of repair system',
   'type_repair' => 'Type Repair',
-  'working_hours' => 'Working hours',
+  'working_hours' => 'Working hours(d:h:i)',
   'YEAR_OFFSET' => 0
 );

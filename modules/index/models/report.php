@@ -406,16 +406,15 @@ class Model extends \Kotchasan\Model
                   
                 }elseif ($action == 'export') {
 
-                   
 						// export รายชื่อ
 						$params = $request->getParsedBody();
 						unset($params['action']);
 						unset($params['src']);
 						$params['module'] = 'index-download';
 						$params['type'] = 'report';
-                       // var_dump($params);
+                        //var_dump($params);
 						$ret['location'] = WEB_URL.'export.php?'.http_build_query($params); 
-                        //var_dump('ex');
+                      //  var_dump('ex');
 				}
             }
         }
