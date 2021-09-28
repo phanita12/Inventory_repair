@@ -284,6 +284,12 @@ class Model extends \Kotchasan\Model
     public static function toDataTable2($params)
     {
 
+        $login = Login::isMember();
+        if($login["status"] == 1){
+            $st = array('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26',);
+        }else{
+            $st = $login["status"];
+        }
         $where = array();
         if (!empty($params['type_id'])) {
             $where[] = array('V.type_id', $params['type_id']); 
@@ -367,7 +373,7 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
-           // ->andWhere(array('R.id',132))
+            ->andWhere(array('U.status',$st))
             ->execute()  
             ;
 
