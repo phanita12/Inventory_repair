@@ -495,13 +495,13 @@ class Form extends \Kotchasan\KBase
                            // var_dump($previewSrc_disable);
                             
                                 if (in_array($ext, array('JPG', 'JPEG', 'GIF', 'PNG', 'BMP', 'WEBP', 'TIFF', 'ICO'))) {
-                                    if($previewSrc_disable <> 'http://localhost/inventory-main/modules/inventory/img/noimage.png'){
-                                        $input .= '<img  src="'.$previewSrc_disable.'" class="file-thumb" target="preview" >'; 
-                                     }else{
-                                        $input .= '<a href="'.$previewSrc.'" target="preview" class="file-thumb" style="background-image:url('.$previewSrc.')"></a>';
-                                     }
+                                  //  if($previewSrc_disable <> 'http://localhost/inventory-main/modules/inventory/img/noimage.png'){
+                                        $input .= '<img  src="'.$previewSrc_disable.'"  target="preview" >'; 
+                                    // }else{
+                                      //  $input .= '<a href="'.$previewSrc.'" target="preview" class="file-thumb" style="background-image:url('.$previewSrc.')"></a>';
+                                    // }
                                 } else {
-                                    $input .= '<a href="'.$previewSrc_disable.'" target="preview" class="file-thumb">'.$ext.'</a>';
+                                    $input .= '<a href="'.$previewSrc_disable.'" target="preview" >'.$ext.'</a>';
                                 }
                             }
                         

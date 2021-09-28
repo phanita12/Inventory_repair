@@ -159,7 +159,7 @@ class View extends \Gcms\View
         'label' => '{LNG_signature approve}',
         'comment' => Language::replace('Browse image uploaded, type :type', array(':type' => 'jpg, jpeg, png')).' ({LNG_resized automatically})',
         'dataPreview' => 'imgPicture',
-        //'previewSrc' => $img,
+       // 'previewSrc' => $img,
         'previewSrc_disable' => $img,
         'accept' => array('jpg', 'jpeg', 'png'), 
         ));  
