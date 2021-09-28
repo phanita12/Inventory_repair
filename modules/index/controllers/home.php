@@ -354,19 +354,18 @@ class Controller extends \Gcms\Controller
 
       $result = array();
       $str = '';
-      $str_2 = '';
       foreach(\repair\Home\Model::createCategory('type_id') as $value_name){
-            for($i='1';$i<'30';$i++){
-              //var_dump(strlen($value_name[$i]) != '0');
-                if(strlen($value_name[$i]) <> '0'){
-                  $result['0'][$i] = $value_name[$i];
-                  $str =  $str.'<th>'. $result['0'][$i].'</th>';
+            for($i=1;$i<30;$i++){
+              //var_dump($value_name[$i]);
+                if(strlen($value_name[$i]) != '0' ){
+                  $result[0][$i] = $value_name[$i];
+                  $str =  $str.'<th>'. $result[0][$i].'</th>';
                 }
             } 
       } 
-     
-            for($i='0';$i<'30';$i++){
-                if(strlen($value[$i]) <> '0'){
+      $str_2 = '';
+            for($i=0;$i<30;$i++){
+                if(strlen($value[$i]) != '0'){
                   $str_2 =  $str_2.'<td>'. $value[$i]['count'].'</td>';
                 }
             } 
