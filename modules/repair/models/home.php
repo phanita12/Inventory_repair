@@ -26,6 +26,9 @@ use Kotchasan\Http\Request;
  *
  * @since 1.0
  */
+
+
+ 
 class Model extends \Kotchasan\Model
 {
     /**
