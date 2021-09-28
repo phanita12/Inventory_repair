@@ -11,6 +11,8 @@ return array(
     1 => 'Enabled'
   ),
   'Can approve manage repair' => 'Can approve manage repair',
+  'Canceljob' => 'Cancel job',
+  'Closejob' => 'Close job',
   'Comment' => 'Comment',
   'DATE_FORMAT' => 'd M Y, H:i',
   'DATE_LONG' => array(
@@ -31,6 +33,7 @@ return array(
     5 => 'Fr',
     6 => 'Sa'
   ),
+  'Disapproved' => 'Disapproved',
   'End date' => 'End date',
   'file_attachment' => 'file attachment',
   'Graph monthly report' => 'monthly report',
@@ -122,6 +125,7 @@ return array(
   ),
   'Summary' => 'Summary of repair system',
   'type_repair' => 'Type Repair',
+  'WaitParts' => 'Wait Parts',
   'working_hours' => 'Working hours(d:h:i)',
   'YEAR_OFFSET' => 0
 );
