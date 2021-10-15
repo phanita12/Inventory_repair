@@ -44,17 +44,16 @@ class Model extends \Kotchasan\Model
                     $dir = ROOT_PATH.DATA_FOLDER.'file_attachment/';  
                      /* @var $file \Kotchasan\Http\UploadedFile */        
                     foreach ($request->getUploadedFiles() as $item => $file) {
-                        if ($item == 'file_attachment') {
-                           // if (is_file($file->hasUploadFile())) {
-           
+                        if ($item == 'file_attachment') { 
+                            $fi = '';          
                                 if ($file->hasUploadFile()) {
-                                   // var_dump('BBB');
                                     if (!File::makeDirectory($dir)) {
                                         // ไดเรคทอรี่ไม่สามารถสร้างได้
                                         $ret['ret_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'file_attachment/');
                                     }else {
                                         try {
                                             $file->resizeImage(array('pdf'), $dir, 'R'.$request->post('repair_id')->toInt().'-'.date('mdHis').'.pdf', self::$cfg->inventory_w);//$save['id']                                          
+                                            $fi = 'R'.$request->post('repair_id')->toInt().'-'.date('mdHis').'.pdf';
                                         } catch (\Exception $exc) {
                                             // ไม่สามารถอัปโหลดได้
                                             $ret['ret_'.$item] = Language::get($exc->getMessage());
@@ -65,13 +64,14 @@ class Model extends \Kotchasan\Model
                                 } elseif ($file->hasError()) {
                                     // ข้อผิดพลาดการอัปโหลด
                                     $ret['ret_'.$item] = Language::get($file->getErrorMessage());
+                                    $fi = '';
 
                                 }
                         //    }
                         }
 
                     }
-                    $fi = 'R'.$request->post('repair_id')->toInt().'-'.date('mdHis').'.pdf';
+                   
                     try {
                         $save = array(
                             'member_id' => $login['id'],

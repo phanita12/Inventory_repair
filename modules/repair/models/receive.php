@@ -165,6 +165,8 @@ class Model extends \Kotchasan\Model
                             // บันทึกประวัติการทำรายการ แจ้งซ่อม
                             $db->insert($repair_status_table, $log);
                             // ใหม่ ส่งอีเมลไปยังผู้ที่เกี่ยวข้อง
+                           // var_dump('A');
+                           // var_dump($log['repair_id']);
                             $ret['alert'] = \Repair\Email\Model::send($log['repair_id']);
                
               

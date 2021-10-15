@@ -135,7 +135,7 @@ class View extends \Gcms\View
         if ($isAdmin) {
             $params['memberstatus'] = $request->request('memberstatus', -1)->toInt();
         } 
-        /*else { $params['memberstatus'] = array(0, $login['id']); */
+        else { $params['memberstatus'] = array(0, $login['id']); }
         foreach (self::$cfg->member_status as $key => $value) {
             $member_status[$key] = '{LNG_'.$value.'}';
         }

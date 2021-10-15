@@ -33,10 +33,7 @@ class Controller extends \Gcms\Controller
      * @return string
      */
     public function render(Request $request)
-    {
-    
-		//var_dump($request);
-		
+    {		
         // ไตเติล
         $this->title = self::$cfg->web_title.' - '.self::$cfg->web_description;
         // เมนู
@@ -58,17 +55,6 @@ class Controller extends \Gcms\Controller
             $section->add('header', array(
                 'innerHTML' => '<h2 class="icon-dashboard">{LNG_Dashboard}</h2>',
             ));
-           /*   // repair_first_status
-              $section->add('select', array(
-                'id' => 'repair_first_status',
-                'labelClass' => 'g-input icon-tools',
-                'itemClass' => 'item',
-                'label' => '{LNG_Initial repair status}',
-                'options' => \Repair\Status\Model::create()->toSelect(),
-                'value' => isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1,
-            ));*/
-
-           
 
             // card
             $card = new Collection();
@@ -235,8 +221,8 @@ class Controller extends \Gcms\Controller
           new GGraphs("table2", {
             type: "bar",
             colors: [
-              "#7E57C2",
-              "#FF5722",
+              "#FF4500",
+              "#008000",
             ]
           });
         </script>
@@ -321,6 +307,7 @@ class Controller extends \Gcms\Controller
                         <th>วัสดุสำนักงาน</th>            
                         <th>Hardware</th>
                         <th>Software</th>
+                        <th>ไม่ระบุ</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -329,6 +316,7 @@ class Controller extends \Gcms\Controller
                         <td>'.$value[0]['2'].'</td>
                         <td>'.$value[0]['3'].'</td>
                         <td>'.$value[0]['4'].'</td>
+                        <td>'.$value[0]['5'].'</td>
                     </tbody>
                   </table>
                 </div>
@@ -357,7 +345,7 @@ class Controller extends \Gcms\Controller
       foreach(\repair\Home\Model::createCategory('type_id') as $value_name){
             for($i=1;$i<30;$i++){
               //var_dump($value_name[$i]);
-                if(strlen($value_name[$i]) != '0' ){
+                if($value_name[$i] <> null ){
                   $result[0][$i] = $value_name[$i];
                   $str =  $str.'<th>'. $result[0][$i].'</th>';
                 }
@@ -365,7 +353,7 @@ class Controller extends \Gcms\Controller
       } 
       $str_2 = '';
             for($i=0;$i<30;$i++){
-                if(strlen($value[$i]) != '0'){
+                if($value[$i] <> null){
                   $str_2 =  $str_2.'<td>'. $value[$i]['count'].'</td>';
                 }
             } 
@@ -407,9 +395,74 @@ class Controller extends \Gcms\Controller
     </section>';
         $card->set(\Kotchasan\Password::uniqid(), $content5); 
     }
-	
+    public static function renderCard55($card, $value ,$title,$headtitle,$bodytitle,$list) 
+    { 
+                   //var_dump( $value);//$value[0]['count']
+                //  var_dump(\repair\Home\Model::createCategory('type_id'));
+                $result = array();
+                $str = ''; $str_2 = '';
+                foreach(\repair\Home\Model::createCategory('type_id') as $value_name){
+                      for($i=1;$i<30;$i++){
+                        //var_dump($value_name[$i]);
+                          if($value_name[$i] <> null ){
+                            $result[0][$i] = $value_name[$i];
+                            $str =  $str.'<th>'. $result[0][$i].'</th>';
+                          }
+                      } 
+                } 
+        if( $value[0]['count'] !=0)  {       
+    
+                for($i=0;$i<30;$i++){
+                    if($value[$i] <> null){
+                      $str_2 =  $str_2.'<td>'. $value[$i]['count'].'</td>';
+                    }
+                } 
+         }else{  $str_2 = '<td> 0 </td>';    }
 
-    /**
+      // var_dump($str_2);
+
+       $content55 = '<br><section class=clear>
+      <h4>'.$title.' '.$list.'</h4>
+      <div id="table55" class="graphcs">
+        <canvas></canvas>
+        <table class="hidden">
+          <thead>
+            <tr>
+              <th>'.$headtitle.'</th>'. $str
+           .'  </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th> '.$bodytitle.'</th>'. $str_2
+           .'</tr> 
+          </tbody>
+        </table>
+      </div>
+      <script>
+        new GGraphs("table55", {
+          type: "pie",
+              centerX: 50 + Math.round($G("table55").getHeight() / 2),
+              labelOffset: 35,
+              centerOffset: 30,
+              strokeColor: null,
+              colors: [
+                "#660000",
+                "#d940ff",
+                "#E65100",
+                "#FF992A",
+                "#06d628",
+                "#304FFE",
+              ]
+        });
+      </script>
+    </section>';
+
+
+        $card->set(\Kotchasan\Password::uniqid(), $content55); 
+      //  var_dump( $content55);
+    }
+
+       /**
      * ฟังก์ชั่นสร้าง เมนูด่วน ในหน้า Home
      *
      * @param Collection $menu

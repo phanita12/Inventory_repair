@@ -1650,6 +1650,12 @@ form .item {
   padding-bottom: 10px;
   overflow-x: auto;
 }
+form .item2 {
+  margin:0 10px;
+  padding-bottom: 10px;
+  overflow-x: auto;
+  margin-top: 20px;
+}
 .event-calendar td a,
 .input-gcalendar,
 .cuttext,

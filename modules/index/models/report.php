@@ -285,17 +285,14 @@ class Model extends \Kotchasan\Model
     {
 
         $login = Login::isMember();
-        if($login["status"] == 1){
-            $st = array('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26',);
-        }else{
-            $st = $login["status"];
+        if($login["status"] != 1){
+            $where2[] = (array('U.status',$login["status"]));
         }
         $where = array();
         if (!empty($params['type_id'])) {
             $where[] = array('V.type_id', $params['type_id']); 
         }
         if (!empty($params['product_no'])) {
-           // $where[] = array('R.product_no', $params['product_no']); 
             $where[] =array('R.product_no', 'LIKE', '%'.$params['product_no'].'%');
         }
         if (!empty($params['operator_id'])) {
@@ -310,19 +307,18 @@ class Model extends \Kotchasan\Model
         if ($params['memberstatus'] > -1) {
             $where[] = array('U.status', $params['memberstatus']); 
         }
-        if ($params['begindate'] != '' || $params['enddate'] != '') {
-                $where[] = Sql::BETWEEN('R.create_date', $params['begindate']." 00:00:00", $params['enddate']." 23:59:59");
-        }
        if (!empty($params['category_id'])) {
             $where[] = array('V.category_id', $params['category_id']); 
         }
         if (!empty($params['model_id'])) {
             $where[] = array('V.model_id', $params['model_id']);   
         }
-       
         if (!empty($params['topic_id'])) {
             $where[] = array('V.id', $params['topic_id']); 
         }
+        if ($params['begindate'] != '' || $params['enddate'] != '') {
+            $where[] = Sql::BETWEEN('R.create_date', $params['begindate']." 00:00:00", $params['enddate']." 23:59:59");
+         }
         
 
         $endtime = static::createQuery()
@@ -334,7 +330,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-            return static::createQuery() //return  $a =
+         return static::createQuery() 
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
             , 'R.product_no'
             , 'V.topic'
@@ -373,7 +369,7 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
-            ->andWhere(array('U.status',$st))
+            ->andWhere($where2)
             ->execute()  
             ;
 

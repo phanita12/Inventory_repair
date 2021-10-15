@@ -45,8 +45,8 @@ class Model extends \Kotchasan\KBase
                    ->from('category C')
                    ->where(array('C.category_id','S.status'))
                    ->andWhere(array('C.type','repairstatus'));
-
-        // ตรวจสอบรายการที่ต้องการ
+      
+                   // ตรวจสอบรายการที่ต้องการ
         $order = \Kotchasan\Model::createQuery()
             ->from('repair R')
             ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
@@ -78,6 +78,7 @@ class Model extends \Kotchasan\KBase
 
                 //เช็คกลุ่มผู้ใช้งาน
                 $gmember = \Index\Member\Model::getMemberstatus($order->s_group);
+                //var_dump( $gmember );
                /* if($order->s_group == 1){
                     $gmember = "ผู้ดูแลระบบ";
                 }elseif($order->s_group == 2){
@@ -93,7 +94,7 @@ class Model extends \Kotchasan\KBase
             $ret = array();
 
             if (self::$cfg->noreply_email != '') {
-
+               
                 //ส่งอีเมลกรณี ส่งขออนุมัติรายการแจ้งซ่อม
                 if($order->status == 8){
                         // ข้อความ
@@ -223,7 +224,7 @@ class Model extends \Kotchasan\KBase
                                 }
                             } 
                      //เช็คส่งเมลสถานะ ส่งมอบเรียบร้อย/ยกเลิกการซ่อม
-                    }elseif($order->status == 7 || $order->status == 6){
+                }elseif($order->status == 7 || $order->status == 6){
     
                             // ข้อความ
                             $content = array(
@@ -293,7 +294,7 @@ class Model extends \Kotchasan\KBase
                                     }
                                 } 
                                 
-                    }else{
+                }else{
 
                     // ข้อความ
                     $content = array(

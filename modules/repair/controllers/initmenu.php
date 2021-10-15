@@ -74,16 +74,20 @@ class Controller extends \Kotchasan\KBase
         }
 
         // รายงาน 
-        if (Login::checkPermission($login, array('can_manage_repair', 'can_repair','report'))) {
-            $submenus[] = array(
-                'text' => '{LNG_Graph monthly report})',
-                'url' => 'index.php?module=report',
+        if (Login::checkPermission($login, array('report'))) {
+            $submenus2 = array(
+                    array(
+                        'text' => '{LNG_report}{LNG_Summary}',
+                        'url' => 'index.php?module=report',
+                        ),
+                     array(
+                        'text' => '{LNG_report}{LNG_Graph-report}',
+                        'url' => 'index.php?module=reportg',
+                         ),
             );
             // เมนูรายงาน
-            $menu->add('report', '{LNG_report}{LNG_Summary}', null, $submenus);
+            $menu->add('reportG', '{LNG_report}', null, $submenus2);
+            $menu->addTopLvlMenu('reportG', '{LNG_report}', null, $submenus2, 'report');
         }
-        
-        //เมนูรายงานกราฟแสดงจำนวนการแจ้งซ่อม แจกแจงตามรายเดือน
-       // $menu->addTopLvlMenu('repair', '{LNG_report}{LNG_Graph monthly report}', null, $submenus, 'report');
     }
 }

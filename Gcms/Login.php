@@ -87,20 +87,32 @@ class Login extends \Kotchasan\Login
             ->order('U.status DESC')
             ->toArray();
         $login_result = null;
+
+
         foreach ($query->execute() as $item) {
+			/*var_dump($item);
+               var_dump($item['password']);
+				//var_dump( );
+				var_dump(sha1(self::$cfg->password_key.$params['password'].$item['salt']));
+                var_dump($item);*/
             if (isset($params['password']) && $item['password'] === sha1(self::$cfg->password_key.$params['password'].$item['salt'])) {
                 // ตรวจสอบรหัสผ่าน
                 $login_result = $item;
+				 //var_dump('A');
             } elseif (isset($params['token']) && $params['token'] === $item['token']) {
                 // ตรวจสอบ token
                 $login_result = $item;
+				//var_dump('B');
             }
             if ($login_result && ($login_result['status'] == 1 || $login_result['active'] == 1)) {
                 // permission
                 $login_result['permission'] = empty($login_result['permission']) ? array() : explode(',', trim($login_result['permission'], " \t\n\r\0\x0B,"));
-                break;
+               // var_dump('C');
+				break;
             } else {
                 $login_result = null;
+               //$login_result = $item;
+				//var_dump('D');		
             }
         }
         if ($login_result === null) {
