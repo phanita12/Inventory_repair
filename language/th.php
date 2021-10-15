@@ -143,6 +143,7 @@ return array(
   'Graph-report' => 'กราฟแสดงการแจ้งซ่อม',
   'History' => 'ติดตามการสั่งซ่อมของฉัน',
   'Home' => 'หน้าหลัก',
+  'hour' => 'รวมเวลา หน่วย(ชม.)',
   'How to define user authentication for mail servers. If you enable it, you must configure below correctly.' => 'กำหนดวิธีการตรวจสอบผู้ใช้สำหรับเมล์เซิร์ฟเวอร์ หากคุณเปิดใช้งานคุณต้องกำหนดค่าต่างๆด้านล่างถูกต้อง',
   'Identification No.' => 'เลขประชาชน',
   'Image' => 'รูปภาพ',

@@ -135,6 +135,7 @@ return array(
   'go to page' => 'ໄປທີ່ໜ້າ',
   'History' => 'ຕິດຕາມການສັ່ງຊ່ອມຂອງຂ້ອຍ',
   'Home' => 'ໜ້າຫຼັກ',
+  'hour' => 'ຊົ່ວໂມງ',
   'How to define user authentication for mail servers. If you enable it, you must configure below correctly.' => 'ກຳນົດວິທີການກວດສອບຜູ້ໃຊ້ສຳລັບເມນເຊິບເວີຫາກທ່ານເປີດໃຊ້ການທ່ານຕ້ອງກຳນົດຄ່າຕ່າງໆດ້ານລຸ່ມຖືກຕ້ອງ',
   'Identification No.' => 'ເລກບັດປະຈຳຕົວ',
   'Image' => 'ຮູບພາບ',

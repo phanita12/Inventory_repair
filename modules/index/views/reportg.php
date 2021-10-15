@@ -13,6 +13,7 @@ namespace Index\Reportg;
 use Gcms\Login;
 use Kotchasan\Html;
 use Kotchasan\Http\Request;
+use Kotchasan\Date;
 
 
 /**
@@ -101,6 +102,7 @@ class View extends \Gcms\View
                             'value' => 'reportg',
                         ));
 
+                           /*  ----------------------------- กราฟที่ 1-------------------------------- */
                          // แสดงผล                   
                         $content = '<section id=report class="setup_frm">'; 
                         $content .= $form->render();
@@ -108,7 +110,7 @@ class View extends \Gcms\View
                         $index =  \Repair\Home\Model::get_type($params); 
                         
                         $title = '{LNG_Graph report} {LNG_Type}';
-                        $list= '{LNG_List of}' ;
+                        $list= '{LNG_List of}{LNG_Repair}' ;
                         $headtitle = '{LNG_Repair}';
                         $bodytitle = '{LNG_List of}{LNG_Repair}';
 						$str = ''; $str_2 = '';
@@ -192,7 +194,7 @@ class View extends \Gcms\View
 
                         $title = '{LNG_Graph report} {LNG_Category}';
                         $list= '{LNG_List of}{LNG_Repair}' ;
-                        $headtitle = '';
+                        $headtitle = '{LNG_Repair}';
                         $bodytitle = '{LNG_List of}{LNG_Repair}';
                             $content2 = '<br><section class=clear>
                             <h4>'.$title.' '.$list.'</h4>
@@ -280,8 +282,8 @@ class View extends \Gcms\View
                                         
                                     }else{  $str_3 = $str_3.'<td> 0 </td>'; }
                             } 
-                            $title = '{LNG_Graph-report} {LNG_Member}';
-                            $list= '{LNG_List of}' ;
+                            $title = '{LNG_Graph report} {LNG_Member} '; //{LNG_Graph-report}
+                            $list= '{LNG_List of} {LNG_Member}' ;
                             $headtitle = '{LNG_Repair}';
                             $bodytitle = '{LNG_List of}{LNG_Repair}';
                             $content3 = '<br><section class=clear>
@@ -348,7 +350,7 @@ class View extends \Gcms\View
                                 $content4 .= '<article class="ggraphs clear">';
                                 $index =  \Repair\Home\Model::get_status($params);
                                 
-                                $title = '{LNG_List of}{LNG_Repair process}';
+                                $title = '{LNG_Graph report} {LNG_Repair process}';
                                 $list= '{LNG_List of}{LNG_all items}' ;
                                 $headtitle = '';
                                 $bodytitle = '{LNG_List of}{LNG_Repair}';
@@ -434,8 +436,91 @@ class View extends \Gcms\View
                                 </script>
                             </section>';
 
-                   // $str = $form->render(); //$form->render() ;
-                    $result = $content. ' ' .$content2. ' ' .$content3. ' ' .$content4;
+                /*  ----------------------------- กราฟที่ 5-------------------------------- */
+                         // แสดงผล                   
+                        $content5 = '<section id=report class="setup_frm">'; 
+                        $content5 .= '<article class="ggraphs clear">';
+                        $title = '{LNG_Graph report} {LNG_Type}';
+                        $list= '{LNG_List of}{LNG_Repair} ({LNG_hour})' ;
+                        $headtitle = '{LNG_Repair}';
+                        $bodytitle = '{LNG_List of}{LNG_Repair} ';
+						$str = ''; $str_2 = '';
+						$value_name =\repair\Home\Model::createCategory('type_id') ; 
+							foreach($value_name->type_id as $value_name){
+								$str =  $str.'<th>'. $value_name.'</th>';
+							} 
+                            $i =0;
+                          foreach(\index\Reportg\Model::get_time_of_type($params) as $value2){
+                           if($value2->type_id != ''){
+                                    $time = DATE::DATEDiff($value2->create_date,$value2->end_date);
+                                   $time_h ='';
+                                   if($time['d'] > 0){ $time_h = ( $time['d']*24)+$time['h']; } else {$time_h = $time['h']; }
+                                    $str_2 =  $str_2.'<td>'. $time_h.'</td>';
+                               $i++;
+                            }            
+                        } 
+                        $content5 .= '<br><section class=clear>
+                            <h4>'.$title.' '.$list.'</h4>
+                            <div id="table5" class="graphcs">
+                                <canvas></canvas>
+                                <table class="hidden">
+                                <thead>
+                                    <tr>
+                                    <th>'.$headtitle.'</th>'. $str
+                                .'  </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <th> '.$bodytitle.'</th>'.$str_2
+                                .'</tr> 
+                                </tbody>
+                                </table>
+                            </div>
+                            <script>
+                                new GGraphs("table5", {
+                                type: "pie",
+                                    centerX: 50 + Math.round($G("table5").getHeight() / 2),
+                                    labelOffset: 70,
+                                    centerOffset: 60,
+                                    strokeColor: null,
+                                    colors: [
+                                        "#660000",
+                                        "#d940ff",
+                                        "#E65100",
+                                        "#FF992A",
+                                        "#06d628",
+                                        "#304FFE",
+                                        "#1B5E20",
+                                        "#263238",
+                                        "#120eeb",
+                                        "#06d628",
+                                        "#FF9999",
+                                        "#CCFF33",
+                                        "#9999FF",
+                                        "#CC66FF",
+                                        "#FF3300",
+                                        "#66FFFF",
+                                        "#336666",
+                                        "#FFDAB9",
+                                        "#CD5C5C",
+                                        "#FFD700",
+                                        "#9400D3",
+                                        "#CC6600",
+                                        "#FF9933",
+                                        "#FF0066",
+                                        "#CC3300",
+                                        "#66CCCC",
+                                        "#33CCCC",
+                                        "#00CC00",
+                                        "#BEBEBE",
+                                        "#00FF7F",
+                                    ]
+                                });
+                            </script>
+                            </section>'; 
+
+                  
+                    $result = $content. ' ' .$content2. ' ' .$content3. ' ' .$content4. ' ' .$content5;
                     return  $result ;
 
 

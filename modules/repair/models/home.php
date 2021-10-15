@@ -616,7 +616,6 @@ class Model extends \Kotchasan\Model
     }
     public static function get_category($params)
     {
-        ///var_dump($params);
            //Query ตามการค้นหาช่วงวันที่ User เลือก
            if(!empty($params['from']) && !empty($params['to'])){
                 
@@ -627,7 +626,6 @@ class Model extends \Kotchasan\Model
                     $where[] = array(Sql::DATE('R.create_date'), '>=', $params['from']);
                     $where[] = array(Sql::DATE('R.create_date'), '<=', $params['to']);
                     $where[] = array('U.status',$params['member_id']);
-                   // var_dump($params['from'].' / '.$params['to'].' / '.$params['member_id']);
                 }
             }else{
                 $where = (array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))));
@@ -638,7 +636,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-            return static::createQuery() // return
+        return  static::createQuery()
             ->select(
                 (array(
                     Sql::SUM(Sql::IF('V.category_id', 2, 1, 0), '2'),
@@ -655,9 +653,8 @@ class Model extends \Kotchasan\Model
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
             ->toArray()
-           ->execute()
-           ;
-      //  print_r($a);
+           ->execute();
+        
         
     }
     public static function get_type( $params)

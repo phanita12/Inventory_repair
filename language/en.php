@@ -60,6 +60,7 @@ return array(
   'Graph monthly report' => 'monthly report',
   'Graph report' => 'Graph report',
   'Graph-report' => 'Graph monthly report',
+  'hour' => 'hour',
   'Inventory' => 'Inventory',
   'INVENTORY_CATEGORIES' => array(
     'category_id' => 'Category',
