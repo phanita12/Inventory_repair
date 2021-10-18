@@ -438,7 +438,7 @@ class View extends \Gcms\View
 
                 /*  ----------------------------- กราฟที่ 5-------------------------------- */
                          // แสดงผล                   
-                        $content5 = '<section id=report class="setup_frm">'; 
+                        $content5 = '<section id=report >'; //class="setup_frm"
                         $content5 .= '<article class="ggraphs clear">';
                         $title = '{LNG_Graph report} {LNG_Type}';
                         $list= '{LNG_List of}{LNG_Repair} ({LNG_hour})' ;
