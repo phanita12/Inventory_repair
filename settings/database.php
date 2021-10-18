@@ -6,12 +6,12 @@ return array (
             'dbdriver' => 'mysql',
             'username' => 'root',
             'password' => '31M@ssw0rd',
-            'dbname' => 'repair',
+            'dbname' => 'repair_qa',
             'prefix' => 'rp',
             'hostname' => 'localhost',
           ),
-          /* ค่ากำหนดการเชื่อมต่อ ชุดที่ 2 */
-          'connection2' => array(
+        /* ค่ากำหนดการเชื่อมต่อ ชุดที่ 2 */
+    /*      'connection2' => array(
             'dbdriver' => 'mysql',
             'username' => 'root',
             'password' => '31M@ssw0rd',
@@ -20,7 +20,7 @@ return array (
             'hostname' => 'localhost',
             'port' => 3306,
             'prefix' => 'prefix2'
-        ),
+        ),*/
   'tables' => 
   array (
     'user'      => 'user',

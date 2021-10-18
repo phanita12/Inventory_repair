@@ -13,7 +13,7 @@ namespace Repair\Receive;
 use Gcms\Login;
 use Kotchasan\Http\Request;
 use Kotchasan\Language;
-
+use Kotchasan\File;
 /**
  * module=repair-receive
  *
@@ -106,9 +106,7 @@ class Model extends \Kotchasan\Model
      * @param Request $request
      */
     public function submit(Request $request)
-    {
-
-        
+    {       
         $ret = array();
         // session, token, member
         if ($request->initSession() && $request->isSafe() && $login = Login::isMember()) {
@@ -138,19 +136,45 @@ class Model extends \Kotchasan\Model
                         // ไม่พบรายการที่แก้ไข
                         $ret['alert'] = Language::get('Sorry, Item not found It&#39;s may be deleted');
                     } else {
-
-                        
                         // ตาราง
                         $repair_table = $this->getTableName('repair');
                         $repair_status_table = $this->getTableName('repair_status');
                         // Database
                         $db = $this->db();
                         if ($index->id == 0) {
- 
-                            // job_id
-                            $repair['job_id'] = \Index\Number\Model::get(0, 'repair_job_no', $repair_table, 'job_id');
-                            $repair['customer_id'] = $login['id'];
-                            $repair['create_date'] = date('Y-m-d H:i:s');
+
+
+                                // job_id
+                                $repair['job_id'] = \Index\Number\Model::get(0, 'repair_job_no', $repair_table, 'job_id');
+                                $repair['customer_id'] = $login['id'];
+                                $repair['create_date'] = date('Y-m-d H:i:s');
+                                 // อัปโหลดไฟล์
+                                $dir = ROOT_PATH.DATA_FOLDER.'file_attachment_user/';  
+                                    /* @var $file \Kotchasan\Http\UploadedFile */        
+                                foreach ($request->getUploadedFiles() as $item => $file) {
+                                    if ($item == 'file_attachment_user') {
+                        
+                                        if ($file->hasUploadFile()) {
+                                            if (!File::makeDirectory($dir)) {
+                                                // ไดเรคทอรี่ไม่สามารถสร้างได้
+                                                $ret['ret_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'file_attachment_user/');
+                                            }else {
+                                                try {
+                                                    $file->resizeImage(array('jpg', 'jpeg', 'png'), $dir, 'U_'.$repair['job_id'].'.jpg', self::$cfg->inventory_w);//$save['id']                                          
+                                                } catch (\Exception $exc) {
+                                                    // ไม่สามารถอัปโหลดได้
+                                                    $ret['ret_'.$item] = Language::get($exc->getMessage());
+                                                }
+                                            }
+                                        } elseif ($file->hasError()) {
+                                            // ข้อผิดพลาดการอัปโหลด
+                                            $ret['ret_'.$item] = Language::get($file->getErrorMessage());
+
+                                        }
+                                    }
+
+                                }                          
+                            
                             // บันทึกรายการแจ้งซ่อม
                             $log = array(
                                 'repair_id' => $db->insert($repair_table, $repair),
@@ -165,15 +189,8 @@ class Model extends \Kotchasan\Model
                             // บันทึกประวัติการทำรายการ แจ้งซ่อม
                             $db->insert($repair_status_table, $log);
                             // ใหม่ ส่งอีเมลไปยังผู้ที่เกี่ยวข้อง
-                           // var_dump('A');
-                           // var_dump($log['repair_id']);
-                            $ret['alert'] = \Repair\Email\Model::send($log['repair_id']);
-               
-              
-                            
+                            $ret['alert'] = \Repair\Email\Model::send($log['repair_id']);    
                         } else {
-
-                           
                             // แก้ไขรายการแจ้งซ่อม
                             $db->update($repair_table, $index->id, $repair);
                             // คืนค่า

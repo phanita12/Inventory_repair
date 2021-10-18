@@ -39,8 +39,6 @@ class View extends \Gcms\View
      */
     public function render($index, $login)
     {
-       // var_dump($index);
-
         // สถานะการซ่อม
         $this->statuses = \Repair\Status\Model::create();
         // อ่านสถานะการทำรายการทั้งหมด
@@ -49,8 +47,18 @@ class View extends \Gcms\View
         $uri = self::$request->createUriWithGlobals(WEB_URL.'index.php');
         /*เอารูปภาพE-sig มาแสดง  */
         $img = is_file(ROOT_PATH.DATA_FOLDER.'approve/'.'R'.$index->id.'-'.Date::format($index->date_approve, 'md').'.jpg') ? WEB_URL.DATA_FOLDER.'approve/'.'R'.$index->id.'-'.Date::format($index->date_approve, 'md').'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';
-            
+        //เช็คกลุ่มผู้ใช้งาน
+        $gmember = \Index\Member\Model::getMemberstatus($index->s_group);
+        if($index->status == '9' || $index->status == '10'){ // template for approve/none approve
+            if (Login::checkPermission($login, array('can_manage_repair','can_repair','approve_manage_repair','approve_repair')) ){
+                $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail2.html');
+            }else{  $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail3.html');  } 
+        }else{ // template standard All Status
+            $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail.html');   }
 
+          /*เอารูปภาพแนบเปิดงานมาแสดง  */
+          $img2 = is_file(ROOT_PATH.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg') ? WEB_URL.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';  
+          
         // ตาราง
         $table = new DataTable2(array(
             /* Uri */
@@ -83,6 +91,9 @@ class View extends \Gcms\View
                 'attachment' => array(
                     'text' => '{LNG_file_attachment}',
                 ),
+                'picture' => array(
+                    'text' => '{LNG_Image}',
+                ),
                 
             ),
             /* รูปแบบการแสดงผลของคอลัมน์ (tbody) */
@@ -112,20 +123,6 @@ class View extends \Gcms\View
             );
         }
 
-        //เช็คกลุ่มผู้ใช้งาน
-        $gmember = \Index\Member\Model::getMemberstatus($index->s_group);
-
-        if($index->status == '9' || $index->status == '10'){
-            // template for approve/none approve
-            if (Login::checkPermission($login, array('can_manage_repair','can_repair','approve_manage_repair','approve_repair')) ){
-                $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail2.html');
-            }else{
-                $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail3.html');
-            } 
-        }else{
-            // template standard All Status
-            $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail.html'); 
-        }
         $template->add(array(
             '/%NAME%/' => $index->name,
             '/%PHONE%/' => $index->phone,
@@ -141,6 +138,7 @@ class View extends \Gcms\View
             '/%ESIG%/' => $img,
             '/%DATE_APPROVE%/' => Date::format($index->date_approve, 'd M Y H:i'),
             '/%COST%/' => $index->COST,
+            '/%UPIC%/' => $img2,
            // '/%FILE_ATTACHMENT%/' => $file_attachment,
         ));
         

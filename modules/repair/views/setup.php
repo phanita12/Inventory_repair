@@ -185,8 +185,6 @@ class View extends \Gcms\View
         // save cookie
         setcookie('repairSetup_perPage', $table->perPage, time() + 2592000, '/', HOST, HTTPS, true);
         setcookie('repairSetup_sort', $table->sort, time() + 2592000, '/', HOST, HTTPS, true);
-
-       // var_dump($table);
         // คืนค่า HTML
         return $table->render();
     }

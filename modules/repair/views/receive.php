@@ -9,7 +9,7 @@
  */
 
 namespace Repair\Receive;
-//use Gcms\Login;
+use Gcms\Login;
 use Kotchasan\Html;
 use Kotchasan\Language;
 
@@ -31,6 +31,7 @@ class View extends \Gcms\View
      */
     public function render($index)
     {
+        $login = Login::isMember();
         $form = Html::create('form', array(
             'id' => 'setup_frm',
             'class' => 'setup_frm',
@@ -40,8 +41,7 @@ class View extends \Gcms\View
             'ajax' => true,
             'token' => true,
         ));
-        $fieldset = $form->add('fieldset', array('title' => '{LNG_Repair job description}', ));
-        
+        $fieldset = $form->add('fieldset', array('title' => '{LNG_Repair job description}', ));  
         $groups = $fieldset->add('groups',); //, array('comment' => '{LNG_Find equipment by}  {LNG_Serial/Registration No.}' ) array('urgency' => '{LNG_Find equipment by}  {LNG_Serial/Registration No.}', )
         $groups_type = $fieldset->add('groups',); //, array('comment' => '{LNG_Find equipment by} {LNG_Type},  {LNG_Category}, {LNG_Model}' )
        
@@ -97,7 +97,7 @@ class View extends \Gcms\View
             'maxlength' => 10, 
             'disabled' => true,
             'value' => $index->model,));
-        /*-------------------------------------------en moomai----------------------------------------*/
+    
         // product_no
         $groups->add('text', array(
             'id' => 'product_no',
@@ -126,6 +126,18 @@ class View extends \Gcms\View
             'rows' => 5,
             'value' => $index->job_description,
         ));
+      //User upload file Attachment
+        $fieldset->add('file', array(
+        'id' => 'file_attachment_user',
+        'labelClass' => 'g-input icon-upload',
+        'itemClass' => 'item',
+        'label' => '{LNG_file_attachment}',
+        'comment' => Language::replace('Browse image uploaded, type :type', array(':type' => 'jpg, jpeg, png')).' ({LNG_resized automatically})',
+        'dataPreview' => 'imgPicture',
+       // 'previewSrc' => $img,
+      //'previewSrc_disable' => $img,
+        'accept' => array('jpg', 'jpeg', 'png'), 
+        ));  
 
          // Approve_id
          $fieldset ->add('hidden', array(
@@ -153,7 +165,7 @@ class View extends \Gcms\View
                 'options' => Language::get('LEVEL_FIELDS'),
                 'value' => $index->urgency, */
             ));
-  
+      /*-------------------------------------------en moomai----------------------------------------*/
             // status_id
             $fieldset->add('hidden', array(
                 'id' => 'status_id',
