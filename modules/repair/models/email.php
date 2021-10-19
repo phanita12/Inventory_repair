@@ -202,7 +202,7 @@ class Model extends \Kotchasan\KBase
                                 ))
                                 ->andWhere(array(
                                     array('status', 1),
-                                    array('permission', 'LIKE', '%,can_manage_repair,%'),
+                                    array('permission', 'LIKE', '%,can_config,%'),//can_manage_repair
                                 ), 'OR')
                                 ->cacheOn();
                             $emails = array();
