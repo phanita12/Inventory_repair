@@ -88,7 +88,7 @@ class Model extends \Kotchasan\KBase
             $ret = array();
          
 
-            if ( $order->send_approve != '') { //self::$cfg->mailto
+            if (self::$cfg->noreply_email != '') {
                
                 //ส่งอีเมลกรณี ส่งขออนุมัติรายการแจ้งซ่อม
                 if($order->status == 8){

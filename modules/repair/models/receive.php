@@ -148,6 +148,7 @@ class Model extends \Kotchasan\Model
                                 $repair['job_id'] = \Index\Number\Model::get(0, 'repair_job_no', $repair_table, 'job_id');
                                 $repair['customer_id'] = $login['id'];
                                 $repair['create_date'] = date('Y-m-d H:i:s');
+<<<<<<< HEAD
 
                                 if (empty($ret)) {
                                     // อัปโหลดไฟล์
@@ -183,6 +184,11 @@ class Model extends \Kotchasan\Model
                               /*   // อัปโหลดไฟล์
                                 $dir = ROOT_PATH.DATA_FOLDER.'file_attachment_user/';  
                                     /* @var $file \Kotchasan\Http\UploadedFile   
+=======
+                                 // อัปโหลดไฟล์
+                                $dir = ROOT_PATH.DATA_FOLDER.'file_attachment_user/';  
+                                    /* @var $file \Kotchasan\Http\UploadedFile */        
+>>>>>>> c73301cc1c4401a13061392ff2669fb25b3dcd28
                                 foreach ($request->getUploadedFiles() as $item => $file) {
                                     if ($item == 'file_attachment_user') {
                         
@@ -205,7 +211,11 @@ class Model extends \Kotchasan\Model
                                         }
                                     }
 
+<<<<<<< HEAD
                                 }            */              
+=======
+                                }                          
+>>>>>>> c73301cc1c4401a13061392ff2669fb25b3dcd28
                             
                             // บันทึกรายการแจ้งซ่อม
                             $log = array(

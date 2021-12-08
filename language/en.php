@@ -1,14 +1,32 @@
 <?php
 /* language/en.php */
 return array(
-  'Add' => 'Add',
   'Add New' => 'Add New',
   'all items' => 'all items',
-  'Approve' => 'Head of department',
+  'Approve' => 'Approve',
   'Approve_date' => 'Approve Date',
   'approve_wait' => 'pending for approval.',
   'Approved' => 'Approved',
-  'Begin date' => 'Begin date',
+  'APPROVING_RESERVATIONS' => array(
+    0 => 'End of booking',
+    1 => 'Before booking time',
+    2 => 'All time'
+  ),
+  'Booking Month' => 'Booking Month',
+  'BOOKING_OPTIONS' => array(
+    'accessories' => 'Accessories'
+  ),
+  'BOOKING_SELECT' => array(
+    'use' => 'use for',
+    'department' => 'Requested department'
+  ),
+  'BOOKING_STATUS' => array(
+    0 => 'Pending',
+    1 => 'Approve',
+    2 => 'Not allowed',
+    3 => 'Canceled by customer',
+    4 => 'Canceled by the officer'
+  ),
   'BOOLEANS' => array(
     0 => 'Disable',
     1 => 'Enabled'
@@ -37,7 +55,6 @@ return array(
     6 => 'Sa'
   ),
   'Disapproved' => 'Disapproved',
-  'Emailing' => 'Email',
   'End date' => 'End date',
   'file_attachment' => 'file attachment',
   'from' => 'from',
@@ -106,7 +123,9 @@ return array(
   ),
   'Name' => 'Name Surname',
   'No_file_attachment' => 'file not found',
+  'number' => 'number',
   'pending' => 'pending',
+  'Pending' => 'Pending',
   'Per Month' => 'Per Month',
   'per year' => 'Per year',
   'PERMISSIONS' => array(
@@ -121,6 +140,11 @@ return array(
   ),
   'report' => 'Report',
   'Reset' => 'Reset',
+  'ROOM_CUSTOM_TEXT' => array(
+    'building' => 'Building',
+    'number' => 'Room No.',
+    'seats' => 'Number of seats'
+  ),
   'SEXES' => array(
     'f' => 'Female',
     'm' => 'Male'
@@ -131,6 +155,7 @@ return array(
     'ssl' => 'Server using a secure connection (SSL)'
   ),
   'Summary' => 'Summary of repair system',
+  'TIME_FORMAT' => 'H:i',
   'type_repair' => 'Type Repair',
   'WaitParts' => 'Wait Parts',
   'working_hours' => 'Working hours(d:h:i)',
