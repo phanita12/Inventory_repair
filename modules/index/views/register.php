@@ -12,6 +12,7 @@ namespace Index\Register;
 
 use Kotchasan\Html;
 use Kotchasan\Http\Request;
+use Gcms\Login;
 
 /**
  * module=register
@@ -84,6 +85,33 @@ class View extends \Gcms\View
             'maxlength' => 20,
             'validator' => array('keyup,change', 'checkPassword'),
         ));
+            // แอดมิน
+            $login_admin = Login::isAdmin();
+           //ดึงข้อมูล User มาแสดงให้เลือก
+           $user_tc = array();
+           $this->user_tc   = \index\Report\Model::create(); 
+           $this->user_id_tc   = \index\Report\Model::all();
+          if ($login_admin) {
+               //แสดงรายชื่อที่จะเลือกเป็นหัวหน้า
+               foreach ($this->user_tc->toselect() as $k => $v) { 
+                   if ($login_admin) {
+                         /*  if ($k== $user['head']) { 
+                               $user_tc[0] = $v ; 
+                           }*/
+                       $user_tc[$k] = $v;
+                   }
+               }
+           }
+            // user_id
+            $fieldset->add('select', array(
+               'id' => 'user_id',
+               'itemClass' => 'item',
+               'label' => '{LNG_Approve}',
+               'labelClass' => 'g-input icon-star0',
+               //'disabled' => $user['id']  == $login_admin['head'] ? true : false,
+               'options' =>  $user_tc, 
+               'value' => $user_tc['id'],
+           )); 
         // status
         $fieldset->add('select', array(
             'id' => 'register_status',
@@ -93,6 +121,7 @@ class View extends \Gcms\View
             'options' => self::$cfg->member_status,
             'value' => 0,
         ));
+       
         // permission
         $fieldset->add('checkboxgroups', array(
             'id' => 'register_permission',

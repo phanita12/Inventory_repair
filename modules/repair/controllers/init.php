@@ -31,7 +31,8 @@ class Controller extends \Kotchasan\KBase
         $permissions['can_manage_repair'] = '{LNG_Can manage repair}';
         $permissions['can_repair'] = '{LNG_Repairman}';
         $permissions['approve_manage_repair'] = '{LNG_Can approve manage repair}';
-        $permissions['report'] = '{LNG_report}{LNG_Summary}';
+      //  $permissions['approve_repair'] = '{LNG_Can approve manage repair}';
+        $permissions['report'] = '{LNG_report}';
         return $permissions;
     }
 }

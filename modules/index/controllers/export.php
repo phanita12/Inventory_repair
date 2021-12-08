@@ -30,6 +30,7 @@ class Controller extends \Kotchasan\Controller
      */
     public function index(Request $request)
     {
+       
         // ตัวแปรป้องกันการเรียกหน้าเพจโดยตรง
         define('MAIN_INIT', 'export');
         // session cookie
@@ -38,7 +39,6 @@ class Controller extends \Kotchasan\Controller
         Template::init(self::$cfg->skin);
         // ตรวจสอบโมดูลที่เรียก
         $className = \Index\Main\Controller::parseRequest($request);
-       // var_dump( $className);
         
         $ret = false;
         if ($className && method_exists($className, 'export')) {        

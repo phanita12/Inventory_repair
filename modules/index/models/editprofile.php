@@ -75,6 +75,7 @@ class Model extends \Kotchasan\Model
                         'province' => $request->post('register_province')->topic(),
                         'zipcode' => $request->post('register_zipcode')->number(),
                         'country' => $request->post('register_country')->filter('A-Z'),
+                        'head' => $request->post('user_id')->toInt(),
                     );
 
                     // ชื่อตาราง
@@ -85,35 +86,8 @@ class Model extends \Kotchasan\Model
                     $isAdmin = Login::isAdmin();
                     // ตรวจสอบค่าที่ส่งมา
                     $user = self::get($request->post('register_id')->toInt());
-                    // อัปโหลดไฟล์
-                    $dir = ROOT_PATH.DATA_FOLDER.'E-signature/';  
-                     /* @var $file \Kotchasan\Http\UploadedFile */        
-                    foreach ($request->getUploadedFiles() as $item => $file) {
-                        if ($item == 'Esignature') {
-           
-                            if ($file->hasUploadFile()) {
-                                if (!File::makeDirectory($dir)) {
-                                    // ไดเรคทอรี่ไม่สามารถสร้างได้
-                                    $ret['ret_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'E-signature/');
-                                }else {
-                                    try {
-                                        $file->resizeImage(array('jpg', 'jpeg', 'png'), $dir, 'Esig_'.$user['id'].'.jpg', self::$cfg->inventory_w);//$save['id']                                          
-                                    } catch (\Exception $exc) {
-                                        // ไม่สามารถอัปโหลดได้
-                                        $ret['ret_'.$item] = Language::get($exc->getMessage());
-                                    }
-                                }
-                          
 
-                            } elseif ($file->hasError()) {
-                                // ข้อผิดพลาดการอัปโหลด
-                                $ret['ret_'.$item] = Language::get($file->getErrorMessage());
-
-                            }
-                        }
-
-                    }
-
+                    
                     
                     if ($user) {
                         // ข้อมูลการเข้าระบบ
@@ -134,6 +108,7 @@ class Model extends \Kotchasan\Model
                             $save['username'] = $user['username'];
                         }
                     }
+
                     if ($user) {
                         // ตรวจสอบค่าที่ส่งมา
                         foreach (self::$cfg->login_fields as $k) {
@@ -148,6 +123,7 @@ class Model extends \Kotchasan\Model
                                 $ret['ret_register_'.$k] = 'Please fill in';
                             }
                         }
+
                         // password
                         $password = $request->post('register_password')->password();
                         $repassword = $request->post('register_repassword')->password();
@@ -164,6 +140,39 @@ class Model extends \Kotchasan\Model
                             // ไม่ได้กรอก ชื่อ
                             $ret['ret_register_name'] = 'Please fill in';
                         }
+
+                        if (empty($ret)) {
+                            // อัปโหลดไฟล์
+                            $dir = ROOT_PATH.DATA_FOLDER.'E-signature/';
+                            foreach ($request->getUploadedFiles() as $item => $file) {
+                                if ($item == 'Esignature') {
+                                //if (preg_match('/^E-signature)$/', $item, $match)) {
+                                    /* @var $file \Kotchasan\Http\UploadedFile */
+                                    if (!File::makeDirectory($dir)) {
+                                        // ไดเรคทอรี่ไม่สามารถสร้างได้
+                                        $ret['ret_file_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'E-signature/');
+                                    } elseif ($file->hasUploadFile()) {
+                                        if (!$file->validFileExt(array('jpg', 'jpeg', 'png'))) {
+                                            // ชนิดของไฟล์ไม่รองรับ
+                                            $ret['ret_file_Esignature'] = Language::get('The type of file is invalid'); //.$match[1]]
+                                        } else {
+                                            try {
+                                               // $file->moveTo($dir.$match[1].'.png');
+                                               $file->moveTo($dir.'Esig_'.$user['id'].'.jpg');
+                                            } catch (\Exception $exc) {
+                                                // ไม่สามารถอัปโหลดได้
+                                                $ret['ret_file_Esignature'] = Language::get($exc->getMessage()); //.$match[1]]
+                                            }
+                                        }
+                                    } elseif ($file->hasError()) {
+                                        // ข้อผิดพลาดการอัปโหลด
+                                        $ret['ret_file_Esignature']  = Language::get($file->getErrorMessage()); //'.$match[1]] 
+                                    }
+                                }
+                            }
+                        }
+
+
                         // บันทึก
                         if (empty($ret)) {
                             // หมวดหมู่
@@ -190,10 +199,14 @@ class Model extends \Kotchasan\Model
                                 // ไปหน้าเดิม แสดงรายการ
                                 $ret['location'] = $request->getUri()->postBack('index.php', array('module' => 'member', 'id' => null));
                             }
+
+                            
                             // คืนค่า
                             $ret['alert'] = Language::get('Saved successfully');
                             // เคลียร์
                             $request->removeToken();
+                           // clearstatcache( $dir, $file);
+                           // clearstatcache();
                         }
                     }
                 } catch (\Kotchasan\InputItemException $e) {

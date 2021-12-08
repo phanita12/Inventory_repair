@@ -284,12 +284,15 @@ class Model extends \Kotchasan\Model
     public static function toDataTable2($params)
     {
 
+        $login = Login::isMember();
+        if($login["status"] != 1){
+            $where2[] = (array('U.status',$login["status"]));
+        }
         $where = array();
         if (!empty($params['type_id'])) {
             $where[] = array('V.type_id', $params['type_id']); 
         }
         if (!empty($params['product_no'])) {
-           // $where[] = array('R.product_no', $params['product_no']); 
             $where[] =array('R.product_no', 'LIKE', '%'.$params['product_no'].'%');
         }
         if (!empty($params['operator_id'])) {
@@ -304,19 +307,18 @@ class Model extends \Kotchasan\Model
         if ($params['memberstatus'] > -1) {
             $where[] = array('U.status', $params['memberstatus']); 
         }
-        if ($params['begindate'] != '' || $params['enddate'] != '') {
-                $where[] = Sql::BETWEEN('R.create_date', $params['begindate']." 00:00:00", $params['enddate']." 23:59:59");
-        }
        if (!empty($params['category_id'])) {
             $where[] = array('V.category_id', $params['category_id']); 
         }
         if (!empty($params['model_id'])) {
             $where[] = array('V.model_id', $params['model_id']);   
         }
-       
         if (!empty($params['topic_id'])) {
             $where[] = array('V.id', $params['topic_id']); 
         }
+        if ($params['begindate'] != '' || $params['enddate'] != '') {
+            $where[] = Sql::BETWEEN('R.create_date', $params['begindate']." 00:00:00", $params['enddate']." 23:59:59");
+         }
         
 
         $endtime = static::createQuery()
@@ -328,7 +330,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-            return static::createQuery() //return  $a =
+         return static::createQuery() 
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
             , 'R.product_no'
             , 'V.topic'
@@ -367,7 +369,7 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
-           // ->andWhere(array('R.id',132))
+            ->andWhere($where2)
             ->execute()  
             ;
 
@@ -406,16 +408,15 @@ class Model extends \Kotchasan\Model
                   
                 }elseif ($action == 'export') {
 
-                   
 						// export รายชื่อ
 						$params = $request->getParsedBody();
 						unset($params['action']);
 						unset($params['src']);
 						$params['module'] = 'index-download';
 						$params['type'] = 'report';
-                       // var_dump($params);
+                        //var_dump($params);
 						$ret['location'] = WEB_URL.'export.php?'.http_build_query($params); 
-                        //var_dump('ex');
+                      //  var_dump('ex');
 				}
             }
         }

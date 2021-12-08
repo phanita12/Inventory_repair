@@ -44,6 +44,7 @@ class Model extends \Kotchasan\Model
                         'name' => $request->post('register_name')->topic(),
                         'status' => $isAdmin ? $request->post('register_status')->toInt() : 0,
                         'active' => 1,
+                        'head' => $request->post('user_id')->toInt(),
                     );
                     $permission = $isAdmin ? $request->post('register_permission', array())->topic() : array();
                     // table

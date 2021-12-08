@@ -1,16 +1,21 @@
 <?php
 /* language/en.php */
 return array(
+  'Add' => 'Add',
+  'Add New' => 'Add New',
   'all items' => 'all items',
   'Approve' => 'Head of department',
   'Approve_date' => 'Approve Date',
   'approve_wait' => 'pending for approval.',
   'Approved' => 'Approved',
+  'Begin date' => 'Begin date',
   'BOOLEANS' => array(
     0 => 'Disable',
     1 => 'Enabled'
   ),
   'Can approve manage repair' => 'Can approve manage repair',
+  'Canceljob' => 'Cancel job',
+  'Closejob' => 'Close job',
   'Comment' => 'Comment',
   'DATE_FORMAT' => 'd M Y, H:i',
   'DATE_LONG' => array(
@@ -31,10 +36,15 @@ return array(
     5 => 'Fr',
     6 => 'Sa'
   ),
+  'Disapproved' => 'Disapproved',
+  'Emailing' => 'Email',
   'End date' => 'End date',
   'file_attachment' => 'file attachment',
+  'from' => 'from',
   'Graph monthly report' => 'monthly report',
   'Graph report' => 'Graph report',
+  'Graph-report' => 'Graph monthly report',
+  'hour' => 'hour',
   'Inventory' => 'Inventory',
   'INVENTORY_CATEGORIES' => array(
     'category_id' => 'Category',
@@ -122,6 +132,7 @@ return array(
   ),
   'Summary' => 'Summary of repair system',
   'type_repair' => 'Type Repair',
-  'working_hours' => 'Working hours',
+  'WaitParts' => 'Wait Parts',
+  'working_hours' => 'Working hours(d:h:i)',
   'YEAR_OFFSET' => 0
 );

@@ -80,7 +80,7 @@ class View extends \Gcms\View
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
             'hideColumns' => array('id'),
             /* คอลัมน์ที่สามารถค้นหาได้ */
-            'searchColumns' => array('name', 'phone', 'job_id', 'topic'),
+            'searchColumns' => array('name', 'phone', 'job_id', 'topic','category'),
             /* ตั้งค่าการกระทำของของตัวเลือกต่างๆ ด้านล่างตาราง ซึ่งจะใช้ร่วมกับการขีดถูกเลือกแถว */
             'action' => 'index.php/repair/model/setup/action',
             'actionCallback' => 'dataTableActionCallback',
@@ -112,6 +112,9 @@ class View extends \Gcms\View
                 'phone' => array(
                     'text' => '{LNG_Phone}',
                     'class' => 'center',
+                ),
+                 'category' => array(
+                    'text' => '{LNG_Category}',
                 ),
                 'topic' => array(
                     'text' => '{LNG_Equipment}',
@@ -185,8 +188,6 @@ class View extends \Gcms\View
         // save cookie
         setcookie('repairSetup_perPage', $table->perPage, time() + 2592000, '/', HOST, HTTPS, true);
         setcookie('repairSetup_sort', $table->sort, time() + 2592000, '/', HOST, HTTPS, true);
-
-       // var_dump($table);
         // คืนค่า HTML
         return $table->render();
     }

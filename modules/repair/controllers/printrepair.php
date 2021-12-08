@@ -91,7 +91,7 @@ class Controller extends \Kotchasan\Controller //extends \Gcms\Controller
                     $detail .= '</tr>';
                     $detail .= '<tr>';
                     $detail .= '<th  >ความต้องการ/แก้ไข :</th>';
-                    $detail .= '<td colspan=3 style="border-bottom: groove;border-right-style: solid;border-width: 1px;width: 80%;">'.$item->job_description.' </td>';
+                    $detail .= '<td colspan=3 style="border-bottom: groove;border-right-style: solid;border-width: 1px;width: 75%;">'.$item->job_description.' </td>';
                     $detail .= '</tr>';
                     $detail .= '<tr>';
                     $detail .= '<th colspan=3 style="width: 70%;">ลงชื่อผู้ขอรับบริการ</th>';
@@ -170,7 +170,7 @@ class Controller extends \Kotchasan\Controller //extends \Gcms\Controller
                         $detailapprove .= '</tr>';
                     }else{
                         $detailapprove .= '<tr>';
-                        $detailapprove .= '<th>ชื่อผู้อนุมัติ :</th>';
+                        $detailapprove .= '<th style="width: 55px;">ชื่อหัวหน้างาน :</th>';
                         $detailapprove .= '<td style="width: 27%;"></td>';
                         $detailapprove .= '<th style="border-bottom: hidden;">วันที่อนุมัติ :</th>';
                         $detailapprove .= '<td style="border-right-style: solid;"></td>';

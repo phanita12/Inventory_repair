@@ -2,7 +2,7 @@
 /* config.php */
 return array (
   'version' => '4.0.3',
-  'web_title' => 'Repair',
+  'web_title' => 'TKS : Repair (ระบบแจ้งซ่อมออนไลน์)',
   'web_description' => 'ระบบบันทึกข้อมูลงานแจ้งซ่อม',
   'timezone' => 'Asia/Bangkok',
   'member_status' => 
@@ -19,7 +19,7 @@ return array (
     9 => 'ขายฮาร์ดแวร์',
     10 => 'ขายอุตสาหกรรม',
     11 => 'เทคนิคQC Lab3',
-    12 => 'ทคนิคQC Lab6',
+    12 => 'เทคนิคQC Lab6',
     13 => 'ส่วนผลิต',
     14 => 'ผลิต บรรจุ G1',
     15 => 'ผลิต G2-4',
@@ -53,7 +53,7 @@ return array (
   'inventory_w' => 600,
   'repair_first_status' => 1,
   'repair_job_no' => 'JOB%04d',
-  'password_key' => '6108a7198e99c',
+  'password_key' => '6108a7198e99c', 
   'user_forgot' => 0,
   'user_register' => 0,
   'welcome_email' => 0,
@@ -67,7 +67,7 @@ return array (
   'google_client_id' => '',
   'bg_color' => '#356FC9',
   'color' => '#FFFFFF',
-  'line_api_key' => 'RQVFlC5fO1mRxl0lvam35VuGjkJtqQU1UmrDAfzAKTs',
+  'line_api_key' => 'fCVqIqPWjz0Ynh0Z5QPG4r2kSN8kBrj3wMvN9iwXSjZ',
   'api_url' => 'http://localhost/inventory-main/api.php',
   'api_token' => 'RQVFlC5fO1mRxl0lvam35VuGjkJtqQU1UmrDAfzAKTs',
   'api_secret' => 'fb01728df6564',

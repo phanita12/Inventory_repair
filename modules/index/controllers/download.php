@@ -13,6 +13,7 @@ namespace Index\Download;
 use Kotchasan\Http\Request;
 use Kotchasan\Language;
 use Gcms\Login;
+use Kotchasan\Date;
 
 /**
  * module=index-download
@@ -67,11 +68,35 @@ class Controller extends \Kotchasan\Controller
                     $header['date_approve']     = Language::get('Approve_date');
                     $header['comment']          = Language::get('Comment');
                     $header['cost']             = Language::get('Cost');
+               
+                    /*   1 วัน=24 ชั่วโมง / 24 ชั่วโมง=3,600 นาที / 3,600 นาที=86,400 วินาที */$i=0;
+                    foreach(\index\Report\Model::toDataTable2($params) as $value){
+                        
+                        $time = DATE::DATEDiff($value->create_date,$value->end_date);
+                        $Alltime = $time['d'].':'.$time['h'].':'.$time['i'];//.':'.$time['s']; $time['m'].':'.
+                        
+                        if( $Alltime <> ''){
+                                $in[$i]["id"]       = $value->id;
+                                $in[$i]["job_id"]   = $value->job_id;
+                                $in[$i]["status"]   = $value->status;
+                                $in[$i]["create_date"]  = $value->create_date;
+                            //  $in[$i]["end_date"]     = $value->end_date;
+                                $in[$i]["product_no"]   = $value->product_no;
+                                $in[$i]["topic"]        = $value->topic;
+                                $in[$i]["cost"]         = $value->cost ;
+                                //$in[$i]["Alltime2"]      = $value->Alltime2;
+                                $in[$i]["Alltime"]      = $Alltime;
+
+                            $i+=1;
+                        } 
+                    } 
 
                 $datas = array();
                 $person  = array();
                 // query report
-                foreach (\Index\Download\Model::getAll($params) as $item) {  
+                foreach (\Index\Download\Model::getAll($params) as $item) { 
+                    $time = DATE::DATEDiff($item->create_date,$item->enddate);
+                    $Alltime = $time['d'].':'.$time['h'].':'.$time['i'];//.':'.$time['s']; $time['m'].':'. 
                     
                     if($item->status == 1 || $item->status == 2 || $item->status == 8){
 
@@ -81,7 +106,8 @@ class Controller extends \Kotchasan\Controller
                             $person['status']           = $item->repairstatus;
                             $person['begindate']        = $item->create_date;
                             $person['enddate']          = $item->enddate;
-                            $person['time']             = $item->Alltime;
+                            //$person['time']             = $item->Alltime;
+                            $person['time']             =  $Alltime;
                             $person['user_id']          = $item->name;
                             $person['memberstatus']     = $item->id_card;
                             $person['product_no']       = $item->product_no;
@@ -103,7 +129,8 @@ class Controller extends \Kotchasan\Controller
                             $person['status']           = $item->repairstatus;
                             $person['begindate']        = $item->create_date;
                             $person['enddate']          = $item->enddate;
-                            $person['time']             = $item->Alltime;
+                            //$person['time']             = $item->Alltime;
+                            $person['time']             =  $Alltime;
                             $person['user_id']          = $item->name;
                             $person['memberstatus']     = $item->id_card;
                             $person['product_no']       = $item->product_no;
@@ -121,8 +148,7 @@ class Controller extends \Kotchasan\Controller
 
                     $datas[] = $person;
                 }
-
-                mb_convert_encoding($header, 'Windows-874','utf-8');
+                //mb_convert_encoding($header, 'Windows-874','utf-8');
                 // export
                 return \Kotchasan\Csv::send('Report Repair Online', $header, $datas, self::$cfg->csv_language); 
                 

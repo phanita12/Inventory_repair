@@ -71,7 +71,7 @@ class View extends \Kotchasan\View
         ));
         return (object) array(
             'detail' => $template->render(),
-            'title' => self::$cfg->web_title.' - '.Language::get('Login with an existing account'),
+            'title' => self::$cfg->web_title, //.' - '.Language::get('Login with an existing account'),
             'bodyClass' => 'welcomepage',
         );
     }
