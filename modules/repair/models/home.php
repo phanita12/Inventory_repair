@@ -13,10 +13,7 @@ namespace Repair\Home;
 
 use Gcms\Login;
 use Kotchasan\Database\Sql;
-use Kotchasan\Language;
-use Gcms\Config;
-use Kotchasan\Http\Request;
-use Kotchasan\Collection;
+
 
 /** 
  * module=repair-home
@@ -45,7 +42,6 @@ class Model extends \Kotchasan\Model
             );
             // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair'));
-       // var_dump(  $isStaff );
         if ($isStaff) {
             $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
             $where[] = array('S.status', $status);
@@ -75,8 +71,6 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-
-
     public static function getNew3($login)
     {
         /*$where = array(
@@ -127,7 +121,6 @@ class Model extends \Kotchasan\Model
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair'));
         if ($isStaff) {
-          //  $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
             $status = array('7'); 
             $where[] = array('S.status', $status);
         } else {
@@ -207,9 +200,6 @@ class Model extends \Kotchasan\Model
     }
     public static function getStatuswaitParts($login)
     {
-        /*$where = array(
-            array(Sql::DATE('S.create_date'), date('Y-m-d')),
-        );*/
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair'));
         if ($isStaff) {
@@ -248,16 +238,12 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-
     public static function getAlltoday($login)
     {
         $q3 =  date('Y-m' . '-01 00:00:00');
         $q2 = SQL::LAST_DAY(date('Y-m-d 23:59:59'));
-
-
         $where = array(
             // array(Sql::DATE('S.create_date'), date('Y-m-d')),
-
         );
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair'));
@@ -298,8 +284,6 @@ class Model extends \Kotchasan\Model
     public static function getSendapprove($login)
     {
         $where = array();
-        // array(Sql::DATE('S.create_date'), date('Y-m-d')),
-        //);
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair', 'approve_manage_repair', 'approve_repair'));
         if ($isStaff) {
@@ -309,16 +293,12 @@ class Model extends \Kotchasan\Model
         } else {
             $where[] = array('R.customer_id', $login['id']);
         }
-
-
-
         $q1 = static::createQuery()
             ->select('repair_id', Sql::MAX('id', 'id'))
             ->from('repair_status')
             ->groupBy('repair_id');
         $query = static::createQuery()
             ->selectCount()
-            //->select(date('Y-m-d'))
             ->from('repair_status S')
             ->join(array($q1, 'T'), 'INNER', array(array('T.repair_id', 'S.repair_id'), array('T.id', 'S.id')))
             ->where($where);
@@ -349,8 +329,6 @@ class Model extends \Kotchasan\Model
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('approve_repair'));
         if ($isStaff) {
-
-           // $status = isset(self::$cfg->repair_status) ? self::$cfg->repair_status : 8;
             $where[] = array('S.status', 8);
         } else {
             $where[] = array('S.status', 8);
@@ -387,55 +365,51 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
-   /* public static function getSendapprove2($login)
-    {
-        $where = array();
-        // พนักงาน
-        $isStaff = Login::checkPermission($login, array('approve_repair'));
-        if ($isStaff) {
+    /* public static function getSendapprove2($login)
+        {
+            $where = array();
+            // พนักงาน
+            $isStaff = Login::checkPermission($login, array('approve_repair'));
+            if ($isStaff) {
 
-            $status = isset(self::$cfg->repair_status) ? self::$cfg->repair_status : 8;
-            // $where[] = array('S.status', 8);
-        } else {
-            $where[] = array('R.customer_id', $login['id']);
-        }
-        $q1 = static::createQuery()
-            ->select('repair_id', Sql::MAX('id', 'id'))
-            ->from('repair_status')
-            ->groupBy('repair_id');
-        $query = static::createQuery()
-            ->selectCount()
-            ->from('repair_status S')
-            ->join(array($q1, 'T'), 'INNER', array(array('T.repair_id', 'S.repair_id'), array('T.id', 'S.id')))
-            ->where($where)
-            ->andwhere(array('S.status', 8));
+                $status = isset(self::$cfg->repair_status) ? self::$cfg->repair_status : 8;
+                // $where[] = array('S.status', 8);
+            } else {
+                $where[] = array('R.customer_id', $login['id']);
+            }
+            $q1 = static::createQuery()
+                ->select('repair_id', Sql::MAX('id', 'id'))
+                ->from('repair_status')
+                ->groupBy('repair_id');
+            $query = static::createQuery()
+                ->selectCount()
+                ->from('repair_status S')
+                ->join(array($q1, 'T'), 'INNER', array(array('T.repair_id', 'S.repair_id'), array('T.id', 'S.id')))
+                ->where($where)
+                ->andwhere(array('S.status', 8));
 
-          print_r($query);
-            
-        if (!$isStaff) {
-            $query->join('repair R', 'INNER', array('R.id', 'S.repair_id'));
-        }
-        $search = $query->toArray()
-            ->execute();
+            print_r($query);
+                
+            if (!$isStaff) {
+                $query->join('repair R', 'INNER', array('R.id', 'S.repair_id'));
+            }
+            $search = $query->toArray()
+                ->execute();
 
-        if (!empty($search)) {
-            return (object) array(
-                'isStaff' => $isStaff,
-                'count' => $search[0]['count'],
-            );
-        }
-        return 0;
-    }*/
+            if (!empty($search)) {
+                return (object) array(
+                    'isStaff' => $isStaff,
+                    'count' => $search[0]['count'],
+                );
+            }
+            return 0;
+        }*/
     public static function getApprove($login)
     {
         $where = array();
-        // array(Sql::DATE('S.create_date'), date('Y-m-d')),
-        //);
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair', 'approve_manage_repair', 'approve_repair'));
         if ($isStaff) {
-
-            //$status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 8;
             $where[] = array('S.status', 9);
         } else {
             $where[] = array('R.customer_id', $login['id']);
@@ -469,13 +443,9 @@ class Model extends \Kotchasan\Model
     public static function getNoneApprove($login)
     {
         $where = array();
-        // array(Sql::DATE('S.create_date'), date('Y-m-d')),
-        //);
         // พนักงาน
         $isStaff = Login::checkPermission($login, array('can_manage_repair', 'can_repair', 'approve_manage_repair', 'approve_repair'));
         if ($isStaff) {
-
-            //$status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 8;
             $where[] = array('S.status', 10);
         } else {
             $where[] = array('R.customer_id', $login['id']);
@@ -508,7 +478,6 @@ class Model extends \Kotchasan\Model
     }
     public static function get_monthly()
     {
-
         return  static::createQuery()
             ->select(
                 (array(
@@ -547,8 +516,6 @@ class Model extends \Kotchasan\Model
         }else{
             $where = (array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))));
         }    
-       
-        
         $q1 = static::createQuery()
             ->select('repair_id', Sql::MAX('id', 'max_id'))
             ->from('repair_status')
@@ -598,15 +565,9 @@ class Model extends \Kotchasan\Model
         }else{
             $where = (array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))));
         }    
-        $q1 = static::createQuery()
-            ->select('repair_id', Sql::MAX('id', 'max_id'))
-            ->from('repair_status')
-            ->groupBy('repair_id');
-
-            return static::createQuery()// return
+            return static::createQuery()
             ->select(
                 (array(
-                          //  Sql::SUM(Sql::IF('U.status', 0, 1, 0), '0'),
                             Sql::SUM(Sql::IF('U.status', 1, 1, 0), '1'),
                             Sql::SUM(Sql::IF('U.status', 2, 1, 0), '2'),
                             Sql::SUM(Sql::IF('U.status', 3, 1, 0), '3'),
@@ -648,23 +609,16 @@ class Model extends \Kotchasan\Model
                 ))
             )
             ->from('repair R')
-            ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
-            ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
-            ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
-            ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
-            ->groupBy('U.status')
             ->toArray()
             ->execute() ;
             
     }
     public static function get_category($params)
     {
-
            //Query ตามการค้นหาช่วงวันที่ User เลือก
            if(!empty($params['from']) && !empty($params['to'])){
-                
                 if($params['member_id'] == '-1'){
                     $where[] = array(Sql::DATE('R.create_date'), '>=', $params['from']);
                     $where[] = array(Sql::DATE('R.create_date'), '<=', $params['to']);
@@ -672,7 +626,6 @@ class Model extends \Kotchasan\Model
                     $where[] = array(Sql::DATE('R.create_date'), '>=', $params['from']);
                     $where[] = array(Sql::DATE('R.create_date'), '<=', $params['to']);
                     $where[] = array('U.status',$params['member_id']);
-
                 }
             }else{
                 $where = (array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))));
@@ -682,7 +635,7 @@ class Model extends \Kotchasan\Model
             ->select('repair_id', Sql::MAX('id', 'max_id'))
             ->from('repair_status')
             ->groupBy('repair_id');
-            return static::createQuery() // return
+            return static::createQuery() 
             ->select(
                 (array(
                     Sql::SUM(Sql::IF('V.category_id', 2, 1, 0), '2'),
@@ -703,7 +656,6 @@ class Model extends \Kotchasan\Model
     }
     public static function get_type( $params)
     {
-     
          //Query ตามการค้นหาช่วงวันที่ User เลือก
             if(!empty($params['from']) && !empty($params['to'])){
                 
@@ -718,25 +670,19 @@ class Model extends \Kotchasan\Model
             }else{
               $where = (array(SQL::MONTH('R.create_date'), SQL::MONTH(date('Y-m-d H:i:s'))));
             }          
-              $q1 = static::createQuery()
-            ->select('repair_id', Sql::MAX('id', 'max_id'))
-            ->from('repair_status')
-            ->groupBy('repair_id');
-            return static::createQuery() 
-            ->select(SQL::COUNT('R.id','count')
+           return  static::createQuery() 
+            ->select( SQL::COUNT('R.id','count'),'C.topic'
             )
             ->from('repair R')
-            ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
-            ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
             ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
-           ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+           ->join('category C', 'LEFT', array('C.category_id','V.type_id'))
            ->where($where)
+           ->andWhere(array('C.type','type_id'))
             ->groupby('V.type_id')
             ->toArray()
             ->execute();  
     }
-
     /**
      * อ่านรายชื่อ Category
      *
@@ -761,8 +707,8 @@ class Model extends \Kotchasan\Model
             ->Where(array('C.category_id','V.type_id'))
             ->andWhere(array( array('c.type', $type)));
             
-            return static::createQuery()  //return
-            ->select('V.type_id',array($q2,'topic')) //'V.type_id',
+            return static::createQuery()  
+            ->select('V.type_id',array($q2,'topic')) 
             ->from('repair R')
             ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))

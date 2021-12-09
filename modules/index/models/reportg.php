@@ -48,19 +48,19 @@ class Model extends \Kotchasan\Model
            ->select('repair_id', Sql::MAX('id', 'max_id'))
            ->from('repair_status')
            ->groupBy('repair_id');
-           return static::createQuery() 
-           //->select(SQL::COUNT('R.id','count')
-           ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date' , 'R.product_no', 'V.topic' ,'S.cost' ,'V.type_id'
+         return  static::createQuery() 
+           ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date' , 'R.product_no', 'V.topic' ,'S.cost' ,'V.type_id','C.topic'
            )
            ->from('repair R')
            ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
            ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
            ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
            ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
-          ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+           ->join('category C', 'LEFT', array('C.category_id','V.type_id'))
            ->where($where)
+           ->andWhere(array('C.type','type_id'))
            ->groupby('V.type_id')
-           ->execute()
+            ->execute()
            ; 
 
 
