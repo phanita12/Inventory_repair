@@ -142,15 +142,11 @@ class Model extends \Kotchasan\Model
                         // Database
                         $db = $this->db();
                         if ($index->id == 0) {
-
-
                                 // job_id
                                 $repair['job_id'] = \Index\Number\Model::get(0, 'repair_job_no', $repair_table, 'job_id');
                                 $repair['customer_id'] = $login['id'];
                                 $repair['create_date'] = date('Y-m-d H:i:s');
-<<<<<<< HEAD
-
-                                if (empty($ret)) {
+                                if (empty($ret) || $ret == "") {
                                     // อัปโหลดไฟล์
                                     $dir = ROOT_PATH.DATA_FOLDER.'file_attachment_user/';
                                     foreach ($request->getUploadedFiles() as $item => $file) {
@@ -184,11 +180,6 @@ class Model extends \Kotchasan\Model
                               /*   // อัปโหลดไฟล์
                                 $dir = ROOT_PATH.DATA_FOLDER.'file_attachment_user/';  
                                     /* @var $file \Kotchasan\Http\UploadedFile   
-=======
-                                 // อัปโหลดไฟล์
-                                $dir = ROOT_PATH.DATA_FOLDER.'file_attachment_user/';  
-                                    /* @var $file \Kotchasan\Http\UploadedFile */        
->>>>>>> c73301cc1c4401a13061392ff2669fb25b3dcd28
                                 foreach ($request->getUploadedFiles() as $item => $file) {
                                     if ($item == 'file_attachment_user') {
                         
@@ -211,11 +202,7 @@ class Model extends \Kotchasan\Model
                                         }
                                     }
 
-<<<<<<< HEAD
                                 }            */              
-=======
-                                }                          
->>>>>>> c73301cc1c4401a13061392ff2669fb25b3dcd28
                             
                             // บันทึกรายการแจ้งซ่อม
                             $log = array(
@@ -233,6 +220,8 @@ class Model extends \Kotchasan\Model
                             // ใหม่ ส่งอีเมลไปยังผู้ที่เกี่ยวข้อง
                             $ret['alert'] = \Repair\Email\Model::send($log['repair_id']);    
                         } else {
+
+                        
                             // แก้ไขรายการแจ้งซ่อม
                             $db->update($repair_table, $index->id, $repair);
                             // คืนค่า

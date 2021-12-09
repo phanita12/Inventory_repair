@@ -35,7 +35,7 @@ class Model
         $settings = array();
         if (Login::checkPermission($login, 'can_config')) {
             // สามารถตั้งค่าระบบได้
-        /*    $settings['system'] = array(
+            $settings['system'] = array(
                 'text' => '{LNG_Site settings}',
                 'url' => 'index.php?module=system',
             );
@@ -50,7 +50,7 @@ class Model
             $settings['modules'] = array(
                 'text' => '{LNG_Module}',
                 'url' => 'index.php?module=modules',
-            );*/
+            );
             $settings['memberstatus'] = array(
                 'text' => '{LNG_Member status}',
                 'url' => 'index.php?module=memberstatus',
