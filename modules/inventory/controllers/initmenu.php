@@ -42,7 +42,7 @@ class Controller extends \Kotchasan\KBase
             );
         }
         // สามารถบริหารจัดการได้
-        if (Login::checkPermission($login, 'can_manage_inventory')) {
+        if (Login::checkPermission($login, 'can_config')) {
             $submenus[] = array(
                 'text' => '{LNG_List of}',
                 'url' => 'index.php?module=inventory-setup',

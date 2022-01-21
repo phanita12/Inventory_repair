@@ -78,7 +78,7 @@ class Model extends \Kotchasan\KBase
                 array('type', 'repairstatus'), 
                 array('published', 1)
             ))
-            ->andwhere(array('category_id', 'IN', array(8 ,9, 10)))
+            ->andwhere(array('category_id', 'IN', array(7,8 ,9, 10)))
             ->order('category_id')
             ->toArray()
             ->execute();

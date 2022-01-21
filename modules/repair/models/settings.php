@@ -2,10 +2,6 @@
 /**
  * @filesource modules/repair/models/settings.php
  *
- * @copyright 2016 Goragod.com
- * @license http://www.kotchasan.com/license/
- *
- * @see http://www.kotchasan.com/
  */
 
 namespace Repair\Settings;

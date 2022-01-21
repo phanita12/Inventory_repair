@@ -230,8 +230,9 @@ class View extends \Gcms\View
                 'label' => '{LNG_Approve}',
                 'labelClass' => 'g-input icon-star0',
                 //'disabled' => $user['id']  == $login_admin['head'] ? true : false,
-                'options' =>  $user_tc, 
-                'value' => $user_tc['id'],
+                'value' => $user['head'],
+                'options' =>  $this->user_tc->toselect(),//$user_tc, 
+               // 'value' => $user_tc['id'],
             )); 
             // status
             $fieldset->add('select', array(

@@ -83,7 +83,7 @@ class Model extends \Kotchasan\KBase
             ->where(array(
                 array('active', 1),
                 array('id',$login['id']),
-                array('permission', 'LIKE', '%,approve_manage_repair,%'),
+                array('permission', 'LIKE', '%,approve_repair,%'),
                 
             ))
             ->order('id')
