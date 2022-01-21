@@ -34,6 +34,7 @@ class Model extends \Kotchasan\Model
      */
     public static function all()
     {
+
         $login = Login::notDemoMode(Login::isMember());
         return  \Kotchasan\Model::createQuery() //return
             ->select('id', 'name')
@@ -287,11 +288,13 @@ class Model extends \Kotchasan\Model
     public static function toDataTable2($params)
     {
 
-        $login = Login::isMember();
-        if($login["status"] != 1){
-            $where2[] = (array('U.status',$login["status"]));
-        }
+        // สามารถดูรายงาน
+        $login =  Login::checkPermission( Login::isMember(), array('report'));
         $where = array();
+
+      /*  if($login["status"] != 1){
+            $where[] = (array('U.status',$login["status"]));
+        }*/
         if (!empty($params['type_id'])) {
             $where[] = array('V.type_id', $params['type_id']); 
         }
@@ -333,7 +336,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-         return static::createQuery() 
+            return static::createQuery() //return
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
             , 'R.product_no'
             , 'V.topic'
@@ -372,9 +375,9 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
-            ->andWhere($where2)
-            ->execute()  
-            ;
+            //->andWhere($where2)
+           ->execute()  
+            ;  
 
 
     }
