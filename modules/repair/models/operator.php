@@ -40,9 +40,9 @@ class Model extends \Kotchasan\KBase
             ->from('user')
             ->where(array(
                 array('active', 1),
-                array('permission', 'LIKE', '%,can_repair,%'), //can_manage_repair
+                array('permission', 'LIKE', '%,can_config,%'), //can_manage_repair
             ))
-            ->order('id')
+            //->order('id')
             ->toArray()
             ->execute();
     }

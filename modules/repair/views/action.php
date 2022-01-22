@@ -48,6 +48,7 @@ class View extends \Gcms\View
         ));
         $fieldset = $form->add('fieldset');
         $status = \Repair\Status\Model::create()->toSelect();
+        if($index->operator_id == 0){$operator = $login['id']; }else{ $operator =  $index->operator_id;  }
 
         // status
         $fieldset->add('select', array(
@@ -88,17 +89,16 @@ class View extends \Gcms\View
            'accept' => array('pdf'), 
        ));  
 
-       
-
         if (Login::checkPermission($login, 'can_manage_repair')) {
             // operator_id
-            $fieldset->add('select', array( //select
+            $fieldset->add('select', array( 
                 'id' => 'operator_id',
               'labelClass' => 'g-input icon-customer',
                 'itemClass' => 'item',
                 'label' => '{LNG_Operator}',
                 'options' => \Repair\Operator\Model::create()->toSelect(),
-                'value' => $index->operator_id,
+                'value' => $operator //$index->operator_id,
+
             ));
         }
         $fieldset = $form->add('fieldset', array(
