@@ -37,6 +37,7 @@ return array(
     6 => 'Sa'
   ),
   'Disapproved' => 'Disapproved',
+  'email_cc' => 'CC',
   'Emailing' => 'Email',
   'End date' => 'End date',
   'file_attachment' => 'file attachment',
