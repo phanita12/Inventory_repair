@@ -327,7 +327,7 @@ class Date
         return $result;
     }
 
-    public static function _date_range_limit_days($base, $result)
+    public static function _date_range_limit_days($base, $days)
     {
         $days_in_month_leap = array(31, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
         $days_in_month = array(31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -337,8 +337,8 @@ class Date
         $year = $base["y"];
         $month = $base["m"];
 
-        if (!$result["invert"]) {
-            while ($result["d"] < 0) {
+        if ( !empty($days["invert"])) {  //!$days["invert"] 
+            while ($days["d"] < 0) {
                 $month--;
                 if ($month < 1) {
                     $month += 12;
@@ -348,16 +348,16 @@ class Date
                 $leapyear = $year % 400 == 0 || ($year % 100 != 0 && $year % 4 == 0);
                 $days = $leapyear ? $days_in_month_leap[$month] : $days_in_month[$month];
 
-                $result["d"] += $days;
-                $result["m"]--;
+                $days["d"] += $days;
+                $days["m"]--;
             }
         } else {
-            while ($result["d"] < 0) {
+            while ($days["d"] < 0) {
                 $leapyear = $year % 400 == 0 || ($year % 100 != 0 && $year % 4 == 0);
                 $days = $leapyear ? $days_in_month_leap[$month] : $days_in_month[$month];
 
-                $result["d"] += $days;
-                $result["m"]--;
+                $days["d"] += $days;
+                $days["m"]--;
 
                 $month++;
                 if ($month > 12) {
@@ -367,7 +367,7 @@ class Date
             }
         }
 
-        return $result;
+        return $days;
     }
     /**
      * Count the number of working days between two dates.

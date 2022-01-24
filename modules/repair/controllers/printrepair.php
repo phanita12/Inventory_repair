@@ -147,7 +147,7 @@ class Controller extends \Kotchasan\Controller //extends \Gcms\Controller
                     $arr_app = \Repair\Printrepair\Model::getapp($index->id);   
                     
                     if($item->status != 1 && $item->status != 2 && $item->status != 3 && $item->status != 5 && $item->status != 6  ){ //$item->status == 9 || $item->status == 10
-                        for($i=0;$i<= count($arr_app);$i++){
+                        for($i=0;$i<count($arr_app);$i++){
                             if($arr_app[$i]->status == 9){
                                 $A[$i] = $arr_app[$i]->comment.' ';
                                 $B[$i] = $arr_app[$i]->date_approve;

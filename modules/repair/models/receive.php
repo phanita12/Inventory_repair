@@ -50,6 +50,11 @@ class Model extends \Kotchasan\Model
                     'type_id' => '',
                     'model_id' => '',
                     'urgency' => '',
+                    'category' => '',
+                    'type_repair' => '',
+                    'model' => '',
+                    'approve_id' => '',
+                    'approve' => '',
                 );
             } else {
                 return static::createQuery()

@@ -31,8 +31,7 @@ class View extends \Gcms\View
      */
     public function render($index)
     {
-        $login = Login::isMember();
-        $form = Html::create('form', array(
+         $form = Html::create('form', array(
             'id' => 'setup_frm',
             'class' => 'setup_frm',
             'autocomplete' => 'off',

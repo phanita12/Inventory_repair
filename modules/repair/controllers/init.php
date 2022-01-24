@@ -59,6 +59,8 @@ class Controller extends \Kotchasan\KBase
         //การส่งอีเมล
         $permissions['send_email'] = '{LNG_Emailing} ({LNG_Technical Service system})';
         $permissions['send_email_cc'] = '{LNG_Emailing} {LNG_email_cc} ({LNG_Technical Service system})';
+         //เมนูรายงาน
+         $permissions['report_technical'] = '{LNG_report} ({LNG_Technical Service system})';
 
          //**********Room************** */
         //ส่วน Booking Room
