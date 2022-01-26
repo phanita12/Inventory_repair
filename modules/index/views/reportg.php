@@ -253,7 +253,7 @@ class View extends \Gcms\View
                     </script>
                     </section>';
             
-                    /*  ----------------------------- กราฟที่ 3-------------------------------- */
+        /*  ----------------------------- กราฟที่ 3-------------------------------- */
                     // แสดงผล
                     $content3 = '<section id=report class="setup_frm">';
                     $content3 .= '<article class="ggraphs clear">';
@@ -264,9 +264,9 @@ class View extends \Gcms\View
                         foreach (self::$cfg->member_status as $key => $value) {
                             $gmember2 .=  '<th>{LNG_'.$value.'}</th>';
                         }
-                        for($i=1;$i<count($index3[0]);$i++){ 
-                            if( ($index3[0][$i]) != 0 ||  ($index3[0][$i]) != null)  {  
-                                $str_3 =  $str_3.'<td>'. $index3[0][$i].'</td>';   
+                        for($i=0;$i<count($index3[0]);$i++){ 
+                            if( ($index3[0]['0'.$i]) >= 0 ||  ($index3[0]['0'.$i]) != null)  {  
+                                $str_3 =  $str_3.'<td>'. $index3[0]['0'.$i].'</td>';
                             }else{  $str_3 = $str_3.'<td> 0 </td>'; }
                         } 
 
