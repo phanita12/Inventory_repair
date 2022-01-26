@@ -77,7 +77,6 @@ class Model extends \Kotchasan\Model
                             'member_id' => $login['id'],
                             'comment' => $request->post('comment')->topic(),
                             'status' => $request->post('status')->toInt(),
-                           
                             'operator_id' => $login['id'],
                             'cost' => $request->post('cost')->toDouble(),
                             'create_date' => date('Y-m-d H:i:s'),

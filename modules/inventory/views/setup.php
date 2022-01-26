@@ -160,11 +160,18 @@ class View extends \Gcms\View
             ),
             /* ปุ่มแสดงในแต่ละแถว */
             'buttons' => array(
+                'printrepair' => array(
+                    'class' => 'icon-print button brown notext',
+                    'href' =>  $uri->createBackUri(array('module' => 'repair-printrepair', 'id' => ':id')),
+                    'target' => '_export',
+                    'title' => '{LNG_Print}',
+                ),
                 array(
                     'class' => 'icon-edit button green',
                     'href' => $uri->createBackUri(array('module' => 'inventory-write', 'tab' => 'product', 'id' => ':id')),
                     'text' => '{LNG_Edit}',
                 ),
+               
             ),
             /* ปุ่มเพิ่ม */
             'addNew' => array(

@@ -118,6 +118,12 @@ class View extends \Gcms\View
                     'href' => $uri->createBackUri(array('module' => 'repair-detail', 'id' => ':id')),
                     'title' => '{LNG_Repair job description}',
                 ),
+                'printrepair' => array(
+                    'class' => 'icon-print button brown notext',
+                    'href' =>  $uri->createBackUri(array('module' => 'repair-printrepair', 'id' => ':id')),
+                    'target' => '_export',
+                    'title' => '{LNG_Print}',
+                ),
             ),
         ));
         // save cookie

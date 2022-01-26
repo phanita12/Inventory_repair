@@ -48,6 +48,7 @@ class Controller extends \Kotchasan\Controller //extends \Gcms\Controller
                 // โหลด template
                 $billing = $this->getTemplate('QUO');
                 $item = \Repair\Printrepair\Model::get($index->id);
+
                 /*เอารูปภาพE-sig approve มาแสดง  */
                 $img = is_file(ROOT_PATH.DATA_FOLDER.'approve/'.'R'.$index->id.'-'.Date::format($index->date_approve, 'md').'.jpg') ? WEB_URL.DATA_FOLDER.'approve/'.'R'.$index->id.'-'.Date::format($index->date_approve, 'md').'.jpg' : WEB_URL.'modules/inventory/img/noesig.png';   
                 /*เอารูปภาพE-sig User ที่เปิด Job มาแสดง  */
@@ -152,8 +153,14 @@ class Controller extends \Kotchasan\Controller //extends \Gcms\Controller
                                 $A[$i] = $arr_app[$i]->comment.' ';
                                 $B[$i] = $arr_app[$i]->date_approve;
                             }
-                        }foreach($A as $comment)foreach($B as $date_approve)
-
+                        }
+                        if(!empty($A)){
+                              foreach($A as $comment);
+                              foreach($B as $date_approve);
+                        }else{
+                            $date_approve = '';
+                            $comment = '';
+                        }
                         $detailapprove .= '<tr>';
                         $detailapprove .= '<th>ชื่อหัวหน้างาน :</th>';
                         $detailapprove .= '<td>'.$item->send_approve2.'</td>';
