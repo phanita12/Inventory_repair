@@ -42,7 +42,7 @@ class Controller extends \Kotchasan\KBase
                 'url' => 'index.php?module=repair-history',
             ),
         );*/
-
+            $submenus = array();
            // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
            if (Login::checkPermission($login, array( 'can_repair'))) {
             $submenus = array(
@@ -70,9 +70,11 @@ class Controller extends \Kotchasan\KBase
                 'url' => 'index.php?module=repair-setup',
             );
         } 
+
         // เมนูแจ้งซ่อม
         $menu->add('repair', '{LNG_Repair jobs}', null, $submenus);
         $menu->addTopLvlMenu('repair', '{LNG_Repair jobs}', null, $submenus, 'member');
+        
 
         // สามารถตั้งค่าระบบได้
         if (Login::checkPermission($login, 'can_config')) {

@@ -58,10 +58,17 @@ class Controller extends \Kotchasan\KBase
             \Index\Home\Controller::renderCard($card, 'icon-valid', '{LNG_Repair list}', number_format($datas_close->count), '{LNG_Closejob}', 'index.php?module=repair-setup&amp;status=7');
             \Index\Home\Controller::renderCard($card, 'icon-invalid', '{LNG_Repair list}', number_format($datas_cancel->count), '{LNG_Canceljob}', 'index.php?module=repair-setup&amp;status=6');  
             \Index\Home\Controller::renderCard($card, 'icon-compare', '{LNG_Repair list}', number_format($datas_waitParts->count), '{LNG_WaitParts}', 'index.php?module=repair-setup&amp;status=3');
-        } else {
+        } else if (Login::checkPermission($login, array( 'can_repair','approve_repair'))) {
+            \Index\Home\Controller::renderCard($card, 'icon-calendar', '{LNG_Date}', \Kotchasan\Date::format(time(), 'd M'), '{LNG_today}', 'index.php');
             \Index\Home\Controller::renderCard($card, 'icon-tags', '{LNG_Repair list}', number_format($datas_Alltoday->count), '{LNG_Per Month}', 'index.php?module=repair-history');
             \Index\Home\Controller::renderCard($card, 'icon-users', '{LNG_Repair list}', number_format($datas->count), '{LNG_Job today}', 'index.php?module=repair-history');
             \Index\Home\Controller::renderCard($card, 'icon-clock', '{LNG_Repair list}', number_format($datas_Sendapprove2->count), '{LNG_approve_wait}', 'index.php?module=repair-approve&amp;status=8');
+        } else if (Login::checkPermission($login, array( 'can_repair'))) {
+            \Index\Home\Controller::renderCard($card, 'icon-calendar', '{LNG_Date}', \Kotchasan\Date::format(time(), 'd M'), '{LNG_today}', 'index.php');
+            \Index\Home\Controller::renderCard($card, 'icon-tags', '{LNG_Repair list}', number_format($datas_Alltoday->count), '{LNG_Per Month}', 'index.php?module=repair-history');
+            \Index\Home\Controller::renderCard($card, 'icon-users', '{LNG_Repair list}', number_format($datas->count), '{LNG_Job today}', 'index.php?module=repair-history');
+        }else{
+            \Index\Home\Controller::renderCard($card, 'icon-calendar', '{LNG_Date}', \Kotchasan\Date::format(time(), 'd M'), '{LNG_today}', 'index.php');
         }
     }
 
