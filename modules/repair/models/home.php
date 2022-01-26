@@ -271,8 +271,9 @@ class Model extends \Kotchasan\Model
         // พนักงาน
         $isStaff = Login::checkPermission($login, array( 'can_config')); //'can_manage_repair',
         if ($isStaff) {
-            $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
-            $where[] = array('S.status', $status);
+           /* $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
+            $where[] = array('S.status', $status);*/
+            $where[] = array('S.status', array('1','6'));
         } else {
             $where[] = array('R.customer_id', $login['id']);
         }
