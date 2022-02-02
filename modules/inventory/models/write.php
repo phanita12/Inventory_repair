@@ -81,118 +81,123 @@ class Model extends \Kotchasan\Model
                     $save = array(
                         'topic' => $request->post('topic')->topic(),
                         'inuse' => $request->post('inuse')->toBoolean(),
+                        'purchase_company' => $request->post('purchase_company')->topic(),
+                        'purchase_contact' => $request->post('purchase_contact')->topic(),
+                        'purchase_date' => $request->post('purchase_date')->date(),
+                        'purchase_price' => $request->post('purchase_price')->toFloat(),
                     );
                     // ตรวจสอบรายการที่เลือก
                     $index = self::get($request->post('id')->toInt());
                     if ($index) {
-                        // หมวดหมู่
-                        $category = \Inventory\Category\Model::init();
-                        foreach (Language::get('INVENTORY_CATEGORIES', array()) as $key => $label) {
-                            $save[$key] = $category->save($key, $request->post($key.'_text')->topic());
-                        }
-                        $meta = array();
-                        foreach (Language::get('INVENTORY_METAS', array()) as $key => $label) {
-                            if ($key == 'detail') {
-                                $meta[$key] = $request->post($key)->textarea();
-                            } else {
-                                $meta[$key] = $request->post($key)->topic();
+                            // หมวดหมู่
+                            $category = \Inventory\Category\Model::init();
+                            foreach (Language::get('INVENTORY_CATEGORIES', array()) as $key => $label) {
+                                $save[$key] = $category->save($key, $request->post($key.'_text')->topic());
                             }
-                        }
-                        // Database
-                        $db = $this->db();
-                        // ตาราง
-                        $table_inventory = $this->getTableName('inventory');
-                        $inventory_items = $this->getTableName('inventory_items');
-                        $table_meta = $this->getTableName('inventory_meta');
-                        if ($index->id == 0) {
-                            $items = array(
-                                'product_no' => $request->post('product_no')->topic(),
-                                'stock' => $request->post('stock')->toDouble(),
-                                'unit' => $request->post('unit')->topic(),
-                            );
-                            if ($items['product_no'] == '') {
-                                // ไม่ได้กรอก product_no
-                                $ret['ret_product_no'] = 'Please fill in';
-                            } else {
-                                // ค้นหา product_no ซ้ำ
-                                $search = $db->first($inventory_items, array('product_no', $items['product_no']));
-                                if ($search && ($index->id == 0 || $index->id != $search->inventory_id)) {
-                                    $ret['ret_product_no'] = Language::replace('This :name already exist', array(':name' => Language::get('Serial/Registration No.')));
+                            $meta = array();
+                            foreach (Language::get('INVENTORY_METAS', array()) as $key => $label) {
+                                if ($key == 'detail') {
+                                    $meta[$key] = $request->post($key)->textarea();
+                                } else {
+                                    $meta[$key] = $request->post($key)->topic();
                                 }
                             }
-                            if ($items['unit'] == '') {
-                                // ไม่ได้กรอก unit
-                                $ret['ret_unit'] = 'Please select';
-                            }
-                            if ($index->id == 0 && $items['stock'] == 0) {
-                                // ใหม่ ไม่ได้กรอก stock
-                                $ret['ret_stock'] = 'Please fill in';
-                            }
-                        }
-                        if ($save['topic'] == '') {
-                            // ไม่ได้กรอก topic
-                            $ret['ret_topic'] = 'Please fill in';
-                        }
-                        if (empty($ret)) {
+                            // Database
+                            $db = $this->db();
+                            // ตาราง
+                            $table_inventory = $this->getTableName('inventory');
+                            $inventory_items = $this->getTableName('inventory_items');
+                            $table_meta = $this->getTableName('inventory_meta');
                             if ($index->id == 0) {
-                                $save['id'] = $db->getNextId($table_inventory);
-                            } else {
-                                $save['id'] = $index->id;
+                                $items = array(
+                                    'product_no' => $request->post('product_no')->topic(),
+                                    'stock' => $request->post('stock')->toFloat(),//toDouble(),
+                                    'unit' => $request->post('unit')->topic(),
+                                );
+                                if ($items['product_no'] == '') {
+                                    // ไม่ได้กรอก product_no
+                                    $ret['ret_product_no'] = 'Please fill in';
+                                } else {
+                                    // ค้นหา product_no ซ้ำ
+                                    $search = $db->first($inventory_items, array('product_no', $items['product_no']));
+                                    if ($search && ($index->id == 0 || $index->id != $search->inventory_id)) {
+                                        $ret['ret_product_no'] = Language::replace('This :name already exist', array(':name' => Language::get('Serial/Registration No.')));
+                                    }
+                                }
+                                if ($items['unit'] == '') {
+                                    // ไม่ได้กรอก unit
+                                    $ret['ret_unit'] = 'Please select';
+                                }
+                                if ($index->id == 0 && $items['stock'] == 0) {
+                                    // ใหม่ ไม่ได้กรอก stock
+                                    $ret['ret_stock'] = 'Please fill in';
+                                }
                             }
-                            // อัปโหลดไฟล์
-                            $dir = ROOT_PATH.DATA_FOLDER.'inventory/';
-                            foreach ($request->getUploadedFiles() as $item => $file) {
-                                /* @var $file \Kotchasan\Http\UploadedFile */
-                                if ($item == 'picture') {
-                                    if ($file->hasUploadFile()) {
-                                        if (!File::makeDirectory($dir)) {
-                                            // ไดเรคทอรี่ไม่สามารถสร้างได้
-                                            $ret['ret_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'inventory/');
-                                        } else {
-                                            try {
-                                                $file->resizeImage(array('jpg', 'jpeg', 'png'), $dir, $save['id'].'.jpg', self::$cfg->inventory_w);
-                                            } catch (\Exception $exc) {
-                                                // ไม่สามารถอัปโหลดได้
-                                                $ret['ret_'.$item] = Language::get($exc->getMessage());
+                            if ($save['topic'] == '') {
+                                // ไม่ได้กรอก topic
+                                $ret['ret_topic'] = 'Please fill in';
+                            }
+                            if (empty($ret)) {
+                                if ($index->id == 0) {
+                                    $save['id'] = $db->getNextId($table_inventory);
+                                } else {
+                                    $save['id'] = $index->id;
+                                }
+                                // อัปโหลดไฟล์
+                                $dir = ROOT_PATH.DATA_FOLDER.'inventory/';
+                                foreach ($request->getUploadedFiles() as $item => $file) {
+                                    /* @var $file \Kotchasan\Http\UploadedFile */
+                                    if ($item === 'picture') {
+                                        if ($file->hasUploadFile()) {
+                                            if (!File::makeDirectory($dir)) {
+                                                // ไดเรคทอรี่ไม่สามารถสร้างได้
+                                                $ret['ret_'.$item] = sprintf(Language::get('Directory %s cannot be created or is read-only.'), DATA_FOLDER.'inventory/');
+                                            } else {
+                                                try {
+                                                    $file->moveTo($dir.$save['id'].'.jpg');
+                                                } catch (\Exception $exc) {
+                                                    // ไม่สามารถอัปโหลดได้
+                                                    $ret['ret_'.$item] = Language::get($exc->getMessage());
+                                                }
                                             }
+                                        } elseif ($file->hasError()) {
+                                            // ข้อผิดพลาดการอัปโหลด
+                                            $ret['ret_'.$item] = Language::get($file->getErrorMessage());
                                         }
-                                    } elseif ($file->hasError()) {
-                                        // ข้อผิดพลาดการอัปโหลด
-                                        $ret['ret_'.$item] = Language::get($file->getErrorMessage());
                                     }
                                 }
                             }
-                        }
-                        if (empty($ret)) {
-                            if ($index->id == 0) {
-                                // ใหม่
-                                $db->insert($table_inventory, $save);
-                            } else {
-                                // แก้ไข
-                                $db->update($table_inventory, $index->id, $save);
-                            }
-                            // อัปเดต meta
-                            $db->delete($table_meta, array('inventory_id', $save['id']), 0);
-                            foreach ($meta as $key => $value) {
-                                if ($value != '') {
-                                    $db->insert($table_meta, array(
-                                        'inventory_id' => $save['id'],
-                                        'name' => $key,
-                                        'value' => $value,
-                                    ));
+                        
+                            if (empty($ret)) {
+                                if ($index->id == 0) {
+                                    // ใหม่
+                                    $db->insert($table_inventory, $save);
+                                } else {
+                                    // แก้ไข
+                                    $db->update($table_inventory, $index->id, $save);
                                 }
+                                // อัปเดต meta
+                                $db->delete($table_meta, array('inventory_id', $save['id']), 0);
+                                foreach ($meta as $key => $value) {
+                                    if ($value != '') {
+                                        $db->insert($table_meta, array(
+                                            'inventory_id' => $save['id'],
+                                            'name' => $key,
+                                            'value' => $value,
+                                        ));
+                                    }
+                                }
+                                if ($index->id == 0) {
+                                    // ใหม่ เพิ่ม product_no รายการแรก
+                                    $db->delete($inventory_items, array('inventory_id', $save['id']), 0);
+                                    $items['inventory_id'] = $save['id'];
+                                    $db->insert($inventory_items, $items);
+                                }
+                                // คืนค่า
+                                $ret['alert'] = Language::get('Saved successfully');
+                                $ret['location'] = $request->getUri()->postBack('index.php', array('module' => 'inventory-setup'));
                             }
-                            if ($index->id == 0) {
-                                // ใหม่ เพิ่ม product_no รายการแรก
-                                $db->delete($inventory_items, array('inventory_id', $save['id']), 0);
-                                $items['inventory_id'] = $save['id'];
-                                $db->insert($inventory_items, $items);
-                            }
-                            // คืนค่า
-                            $ret['alert'] = Language::get('Saved successfully');
-                            $ret['location'] = $request->getUri()->postBack('index.php', array('module' => 'inventory-setup'));
                         }
-                    }
                 } catch (\Kotchasan\InputItemException $e) {
                     $ret['alert'] = $e->getMessage();
                 }

@@ -38,8 +38,6 @@ class Model extends \Kotchasan\Model
 
         if ($request->initSession() && $request->isSafe() && $login = Login::isMember()) {
             if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
-                
-
                     // อัปโหลดไฟล์
                     $dir = ROOT_PATH.DATA_FOLDER.'file_attachment/';  
                      /* @var $file \Kotchasan\Http\UploadedFile */        
@@ -78,14 +76,14 @@ class Model extends \Kotchasan\Model
                             'comment' => $request->post('comment')->topic(),
                             'status' => $request->post('status')->toInt(),
                             'operator_id' => $login['id'],
-                            'cost' => $request->post('cost')->toDouble(),
+                            'cost' => $request->post('cost')->toFloat(),
                             'create_date' => date('Y-m-d H:i:s'),
                             'repair_id' => $request->post('repair_id')->toInt(),
                             'attachment' => $fi,
                             'operator_id' => $request->post('operator_id', $login['id'])->toInt(),
+                            'r_warranty' => $request->post('warranty')->toInt(),
+                            'r_company' => $request->post('repair_company')->toInt(),
                         );
-    
-                         
                     if (empty($save['status'])) {
                         // ไม่ได้เลือก status
                         $ret['ret_status'] = 'Please select';

@@ -119,6 +119,10 @@ class View extends \Gcms\View
                 'topic' => array(
                     'text' => '{LNG_Equipment}',
                 ),
+                'product_no' => array(
+                    'text' => '{LNG_Serial/Registration No.}',
+                    'sort' => 'product_no',
+                ),
                 'create_date' => array(
                     'text' => '{LNG_Received date}',
                     'class' => 'center',

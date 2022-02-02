@@ -49,57 +49,66 @@ class View extends \Gcms\View
         $fieldset = $form->add('fieldset');
         $status = \Repair\Status\Model::create()->toSelect();
         if($index->operator_id == 0){$operator = $login['id']; }else{ $operator =  $index->operator_id;  }
-
         // status
-        $fieldset->add('select', array(
-            'id' => 'status',
-            'labelClass' => 'g-input icon-star0',
-            'itemClass' => 'item',
-            'label' => '{LNG_Repair status}',
-            'options' => array(0 => '{LNG_Please select}') + $status,
-            'value' => $index->status,
-        ));
-      
+            $fieldset->add('select', array(
+                'id' => 'status',
+                'labelClass' => 'g-input icon-star0',
+                'itemClass' => 'item',
+                'label' => '{LNG_Repair status}',
+                'options' => array(0 => '{LNG_Please select}') + $status,
+                'value' => $index->status,
+            ));
         // comment
-        $fieldset->add('textarea', array(
-            'id' => 'comment',
-            'labelClass' => 'g-input icon-comments',
-            'itemClass' => 'item',
-            'label' => '{LNG_Comment}',
-            'comment' => '{LNG_Note or additional notes}',
-            'rows' => 2,
-        ));
-
+            $fieldset->add('textarea', array(
+                'id' => 'comment',
+                'labelClass' => 'g-input icon-comments',
+                'itemClass' => 'item',
+                'label' => '{LNG_Comment}',
+                'comment' => '{LNG_Note or additional notes}',
+                'rows' => 2,
+            ));
         // Cost
-        $fieldset->add('number', array(
-            'id' => 'cost',
-            'labelClass' => 'g-input icon-number',
-            'itemClass' => 'item',
-            'label' => '{LNG_Cost}',
-			'class'=> 'currency'
-        ));
-
+            $fieldset->add('number', array(
+                'id' => 'cost',
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'item',
+                'label' => '{LNG_Cost}',
+                'class'=> 'currency'
+            ));
+        // warranty
+            $fieldset->add('number', array(
+                'id' => 'warranty',
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'item',
+                'label' => '{LNG_Warranty}',
+            ));
+         // Repair company
+            $fieldset->add('number', array(
+                'id' => 'repair_company',
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'item',
+                'label' => '{LNG_Repair company}',
+            ));
          // File attachment
-         $fieldset->add('file', array(
-           'id' => 'file_attachment',
-           'labelClass' => 'g-input icon-upload',
-           'itemClass' => 'item',
-           'label' => '{LNG_Browse file}',
-           'comment' => Language::replace('Upload :type files no larger than :size', array(':type' => '.pdf', ':size' => \Kotchasan\Http\UploadedFile::getUploadSize())),
-           'accept' => array('pdf'), 
-       ));  
+            $fieldset->add('file', array(
+                'id' => 'file_attachment',
+                'labelClass' => 'g-input icon-upload',
+                'itemClass' => 'item',
+                'label' => '{LNG_Browse file}',
+                'comment' => Language::replace('Upload :type files no larger than :size', array(':type' => '.pdf', ':size' => \Kotchasan\Http\UploadedFile::getUploadSize())),
+                'accept' => array('pdf'), 
+            ));  
 
         if (Login::checkPermission($login, 'can_manage_repair')) {
             // operator_id
-            $fieldset->add('select', array( 
-                'id' => 'operator_id',
-              'labelClass' => 'g-input icon-customer',
-                'itemClass' => 'item',
-                'label' => '{LNG_Operator}',
-                'options' => \Repair\Operator\Model::create()->toSelect(),
-                'value' => $operator //$index->operator_id,
-
-            ));
+                $fieldset->add('select', array( 
+                    'id' => 'operator_id',
+                    'labelClass' => 'g-input icon-customer',
+                    'itemClass' => 'item',
+                    'label' => '{LNG_Operator}',
+                    'options' => \Repair\Operator\Model::create()->toSelect(),
+                    'value' => $operator 
+                ));
         }
         $fieldset = $form->add('fieldset', array(
             'class' => 'submit',

@@ -114,12 +114,12 @@ class View extends \Gcms\View
                     'class' => 'button purple notext notext icon-download',
                     'id' => ':id',
                     'title' => '{LNG_File}',             
-                ),   */
+                ),   
                 'delete' => array(
                     'class' => 'icon-delete button red notext',
                     'id' => ':id',
                     'title' => '{LNG_Delete}',
-                ),
+                ),*/
             );
         }
 
