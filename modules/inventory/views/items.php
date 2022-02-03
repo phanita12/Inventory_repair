@@ -44,7 +44,7 @@ class View extends \Gcms\View
             'token' => true,
         ));
         $fieldset = $form->add('fieldset', array(
-            'title' => '{LNG_Serial/Registration No.} '.$product->topic,
+            'title' => '{LNG_Registration No.} '.$product->topic,
         ));
         // ตาราง
         $table = new DataTable(array(
@@ -65,7 +65,7 @@ class View extends \Gcms\View
             /* ส่วนหัวของตาราง และการเรียงลำดับ (thead) */
             'headers' => array(
                 'product_no' => array(
-                    'text' => '{LNG_Serial/Registration No.}',
+                    'text' => '{LNG_Registration No.}',
                     'class' => 'center',
                 ),
                 'stock' => array(

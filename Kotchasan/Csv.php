@@ -129,27 +129,22 @@ class Csv
      *
      * @return bool
      */
-    
-    public static function send($file, $header, $datas, $charset = 'Windows-874') //Windows-874
+    public static function send($file, $header, $datas, $charset = 'Windows-874')
     {
         // header
-        //header('Content-Type: text/csv;');
         header('Content-Type: text/csv;charset="'.$charset.'"');
-        // header('Content-Disposition: attachment;filename="'.$file.'.csv"');
-        header(sprintf( 'Content-Disposition: attachment; filename='.$file.'_%s.csv', date( 'dmYHi' ) ) );
+        header('Content-Disposition: attachment;filename="'.$file.'.csv"');
         // create stream
         $f = fopen('php://output', 'w');
-        // Insert the UTF-8 BOM in the file
-        fputs($f, $bom = ( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
         // charset
-        $charset = strtoupper($charset); 
+        $charset = strtoupper($charset);
         // csv header
         if (!empty($header)) {
-            fputcsv($f, self::convert($header, 'UTF-8'));
-        }       
+            fputcsv($f, self::convert($header, $charset));
+        }
         // content
         foreach ($datas as $item) {
-            fputcsv($f, self::convert($item, 'UTF-8'));
+            fputcsv($f, self::convert($item, $charset));
         }
         // close
         fclose($f);

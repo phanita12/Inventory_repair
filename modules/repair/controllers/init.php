@@ -28,11 +28,12 @@ class Controller extends \Kotchasan\KBase
      */
     public static function updatePermissions($permissions)
     {
-        $permissions['can_manage_repair'] = '{LNG_Can manage repair}';
-        $permissions['can_repair'] = '{LNG_Repairman}';
-        $permissions['approve_manage_repair'] = '{LNG_Can approve manage repair}';
+        //$permissions['can_manage_repair'] = '{LNG_Can manage repair}';
+        $permissions['can_manage_car_booking'] = '{LNG_Can manage repair}';
+        $permissions['can_repair'] = '{LNG_Bookingman}';
+        $permissions['approve_manage_repair'] = '{LNG_Can approve manage Booking}';
       //  $permissions['approve_repair'] = '{LNG_Can approve manage repair}';
-        $permissions['report'] = '{LNG_report}';
+        $permissions['report_car_booking'] = '{LNG_report}';
         return $permissions;
     }
 }

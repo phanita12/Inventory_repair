@@ -117,7 +117,7 @@ class Model extends \Kotchasan\Model
                                 // ค้นหา product_no ซ้ำ
                                 $search = $db->first($inventory_items, array('product_no', $items['product_no']));
                                 if ($search && ($index->id == 0 || $index->id != $search->inventory_id)) {
-                                    $ret['ret_product_no'] = Language::replace('This :name already exist', array(':name' => Language::get('Serial/Registration No.')));
+                                    $ret['ret_product_no'] = Language::replace('This :name already exist', array(':name' => Language::get('Registration No.')));
                                 }
                             }
                             if ($items['unit'] == '') {

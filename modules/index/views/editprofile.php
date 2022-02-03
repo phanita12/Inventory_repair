@@ -159,7 +159,7 @@ class View extends \Gcms\View
         'label' => '{LNG_signature approve}',
         'comment' => Language::replace('Browse image uploaded, type :type', array(':type' => 'jpg, jpeg, png')).' ({LNG_resized automatically})',
         'dataPreview' => 'imgPicture',
-       // 'previewSrc' => $img,
+        'previewSrc' => $img,
         'previewSrc_disable' => $img,
         'accept' => array('jpg', 'jpeg', 'png'), 
         ));  
@@ -223,15 +223,17 @@ class View extends \Gcms\View
                     }
                 }
             }
+
+            if($user['head'] == 0){ $user['head'] = $user['id'] ;  }
              // user_id
              $fieldset->add('select', array(
                 'id' => 'user_id',
                 'itemClass' => 'item',
                 'label' => '{LNG_Approve}',
                 'labelClass' => 'g-input icon-star0',
-                //'disabled' => $user['id']  == $login_admin['head'] ? true : false,
+                'disabled' => $user['id']  == $user['head'] ? true : false,
                 'options' =>  $user_tc, 
-                'value' => $user_tc['id'],
+                'value' =>  $user['head'],
             )); 
             // status
             $fieldset->add('select', array(

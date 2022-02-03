@@ -32,6 +32,28 @@ class Sql
      */
     protected $values;
 
+   /**
+     * หาข้อมูล type_request
+     *
+     * @assert ('id')->text() [==] 'AVG(`id`)'
+     *
+     * @param string      $column_name ชื่อคอลัมน์
+     * @param string|null $alias       ชื่อรองที่ต้องการ ถ้าไม่ระบุไม่มีชื่อรอง
+     * @param bool        $distinct    false (default) นับทุกคอลัมน์, true นับเฉพาะคอลัมน์ที่ไม่ซ้ำ
+     *
+     * @return \static
+     */
+    public static function CASE_WHEN($column_name, $alias = null, $distinct = false)
+    {
+        return self::create('CASE WHEN '.self::fieldName($column_name).'= 0 THEN "เข้าพบลูกค้า"'
+        .' WHEN '.self::fieldName($column_name).'= 1 THEN "ติดต่อราชการ"'
+        .' WHEN '.self::fieldName($column_name).'= 2 THEN "สัมมนา"'
+        .' WHEN '.self::fieldName($column_name).'= 3 THEN "ส่งสินค้า"'
+        .' WHEN '.self::fieldName($column_name).'= 4 THEN "อื่นๆ"'
+        .' ELSE " " END '.($alias ? " AS `$alias`" : ''));
+    }
+
+
     /**
      * หาค่าเฉลี่ยของคอลัมน์ที่เลือก
      *

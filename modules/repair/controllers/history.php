@@ -36,7 +36,7 @@ class Controller extends \Gcms\Controller
         // ข้อความ title bar
         $this->title = Language::trans('{LNG_History}');
         // เลือกเมนู
-        $this->menu = 'repair';
+        $this->menu = 'booking';
         // สมาชิก
         if ($login = Login::isMember()) {
             // แสดงผล
@@ -48,7 +48,7 @@ class Controller extends \Gcms\Controller
                 'class' => 'breadcrumbs',
             ));
             $ul = $breadcrumbs->add('ul');
-            $ul->appendChild('<li><span class="icon-tools">{LNG_Repair jobs}</span></li>');
+            $ul->appendChild('<li><span class="icon-tools">{LNG_Booking jobs}</span></li>');
             $ul->appendChild('<li><span>{LNG_History}</span></li>');
             $section->add('header', array(
                 'innerHTML' => '<h2 class="icon-list">'.$this->title.'</h2>',

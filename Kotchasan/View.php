@@ -172,7 +172,7 @@ class View extends \Kotchasan\KBase
             $head .= implode("\n", $this->metas);
         }
         if (!empty($this->script)) {
-            $head .= "<script>\n".implode("\n", $this->script)."\n</script>";
+            $head .= "\n<script>\n".implode("\n", $this->script)."\n</script>";
         }
         if ($head != '') {
             $this->contents['/(<head.*)(<\/head>)/isu'] = '$1'.$head.'$2';

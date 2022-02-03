@@ -107,11 +107,11 @@ class View extends \Gcms\View
                     'sort' => 'id',
                 ),
                 'topic' => array(
-                    'text' => '{LNG_Equipment}',
+                    'text' => '{LNG_Car information}',
                     'sort' => 'topic',
                 ),
                 'product_no' => array(
-                    'text' => '{LNG_Serial/Registration No.}',
+                    'text' => '{LNG_Registration No.}',
                     'sort' => 'product_no',
                 ),
                 'category_id' => array(
@@ -170,7 +170,7 @@ class View extends \Gcms\View
             'addNew' => array(
                 'class' => 'float_button icon-new',
                 'href' => $uri->createBackUri(array('module' => 'inventory-write', 'id' => 0)),
-                'title' => '{LNG_Add} {LNG_Equipment}',
+                'title' => '{LNG_Add} {LNG_Car information}',
             ),
         ));
         // save cookie

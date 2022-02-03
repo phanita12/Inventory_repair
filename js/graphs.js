@@ -46,6 +46,7 @@
         gridVColor: "#CDCDCD",
         showTitle: true,
         lineWidth: 2,
+        linePointerSize: 3,
         centerOffset: 10,
         centerX: null,
         centerY: null,
@@ -125,12 +126,13 @@
         this.max = Math.ceil(this.max / options.rows) * options.rows;
       }
       var _mouseMove = function(e) {
-        var currItem = null;
-        var offset = self.canvas.viewportOffset();
-        var pos = GEvent.pointer(e);
-        var mouseX = pos.x - offset.left;
-        var mouseY = pos.y - offset.top;
-        var tootip = new Array();
+        var currItem = null,
+          offset = self.canvas.viewportOffset(),
+          pos = GEvent.pointer(e),
+          mouseX = pos.x - offset.left,
+          mouseY = pos.y - offset.top,
+          tootip = new Array(),
+          _tooltip;
         forEach(self.datas.rows, function(rows, row) {
           forEach(this.items, function(item, index) {
             if (
@@ -141,17 +143,12 @@
             ) {
               currItem = item;
               if (item.tooltip) {
-                tootip.push(item.tooltip);
+                _tooltip = item.tooltip.replace(/[\n]{1,}/g, '<br>');
               } else {
-                tootip.push(
-                  "<b>" +
-                  self.subtitle +
-                  self.datas.labels[index] +
-                  "</b> " +
-                  rows.title +
-                  " " +
-                  item.title
-                );
+                _tooltip = "<b>" + self.subtitle + self.datas.labels[index] + "</b> " + rows.title + " " + item.title;
+              }
+              if (tootip.length == 0 || tootip[0] != _tooltip) {
+                tootip.push(_tooltip);
               }
               return true;
             }
@@ -236,7 +233,8 @@
           self.loading = false;
         }
       };
-      window.setInterval(_change, 50);
+      window.addEventListener('resize', _change, true);
+      _change();
       if ($E("ggraph_tooltip")) {
         this.tooltip = $G("ggraph_tooltip");
       } else {
@@ -255,10 +253,7 @@
       var options = this.options;
       var self = this;
       var context = this.context;
-      var offsetRight = Math.ceil(
-        context.measureText(this.datas.labels[this.datas.labels.length - 1])
-        .width / 2
-      );
+      var offsetRight = Math.ceil(context.measureText(this.datas.labels[this.datas.labels.length - 1]).width / 2);
       var label = this.max;
       var labelValue = this.max / options.rows;
       if (labelValue > 1) {
@@ -284,10 +279,7 @@
       forEach(this.datas.rows, function() {
         forEach(this.items, function(item, index) {
           item.cx = index * cellWidth + l;
-          item.cy =
-            clientHeight +
-            t -
-            Math.floor((clientHeight * item.value) / self.max);
+          item.cy = clientHeight + t - Math.floor((clientHeight * item.value) / self.max);
           item.x = item.cx - o;
           item.y = item.cy - o;
           item.w = item.cx + o;
@@ -371,23 +363,14 @@
             xp = item.cx;
             yp = item.cy;
           });
-          forEach(this.items, function() {
-            context.fillStyle = options.colors[row % options.colors.length];
-            context.beginPath();
-            context.arc(
-              this.cx,
-              this.cy,
-              options.lineWidth + 3,
-              0,
-              Math.PI * 2,
-              true
-            );
-            context.fill();
-            context.fillStyle = self.backgroundColor;
-            context.beginPath();
-            context.arc(this.cx, this.cy, 3, 0, Math.PI * 2, true);
-            context.fill();
-          });
+          if (options.linePointerSize > 0) {
+            forEach(this.items, function() {
+              context.fillStyle = options.colors[row % options.colors.length];
+              context.beginPath();
+              context.arc(this.cx, this.cy, options.linePointerSize, 0, Math.PI * 2, true);
+              context.fill();
+            });
+          }
         });
         self.drawTitle(r, t);
       }

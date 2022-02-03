@@ -432,12 +432,13 @@ class QueryBuilder extends \Kotchasan\Database\Query
      *
      * @param string $table     ชื่อตาราง
      * @param mixed  $condition query WHERE
+     * @param string $operator  (optional) เช่น AND หรือ OR
      *
      * @return \static
      */
-    public function notExists($table, $condition)
+    public function notExists($table, $condition, $operator = 'AND')
     {
-        $ret = $this->buildWhere($condition);
+        $ret = $this->buildWhere($condition, $operator);
         if (is_array($ret)) {
             $this->values = ArrayTool::replace($this->values, $ret[1]);
             $ret = $ret[0];

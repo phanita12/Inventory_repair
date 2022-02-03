@@ -34,7 +34,7 @@ class Controller extends \Kotchasan\KBase
     {
         $submenus = array(
             array(
-                'text' => '{LNG_Get a repair}',
+                'text' => '{LNG_Get a Job}',
                 'url' => 'index.php?module=repair-receive',
             ),
             array(
@@ -45,43 +45,43 @@ class Controller extends \Kotchasan\KBase
         // อนุมัติรายการซ่อม 
         if (Login::checkPermission($login, array('approve_manage_repair', 'approve_repair'))) {
             $submenus[] = array(
-                'text' => '{LNG_Repair list} ({LNG_approve_wait})',
+                'text' => '{LNG_Booking list} ({LNG_approve_wait})',
                 'url' => 'index.php?module=repair-approve',
             );
         }
         // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
-        if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+        if (Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
             $submenus[] = array(
-                'text' => '{LNG_Repair list} ({LNG_all items})', //LNG_Repairman
+                'text' => '{LNG_Booking list} ({LNG_all items})', 
                 'url' => 'index.php?module=repair-setup',
             );
         } 
         // เมนูแจ้งซ่อม
-        $menu->add('repair', '{LNG_Repair jobs}', null, $submenus);
-        $menu->addTopLvlMenu('repair', '{LNG_Repair jobs}', null, $submenus, 'member');
+        $menu->add('repair', '{LNG_Booking jobs}', null, $submenus);
+        $menu->addTopLvlMenu('repair', '{LNG_Booking jobs}', null, $submenus, 'member');
         // สามารถตั้งค่าระบบได้
         if (Login::checkPermission($login, 'can_config')) {
-            $menu->add('settings', '{LNG_Repair}', null, array(
+            $menu->add('settings', '{LNG_Booking}', null, array(
                 array(
                     'text' => '{LNG_Module settings}',
                     'url' => 'index.php?module=repair-settings',
                 ),
                 array(
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'url' => 'index.php?module=repair-repairstatus',
                 ),
             ), 'repair');
         }
 
         // รายงาน 
-        if (Login::checkPermission($login, array('report'))) {
+        if (Login::checkPermission($login, array('report_car_booking'))) {
             $submenus2 = array(
                     array(
-                        'text' => '{LNG_report}{LNG_Summary}',
+                        'text' => '{LNG_Summary}',
                         'url' => 'index.php?module=report',
                         ),
                      array(
-                        'text' => '{LNG_report}{LNG_Graph-report}',
+                        'text' => '{LNG_Graph-report}',
                         'url' => 'index.php?module=reportg',
                          ),
             );

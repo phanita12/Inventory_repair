@@ -34,13 +34,13 @@ class Controller extends \Gcms\Controller
     public function render(Request $request)
     {
         // ข้อความ title bar
-        $this->title = Language::trans('{LNG_List of} {LNG_Repair}');
+        $this->title = Language::trans('{LNG_List of} {LNG_Booking}');
         // เลือกเมนู
-        $this->menu = 'repair';
+        $this->menu = 'booking';
         // สมาชิก
         $login = Login::isMember();
         // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
-        if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+        if (Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
             // แสดงผล
             $section = Html::create('section', array(
                 'class' => 'content_bg',
@@ -51,8 +51,8 @@ class Controller extends \Gcms\Controller
             ));
             $ul = $breadcrumbs->add('ul');
             $ul->appendChild('<li><span class="icon-tools">{LNG_Module}</span></li>');
-            $ul->appendChild('<li><span>{LNG_Repair}</span></li>');
-            $ul->appendChild('<li><span>{LNG_List of}</span></li>');
+            $ul->appendChild('<li><span>{LNG_Booking}</span></li>');
+            $ul->appendChild('<li><span>{LNG_List of} {LNG_Booking jobs}</span></li>');
             $section->add('header', array(
                 'innerHTML' => '<h2 class="icon-list">'.$this->title.'</h2>',
             ));

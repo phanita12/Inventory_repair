@@ -58,10 +58,10 @@ class Number
      * จัดรูปแบบตัวเลข รองรับการเติม วัน เดือน ปี
      *
      * @assert ('G%04d', 1) [==] "G0001"
-     * @assert ('G-%Y-%m-%d-%04d', 1) [==] "G-63-08-19-0001"
-     * @assert ('G-%y-%m-%d-%04d', 1) [==] "G-20-08-19-0001"
-     * @assert ('G-%YYYY-%m-%d-%04d', 1) [==] "G-2563-08-19-0001"
-     * @assert ('G-%yyyy-%m-%d-%04d', 1) [==] "G-2020-08-19-0001"
+     * @example G-%Y-%M-%D-%04d    G-64-08-09-0001
+     * @example G-%y-%m-%d-%04d    G-21-8-9-0001
+     * @example G-%YY-%M-%D-%04d   G-2564-08-09-0001
+     * @example G-%yy-%m-%d-%04d   G-2021-8-9-0001
      *
      * @param string $format
      * @param mixed $value
@@ -76,7 +76,7 @@ class Number
         $d = date('d');
         $format = str_replace(
             array('%YY', '%yy', '%Y', '%y', '%M', '%m', '%D', '%d'),
-            array($Y, $y, substr($Y, 2, 2), substr($y, 2, 2), $m, $m, $d, (int) $d),
+            array($Y, $y, substr($Y, 2, 2), substr($y, 2, 2), $m, (int) $m, $d, (int) $d),
             $format
         );
         return sprintf($format, $value);

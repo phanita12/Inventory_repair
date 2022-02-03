@@ -36,7 +36,7 @@ class Controller extends \Gcms\Controller
         // ข้อความ title bar
         $this->title = Language::trans('{LNG_List of} {LNG_approve_wait}');
         // เลือกเมนู
-        $this->menu = 'repair';
+        $this->menu = 'booking';
         // สมาชิก
         $login = Login::isMember();
         // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
@@ -51,7 +51,7 @@ class Controller extends \Gcms\Controller
             ));
             $ul = $breadcrumbs->add('ul');
             $ul->appendChild('<li><span class="icon-tools">{LNG_Module}</span></li>');
-            $ul->appendChild('<li><span>{LNG_Repair}</span></li>');
+            $ul->appendChild('<li><span>{LNG_Booking jobs}</span></li>');
             $ul->appendChild('<li><span>{LNG_List of}</span></li>');
             $section->add('header', array(
                 'innerHTML' => '<h2 class="icon-list">'.$this->title.'</h2>',

@@ -28,5 +28,4 @@ class Controller extends \Kotchasan\KBase
     {
         return new static;
     }
-    
 }

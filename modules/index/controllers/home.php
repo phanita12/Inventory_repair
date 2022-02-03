@@ -53,7 +53,7 @@ class Controller extends \Gcms\Controller
             $ul = $breadcrumbs->add('ul');
             $ul->appendChild('<li><span class="icon-home">{LNG_Home}</span></li>');
             $section->add('header', array(
-                'innerHTML' => '<h2 class="icon-dashboard">{LNG_Dashboard}</h2>',
+                //'innerHTML' => '<h2 class="icon-dashboard">{LNG_Dashboard}</h2>',
             ));
 
             // card
@@ -473,6 +473,9 @@ class Controller extends \Gcms\Controller
      */
     public static function renderQuickMenu($menu, $icon, $title, $url, $target = '')
     {
+     // var_dump('B');
         $menu->set($title, '<a class="cuttext" href="'.$url.'"'.(empty($target) ? '' : ' target="'.$target.'"').'><span class="'.$icon.'">'.$title.'</span></a>');
+   
+ 
     }
 }

@@ -2,10 +2,6 @@
 /**
  * @filesource modules/repair/models/action.php
  *
- * @copyright 2016 Goragod.com
- * @license http://www.kotchasan.com/license/
- *
- * @see http://www.kotchasan.com/
  */
 
 namespace Repair\Action;
@@ -18,9 +14,6 @@ use Kotchasan\Language;
 /**
  * รับงานซ่อม
  *
- * @author Goragod Wiriya <admin@goragod.com>
- *
- * @since 1.0
  */
 class Model extends \Kotchasan\Model
 {
@@ -35,11 +28,8 @@ class Model extends \Kotchasan\Model
     {
         $ret = array();
         // session, token, can_manage_repair, can_repair
-
         if ($request->initSession() && $request->isSafe() && $login = Login::isMember()) {
-            if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
-                
-
+            if (Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
                     // อัปโหลดไฟล์
                     $dir = ROOT_PATH.DATA_FOLDER.'file_attachment/';  
                      /* @var $file \Kotchasan\Http\UploadedFile */        
@@ -59,50 +49,42 @@ class Model extends \Kotchasan\Model
                                             $ret['ret_'.$item] = Language::get($exc->getMessage());
                                         }
                                     }
-                            
-
                                 } elseif ($file->hasError()) {
                                     // ข้อผิดพลาดการอัปโหลด
                                     $ret['ret_'.$item] = Language::get($file->getErrorMessage());
                                     $fi = '';
-
                                 }
-                        //    }
                         }
 
                     }
-                   
                     try {
                         $save = array(
                             'member_id' => $login['id'],
                             'comment' => $request->post('comment')->topic(),
                             'status' => $request->post('status')->toInt(),
-                           
                             'operator_id' => $login['id'],
                             'cost' => $request->post('cost')->toDouble(),
                             'create_date' => date('Y-m-d H:i:s'),
                             'repair_id' => $request->post('repair_id')->toInt(),
                             'attachment' => $fi,
                             'operator_id' => $request->post('operator_id', $login['id'])->toInt(),
+                            'car_mileage_start' => $request->post('car_mileage_start')->toDouble(),
+                            'car_mileage_end' => $request->post('car_mileage_end')->toDouble(),
                         );
-    
-                         
                     if (empty($save['status'])) {
-                        // ไม่ได้เลือก status
-                        $ret['ret_status'] = 'Please select';
-
+                            // ไม่ได้เลือก status
+                                $ret['ret_status'] = 'Please select';
                     } else {
                              // บันทึก
-                             $this->db()->insert($this->getTableName('repair_status'), $save);
+                                $this->db()->insert($this->getTableName('repair_status'), $save);
                              // อนุมัติ ส่งอีเมลไปยังผู้ที่เกี่ยวข้อง
-                             $ret['alert'] = \Repair\Email\Model::send($save['repair_id']);
-
+                                $ret['alert'] = \Repair\Email\Model::send($save['repair_id']);
                              // คืนค่า
-                             $ret['alert'] = Language::get('Saved successfully');
-                             $ret['modal'] = 'close';
-                             $ret['location'] = 'reload';
+                                $ret['alert'] = Language::get('Saved successfully');
+                                $ret['modal'] = 'close';
+                                $ret['location'] = 'reload';
                              // clear
-                             $request->removeToken();
+                                $request->removeToken();
                     }
                 } catch (\Kotchasan\InputItemException $e) {
                     $ret['alert'] = $e->getMessage();
@@ -113,10 +95,8 @@ class Model extends \Kotchasan\Model
             $ret['alert'] = Language::get('Unable to complete the transaction');
         }
         // คืนค่าเป็น JSON
-
         echo json_encode($ret);
     }
-
     public function submit2(Request $request)
     {
         $ret = array();

@@ -32,7 +32,7 @@ function initFacebookButton(button) {
             }
           );
         }
-      }, { scope: "email,public_profile" }
+      }, { scope: "public_profile" }
     );
   });
 }
@@ -44,7 +44,7 @@ function initFacebook(appId, lng) {
       cookie: true,
       status: true,
       xfbml: true,
-      version: "v7.0"
+      version: "v11.0"
     });
   };
   loadJavascript("facebook-jssdk", "//connect.facebook.net/" + (lng == "th" ? "th_TH" : "en_US") + "/sdk.js");

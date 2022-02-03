@@ -45,7 +45,7 @@ class View extends \Gcms\View
             'id' => 'repair_first_status',
             'labelClass' => 'g-input icon-tools',
             'itemClass' => 'item',
-            'label' => '{LNG_Initial repair status}',
+            'label' => '{LNG_Initial status}',
             'options' => \Repair\Status\Model::create()->toSelect(),
             'value' => isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1,
         ));

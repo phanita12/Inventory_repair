@@ -36,7 +36,7 @@ class View extends \Gcms\View
             'class' => 'setup_frm',
         ));
         $fieldset = $form->add('fieldset', array(
-            'title' => '{LNG_Details of} {LNG_Repair status}',
+            'title' => '{LNG_Details of} {LNG_Task status}',
         ));
         $list = $fieldset->add('ul', array(
             'class' => 'editinplace_list',
@@ -54,7 +54,7 @@ class View extends \Gcms\View
         ));
         $a->add('span', array(
             'class' => 'icon-plus',
-            'innerHTML' => '{LNG_Add} {LNG_Repair status}',
+            'innerHTML' => '{LNG_Add} {LNG_Task status}',
         ));
         $form->script('initEditInplace("list", "repair/model/repairstatus/action", "list_add_0_repairstatus");');
         // คืนค่า HTML

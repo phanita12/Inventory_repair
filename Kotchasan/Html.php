@@ -244,8 +244,6 @@ class Html extends \Kotchasan\KBase
     public function render()
     {
         $result = '<'.$this->tag.$this->renderAttributes().'>'.(isset($this->attributes['innerHTML']) ? $this->attributes['innerHTML'] : '');
-       
-               
         foreach ($this->rows as $row) {
             if (is_string($row)) {
                 $result .= $row;
@@ -258,7 +256,6 @@ class Html extends \Kotchasan\KBase
                 }
             }
         }
-       
         $result .= '</'.$this->tag.'>';
         if ($this->tag == 'form' && !empty(self::$form->javascript)) {
             $result .= "\n".preg_replace('/^[\s\t]+/m', '', "<script>\n".implode("\n", self::$form->javascript)."\n</script>");
@@ -266,10 +263,7 @@ class Html extends \Kotchasan\KBase
         } elseif (!empty($this->javascript)) {
             $result .= "\n".preg_replace('/^[\s\t]+/m', '', "<script>\n".implode("\n", $this->javascript)."\n</script>");
         }
-      
-       
         return $result;
-       
     }
 
     /**
@@ -281,6 +275,7 @@ class Html extends \Kotchasan\KBase
     {
         if (isset(self::$form)) {
             self::$form->javascript[] = $script;
+
         } else {
             $this->javascript[] = $script;
         }
@@ -326,7 +321,6 @@ class Html extends \Kotchasan\KBase
             $obj = self::create($tag, $attributes);
         }
         $this->rows[] = $obj;
-
         return $obj;
     }
 
@@ -355,12 +349,9 @@ class Html extends \Kotchasan\KBase
             }
         } else {
             $item = new static('div', $prop);
-           
         }
-
         $this->rows[] = $item;
         $obj = $item->add('div', array('class' => 'input-'.$tag));
-        
         $rows = array();
         $comment = array();
         if (empty($attributes['id'])) {
@@ -390,12 +381,8 @@ class Html extends \Kotchasan\KBase
             $comment['class'] = 'comment';
             $comment['innerHTML'] = $value;
             $item->add('div', $comment);
-            
         }
-
-
         return $obj;
-      
     }
 
     /**
@@ -405,7 +392,6 @@ class Html extends \Kotchasan\KBase
      */
     private function addInputGroups($attributes)
     {
-
         if (!empty($attributes['disabled'])) {
             $attributes['disabled'] = 'disabled';
         } else {
@@ -417,13 +403,10 @@ class Html extends \Kotchasan\KBase
             unset($attributes['readonly']);
         }
         $prop = array('class' => empty($attributes['itemClass']) ? 'item' : $attributes['itemClass']);
-
         if (isset($attributes['itemId'])) {
             $prop['id'] = $attributes['itemId'];
         }
-
         $obj = new static('div', $prop);
-
         $this->rows[] = $obj;
         if (isset($attributes['id'])) {
             $id = $attributes['id'];
@@ -441,27 +424,16 @@ class Html extends \Kotchasan\KBase
             ));
         }
         $li = '';
-
-           if (isset($attributes['value']) && is_array($attributes['value'])) {
+        if (isset($attributes['value']) && is_array($attributes['value'])) {
             if (isset($attributes['options'])) {
                 foreach ($attributes['value'] as $value) {
                     if (isset($attributes['options'][$value])) {
-                        $li .= '
-                        <li>
-                        <span>'.$attributes['options'][$value].'</span>
-                        <button type="button">x</button>
-                        <input type="hidden" name="'.$id.'[]" value="'.$value.'">
-                        </li>';
+                        $li .= '<li><span>'.$attributes['options'][$value].'</span><button type="button">x</button><input type="hidden" name="'.$id.'[]" value="'.$value.'"></li>';
                     }
                 }
             } else {
                 foreach ($attributes['value'] as $value) {
-                    $li .= '
-                    <li>
-                    <span>'.$value.'</span>
-                    <button type="button">x</button>
-                    <input type="hidden" name="'.$id.'[]" value="'.$value.'">
-                    </li>';
+                    $li .= '<li><span>'.$value.'</span><button type="button">x</button><input type="hidden" name="'.$id.'[]" value="'.$value.'"></li>';
                 }
             }
         }
@@ -480,7 +452,6 @@ class Html extends \Kotchasan\KBase
             } elseif ($key == 'options') {
                 $options = $value;
                 $datalist = $id.'_'.\Kotchasan\Password::uniqid();
-
                 $prop['list'] = 'list="'.$datalist.'"';
             } elseif ($key == 'comment') {
                 $comment = $value;
@@ -491,7 +462,6 @@ class Html extends \Kotchasan\KBase
         $prop['id'] = 'id="'.$id.'"';
         $prop['type'] = 'type="text"';
         $prop['class'] = 'class="inputgroup"';
-
         $li .= '<li><input '.implode(' ', $prop).'>';
         if (isset($options) && is_array($options)) {
             $li .= '<datalist id="'.$datalist.'">';
@@ -501,9 +471,6 @@ class Html extends \Kotchasan\KBase
             $li .= '</datalist>';
         }
         $li .= '</li>';
-
-
-
         $obj->add('ul', array(
             'class' => implode(' ', $c),
             'innerHTML' => $li,
@@ -515,9 +482,6 @@ class Html extends \Kotchasan\KBase
                 'innerHTML' => $comment,
             ));
         }
-
-
-       
         return $obj;
     }
 

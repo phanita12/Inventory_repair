@@ -80,7 +80,7 @@ class View extends \Gcms\View
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
             'hideColumns' => array('id'),
             /* คอลัมน์ที่สามารถค้นหาได้ */
-            'searchColumns' => array('name', 'phone', 'job_id', 'topic'),
+            'searchColumns' => array('name', 'phone', 'job_id', 'product_no'),
             /* ตั้งค่าการกระทำของของตัวเลือกต่างๆ ด้านล่างตาราง ซึ่งจะใช้ร่วมกับการขีดถูกเลือกแถว */
             'action' => 'index.php/repair/model/approve/action',
             'actionCallback' => 'dataTableActionCallback',
@@ -88,7 +88,7 @@ class View extends \Gcms\View
             'filters' => array(
                 array(
                     'name' => 'status',
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'options' => array(-1 => '{LNG_all items}') + $this->statuses->toSelect(),
                     'value' => $params['status'],
                 ),
@@ -113,8 +113,14 @@ class View extends \Gcms\View
                     'text' => '{LNG_Phone}',
                     'class' => 'center',
                 ),
-                'topic' => array(
-                    'text' => '{LNG_Equipment}',
+                'product_no' => array(
+                    'text' => '{LNG_Registration No.}',
+                ),
+                'types_objective' => array(
+                    'text' => '{LNG_Types of objective}',
+                ),
+                'destination' => array(
+                    'text' => '{LNG_destination}',
                 ),
                 'create_date' => array(
                     'text' => '{LNG_Received date}',
@@ -126,7 +132,7 @@ class View extends \Gcms\View
                     'class' => 'center',
                 ),
                 'status' => array(
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'class' => 'center',
                     'sort' => 'status',
                 ),
@@ -151,14 +157,14 @@ class View extends \Gcms\View
                 'status' => array(
                     'class' => 'icon-list button orange',
                     'id' => ':id',
-                    'title' => '{LNG_Repair status}',
+                    'title' => '{LNG_Task status}',
                 ),
                 'description' => array(
                     'class' => 'icon-report button purple',
                    // 'href' => $uri->createBackUri(array('module' => 'repair-approve-detail', 'id' => ':id')),
                     'href' => $uri->createBackUri(array('module' => 'repair-detail', 'id' => ':id')),
                     
-                    'title' => '{LNG_Repair job description}',
+                    'title' => '{LNG_job description}',
                 ),
             ),
         ));
@@ -175,7 +181,7 @@ class View extends \Gcms\View
             $table->buttons['edit'] = array(
                 //'class' => 'icon-edit button green',
                 'href' => $uri->createBackUri(array('module' => 'repair-receive', 'id' => ':id')),
-                'title' => '{LNG_Edit} {LNG_Repair details}',
+                'title' => '{LNG_Edit} {LNG_Booking details}',
             );
         }
         // save cookie

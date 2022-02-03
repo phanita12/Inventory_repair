@@ -185,18 +185,35 @@ function createClass($className, $param = null)
 }
 
 /**
+ * ฟังก์ชั่นเรียกเมื่อมีการเรียกคำสั่ง debug และสิ้นสุดการประมวลผลแล้ว
+ */
+function doShutdown()
+{
+    echo '<script>';
+    foreach (\Kotchasan::$debugger as $item) {
+        echo 'console.log('.$item.');';
+    }
+    echo '</script>';
+}
+
+/**
  * แสดงข้อมูลตัวแปรออกทาง Console ของบราวเวอร์ (debug)
  *
  * @param mixed $expression
  */
 function debug($expression)
 {
-    if (is_array($expression) || is_object($expression)) {
-        $content = json_encode((array) $expression);
-    } else {
-        $content = '"'.str_replace(array('/', '"'), array('\/', '\"'), $expression).'"';
+    if (\Kotchasan::$debugger === null) {
+        \Kotchasan::$debugger = array();
+        register_shutdown_function('doShutdown');
     }
-    echo '<script>console.log('.$content.')</script>';
+    $debug = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1);
+    \Kotchasan::$debugger[] = '"'.$debug[0]['file'].' : '.$debug[0]['line'].'"';
+    if (is_array($expression) || is_object($expression)) {
+        \Kotchasan::$debugger[] = json_encode((array) $expression);
+    } else {
+        \Kotchasan::$debugger[] = '"'.str_replace(array('/', '"'), array('\/', '\"'), $expression).'"';
+    }
 }
 /*
  * custom error handler

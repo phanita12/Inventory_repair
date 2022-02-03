@@ -1,11 +1,6 @@
 <?php
 /**
  * @filesource modules/repair/views/setup.php
- *
- * @copyright 2016 Goragod.com
- * @license http://www.kotchasan.com/license/
- *
- * @see http://www.kotchasan.com/
  */
 
 namespace Repair\Setup;
@@ -18,9 +13,6 @@ use Kotchasan\Http\Request;
 /**
  * module=repair-setup
  *
- * @author Goragod Wiriya <admin@goragod.com>
- *
- * @since 1.0
  */
 class View extends \Gcms\View
 {
@@ -46,7 +38,7 @@ class View extends \Gcms\View
         $params = array(
             'status' => $request->request('status', -1)->toInt(),
         );
-        $isAdmin = Login::checkPermission($login, 'can_manage_repair');
+        $isAdmin = Login::checkPermission($login, 'can_manage_car_booking');
         // สถานะการซ่อม
         $this->statuses = \Repair\Status\Model::create();
         $this->operators = \Repair\Operator\Model::create();
@@ -70,7 +62,7 @@ class View extends \Gcms\View
             /* Uri */
             'uri' => $uri,
             /* Model */
-            'model' => \Repair\Setup\Model::toDataTable($params),
+            'model' =>\Repair\Setup\Model::toDataTable($params),
             /* รายการต่อหน้า */
             'perPage' => $request->cookie('repairSetup_perPage', 30)->toInt(),
             /* เรียงลำดับ */
@@ -80,7 +72,7 @@ class View extends \Gcms\View
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
             'hideColumns' => array('id'),
             /* คอลัมน์ที่สามารถค้นหาได้ */
-            'searchColumns' => array('name', 'phone', 'job_id', 'topic','category'),
+            'searchColumns' => array('name', 'phone', 'job_id', 'product_no','begin_date','end_date','types_objective'),
             /* ตั้งค่าการกระทำของของตัวเลือกต่างๆ ด้านล่างตาราง ซึ่งจะใช้ร่วมกับการขีดถูกเลือกแถว */
             'action' => 'index.php/repair/model/setup/action',
             'actionCallback' => 'dataTableActionCallback',
@@ -88,7 +80,7 @@ class View extends \Gcms\View
             'filters' => array(
                 array(
                     'name' => 'status',
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'options' => array(-1 => '{LNG_all items}') + $this->statuses->toSelect(),
                     'value' => $params['status'],
                 ),
@@ -111,55 +103,54 @@ class View extends \Gcms\View
                 ),
                 'phone' => array(
                     'text' => '{LNG_Phone}',
-                    'class' => 'center',
                 ),
-                 'category' => array(
+               /*  'category' => array(
                     'text' => '{LNG_Category}',
+                ),*/
+                'product_no' => array(
+                    'text' => '{LNG_Registration No.}',
                 ),
-                'topic' => array(
-                    'text' => '{LNG_Equipment}',
+                'types_objective' => array(
+                    'text' => '{LNG_Types of objective}',
                 ),
+                'begin_date' => array(
+                    'text' => '{LNG_Begin date}',
+                ),
+                'end_date' => array(
+                    'text' => '{LNG_End date}',
+                ),
+               /* 'destination' => array(
+                    'text' => '{LNG_destination}',
+                ),*/
                 'create_date' => array(
                     'text' => '{LNG_Received date}',
-                    'class' => 'center',
                     'sort' => 'create_date',
                 ),
                 'operator_id' => array(
                     'text' => '{LNG_Operator}',
-                    'class' => 'center',
                 ),
                 'status' => array(
-                    'text' => '{LNG_Repair status}',
-                    'class' => 'center',
+                    'text' => '{LNG_Task status}',
                     'sort' => 'status',
                 ),
             ),
             /* รูปแบบการแสดงผลของคอลัมน์ (tbody) */
             'cols' => array(
-                'phone' => array(
-                    'class' => 'center',
-                ),
-                'create_date' => array(
-                    'class' => 'center',
-                ),
-                'operator_id' => array(
-                    'class' => 'center',
-                ),
-                'status' => array(
-                    'class' => 'center',
-                ),
+                'destination' => array(
+                    'width' => '20%',
+                ), 
             ),
             /* ปุ่มแสดงในแต่ละแถว */
             'buttons' => array(
                 'status' => array(
                     'class' => 'icon-list button orange',
                     'id' => ':id',
-                    'title' => '{LNG_Repair status}',
+                    'title' => '{LNG_Task status}',
                 ),
                 'description' => array(
                     'class' => 'icon-report button purple',
                     'href' => $uri->createBackUri(array('module' => 'repair-detail', 'id' => ':id')),
-                    'title' => '{LNG_Repair job description}',
+                    'title' => '{LNG_job description}',
                 ),
                 'printrepair' => array(
                     'class' => 'icon-print button brown notext',
@@ -182,7 +173,7 @@ class View extends \Gcms\View
             $table->buttons['edit'] = array(
                 'class' => 'icon-edit button green',
                 'href' => $uri->createBackUri(array('module' => 'repair-receive', 'id' => ':id')),
-                'title' => '{LNG_Edit} {LNG_Repair details}',
+                'title' => '{LNG_Edit} {LNG_Booking details}',
             );
         }
         // save cookie
@@ -203,7 +194,9 @@ class View extends \Gcms\View
      */
     public function onRow($item, $o, $prop)
     {
-        $item['create_date'] = Date::format($item['create_date'], 'd M Y');
+        $item['create_date'] = Date::format($item['create_date'], 'd M Y H:i');
+        $item['begin_date'] = Date::format($item['begin_date'], 'd M Y H:i');
+        $item['end_date'] = Date::format($item['end_date'], 'd M Y H:i');
         $item['phone'] = self::showPhone($item['phone']);
         $item['status'] = '<mark class=term style="background-color:'.$this->statuses->getColor($item['status']).'">'.$this->statuses->get($item['status']).'</mark>';
         $item['operator_id'] = $this->operators->get($item['operator_id']);

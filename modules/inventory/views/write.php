@@ -43,7 +43,7 @@ class View extends \Gcms\View
             'token' => true,
         ));
         $fieldset = $form->add('fieldset', array(
-            'title' => '{LNG_Details of} {LNG_Equipment}',
+            'title' => '{LNG_Details of} {LNG_Car information}',
         ));
         $groups = $fieldset->add('groups');
         if ($product->id == 0) {
@@ -52,7 +52,7 @@ class View extends \Gcms\View
                 'id' => 'product_no',
                 'labelClass' => 'g-input icon-number',
                 'itemClass' => 'width50',
-                'label' => '{LNG_Serial/Registration No.}',
+                'label' => '{LNG_Registration No.}',
                 'maxlength' => 20,
                 'value' => isset($product->product_no) ? $product->product_no : '',
             ));
@@ -62,8 +62,8 @@ class View extends \Gcms\View
             'id' => 'topic',
             'labelClass' => 'g-input icon-edit',
             'itemClass' => 'width50',
-            'label' => '{LNG_Equipment}',
-            'placeholder' => '{LNG_Details of} {LNG_Equipment}',
+            'label' => '{LNG_Car information}',
+            'placeholder' => '{LNG_Details of} {LNG_Car information}',
             'maxlength' => 64,
             'value' => isset($product->topic) ? $product->topic : '',
         ));
