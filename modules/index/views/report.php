@@ -145,9 +145,17 @@ class View extends \Gcms\View
                 $operators[$k] = $v;
             }
         }
+<<<<<<< HEAD
         $params['begindate'] = $request->request('begindate', date('Y-m-d', strtotime('-7 days')))->date();
         $params['enddate'] =  $request->request('enddate', date('Y-m-d'))->date();
      
+=======
+       /* $params['begindate'] = $request->request('begindate')->topic();
+        $params['enddate'] = $request->request('enddate')->topic();*/
+        $params['begindate'] = $request->request('begindate', date('Y-m-d', strtotime('-7 days')))->date();
+        $params['enddate'] =  $request->request('enddate', date('Y-m-d'))->date();
+       
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // URL สำหรับส่งให้ตาราง
         $uri = self::$request->createUriWithGlobals(WEB_URL.'index.php');
         
@@ -394,7 +402,7 @@ class View extends \Gcms\View
         $item['begin_date']    = Date::format($item['begin_date'], 'd M Y H:i');
         $item['end_date']    = Date::format($item['end_date'], 'd M Y H:i');
         $item['status']         = '<mark class=term style="background-color:'.$this->statuses->getColor($item['status']).'">'.$this->statuses->get($item['status']).'</mark>';
-        $item['operator_id']    = $this->operators->get($item['operator_id']);
+      /*  $item['operator_id']    = $this->operators->get($item['operator_id']);
         $item['user_id']        = $this->userrepair->getuser($item['user_id']);
         $item['memberstatus']   = isset(self::$cfg->member_status[$item['status']]) ? '<span class=status'.$item['status'].'>{LNG_'.self::$cfg->member_status[$item['status']].'}</span>' : '';
         //$item['begindate']      = Date::format($item['begindate'], 'd M Y H:i');
@@ -402,7 +410,7 @@ class View extends \Gcms\View
         $item['category_id']    = $this->catagory_id->getCategory($item['category_id'],'category_id'); 
         $item['model_id']       = $this->model_id->getCategory($item['model_id'],'model_id'); 
         $item['type_id']        = $this->type_id->getCategory($item['type_id'],'type_id'); 
-        $item['product_no']     = $this->product_no->getProduct($item['product_no']);  
+        $item['product_no']     = $this->product_no->getProduct($item['product_no']);  */
         return $item;
     }
 }

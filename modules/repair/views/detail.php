@@ -49,6 +49,7 @@ class View extends \Gcms\View
         //เช็คกลุ่มผู้ใช้งาน
         $gmember = \Index\Member\Model::getMemberstatus($index->s_group);
         if($index->status == '9' || $index->status == '10'){ // template for approve/none approve
+<<<<<<< HEAD
             if (Login::checkPermission($login, array('can_manage_car_booking','can_repair','approve_manage_repair','approve_repair')) ){
                            $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail2.html');
             }else{      $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail3.html');  } 
@@ -68,6 +69,17 @@ class View extends \Gcms\View
             }    
         }
        
+=======
+            if (Login::checkPermission($login, array('can_manage_repair','can_repair','approve_repair')) ){
+                $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail2.html');
+            }else{  $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail3.html');  } 
+        }else{ // template standard All Status
+            $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail.html');   }
+
+          /*เอารูปภาพแนบเปิดงานมาแสดง  */
+          $img2 = is_file(ROOT_PATH.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg') ? WEB_URL.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';  
+          
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // ตาราง
         $table = new DataTable2(array(
             /* Uri */
@@ -123,12 +135,12 @@ class View extends \Gcms\View
                     'class' => 'button purple notext notext icon-download',
                     'id' => ':id',
                     'title' => '{LNG_File}',             
-                ),   */
+                ),   
                 'delete' => array(
                     'class' => 'icon-delete button red notext',
                     'id' => ':id',
                     'title' => '{LNG_Delete}',
-                ),
+                ),*/
             );
         }
 //var_dump( $index);

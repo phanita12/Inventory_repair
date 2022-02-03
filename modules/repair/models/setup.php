@@ -52,7 +52,11 @@ class Model extends \Kotchasan\Model
             ->andWhere(array('C.type','category_id'));*/
         
         return  static::createQuery() 
+<<<<<<< HEAD
             ->select('R.id', 'R.job_id',  'R.create_date', 'U.name', 'U.phone','R.begin_date','R.end_date','R.product_no',SQL::CASE_WHEN('R.types_objective','types_objective'), 'S.operator_id', 'S.status'   ) //,'R.destination',array($q3,'category' ), 'R.destination',
+=======
+            ->select('R.id', 'R.job_id', 'U.name', 'U.phone', array($q3,'category' ), 'V.topic', 'R.product_no', 'R.create_date', 'S.operator_id', 'S.status')
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
             ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))

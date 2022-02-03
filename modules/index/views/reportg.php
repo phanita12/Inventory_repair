@@ -144,35 +144,35 @@ class View extends \Gcms\View
                             strokeColor: null,
                             colors: [
                                 "#660000",
-                                    "#d940ff",
-                                    "#E65100",
-                                    "#FF992A",
-                                    "#06d628",
-                                    "#009ACD",
-                                    "#1B5E20",
-                                    "#263238",
-                                    "#120eeb",
-                                    "#06d628",
-                                    "#FF9999",
-                                    "#8B4513",
-                                    "#9999FF",
-                                    "#CC66FF",
-                                    "#FF3300",
-                                    "#FFA500",
-                                    "#336666",
-                                    "#FFDAB9",
-                                    "#CD5C5C",
-                                    "#FFD700",
-                                    "#9400D3",
-                                    "#CC6600",
-                                    "#FF9933",
-                                    "#FF0066",
-                                    "#CC3300",
-                                    "#66CCCC",
-                                    "#FFB90F",
-                                    "#00CC00",
-                                    "#BEBEBE",
-                                    "#00FF7F",
+                                        "#d940ff",
+                                        "#E65100",
+                                        "#FF992A",
+                                        "#06d628",
+                                        "#009ACD",
+                                        "#1B5E20",
+                                        "#263238",
+                                        "#120eeb",
+                                        "#FF1493",
+                                        "#FF9999",
+                                        "#8B4513",
+                                        "#9999FF",
+                                        "#CC66FF",
+                                        "#FF3300",
+                                        "#FFA500",
+                                        "#336666",
+                                        "#FFDAB9",
+                                        "#CD5C5C",
+                                        "#FFD700",
+                                        "#9400D3",
+                                        "#CC6600",
+                                        "#FF9933",
+                                        "#FF0066",
+                                        "#CC3300",
+                                        "#66CCCC",
+                                        "#FFB90F",
+                                        "#00CC00",
+                                        "#BEBEBE",
+                                        "#00FF7F",
                             ]
                         });
                     </script>
@@ -227,7 +227,7 @@ class View extends \Gcms\View
                                 "#1B5E20",
                                 "#263238",
                                 "#120eeb",
-                                "#06d628",
+                                "#FF1493",
                                 "#FF9999",
                                 "#8B4513",
                                 "#9999FF",
@@ -254,28 +254,96 @@ class View extends \Gcms\View
                     </section>';
             
         /*  ----------------------------- กราฟที่ 3-------------------------------- */
-                        // แสดงผล
-                        $content3 = '<section id=report class="setup_frm">';
-                        $content3 .= '<article class="ggraphs clear">';
-                        $index3 =  \Repair\Home\Model::get_group($params);    
-                            // สถานะสมาชิก
-                            $gmember2 = '';     $str_3 = '';
-                            foreach (self::$cfg->member_status as $key => $value) {
-                                $gmember2 .=  '<th>{LNG_'.$value.'}</th>';
-                            }
-                            for($i=0;$i<=count($index3[0]);$i++){ 
-                                if( ($index3[0][$i]) != 0 ||  ($index3[0][$i]) != null)  {  
-                                    $str_3 =  $str_3.'<td>'. $index3[0][$i].'</td>';   
-                                }else{  $str_3 = $str_3.'<td> 0 </td>'; }
-                            } 
+                    // แสดงผล
+                    $content3 = '<section id=report class="setup_frm">';
+                    $content3 .= '<article class="ggraphs clear">';
+                    $index3 = array();
+                    $index3 =  \Repair\Home\Model::get_group($params);    
+                        // สถานะสมาชิก
+                        $gmember2 = '';     $str_3 = '';
+                        foreach (self::$cfg->member_status as $key => $value) {
+                            $gmember2 .=  '<th>{LNG_'.$value.'}</th>';
+                        }
+                        for($i=0;$i<count($index3[0]);$i++){ 
+                            if( ($index3[0]['0'.$i]) >= 0 ||  ($index3[0]['0'.$i]) != null)  {  
+                                $str_3 =  $str_3.'<td>'. $index3[0]['0'.$i].'</td>';
+                            }else{  $str_3 = $str_3.'<td> 0 </td>'; }
+                        } 
 
-                        $title = '{LNG_Graph report} {LNG_Member} '; 
-                        $list= '{LNG_List of} {LNG_Member}' ;
-                        $headtitle = '{LNG_Booking}';
-                        $bodytitle = '{LNG_List of} {LNG_Booking}';
-                        $content3 = '<br><section class=clear>
-                                <h4>'.$title.'</h4>
-                                <div id="table3" class="graphcs">
+                    $title = '{LNG_Graph report} {LNG_Member} '; 
+                    $list= '{LNG_List of} {LNG_Member}' ;
+                    $headtitle = '{LNG_Repair}';
+                    $bodytitle = '{LNG_List of}{LNG_Repair}';
+                    $content3 = '<br><section class=clear>
+                            <h4>'.$title.'</h4>
+                            <div id="table3" class="graphcs">
+                            <canvas></canvas>
+                            <table class="hidden">
+                                <thead>
+                                <tr>
+                                    <th>'.$headtitle.'</th>'. $gmember2.'       
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr> <th> '.$bodytitle.'</th> '.$str_3.'</tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <script>
+                            new GGraphs("table3", {
+                                type: "pie",
+                                    centerX: 50 + Math.round($G("table3").getHeight() / 2),
+                                    labelOffset: 70,
+                                    centerOffset: 60,
+                                    strokeColor: null,
+                                    colors: [
+                                        "#660000",
+                                        "#d940ff",
+                                        "#E65100",
+                                        "#FF992A",
+                                        "#06d628",
+                                        "#009ACD",
+                                        "#1B5E20",
+                                        "#263238",
+                                        "#120eeb",
+                                        "#FF1493",
+                                        "#FF9999",
+                                        "#8B4513",
+                                        "#9999FF",
+                                        "#CC66FF",
+                                        "#FF3300",
+                                        "#FFA500",
+                                        "#336666",
+                                        "#FFDAB9",
+                                        "#CD5C5C",
+                                        "#FFD700",
+                                        "#9400D3",
+                                        "#CC6600",
+                                        "#FF9933",
+                                        "#FF0066",
+                                        "#CC3300",
+                                        "#66CCCC",
+                                        "#FFB90F",
+                                        "#00CC00",
+                                        "#BEBEBE",
+                                        "#00FF7F",
+                                    ]
+                            });
+                            </script>
+                        </section>';
+
+        /*  ----------------------------- กราฟที่ 4-------------------------------- */
+                // แสดงผล
+                $content4 = '<section id=report class="setup_frm">';
+                $content4 .= '<article class="ggraphs clear">';
+                $index =  \Repair\Home\Model::get_status($params);             
+                $title = '{LNG_Graph report} {LNG_Repair process}';
+                $list= '{LNG_List of}{LNG_all items}' ;
+                $headtitle = '';
+                $bodytitle = '{LNG_List of}{LNG_Repair}';    
+                $content4 = '<br><section class=clear>
+                                <h4>'.$title.' </h4>
+                                <div id="table4" class="graphcs">
                                 <canvas></canvas>
                                 <table class="hidden">
                                     <thead>
@@ -305,7 +373,7 @@ class View extends \Gcms\View
                                             "#1B5E20",
                                             "#263238",
                                             "#120eeb",
-                                            "#06d628",
+                                            "#FF1493",
                                             "#FF9999",
                                             "#8B4513",
                                             "#9999FF",
@@ -445,68 +513,68 @@ class View extends \Gcms\View
                         $i++;
                         }            
                     } 
-                    $content5 .= '<br><section class=clear>
-                        <h4>'.$title.' '.$list.'</h4>
-                        <div id="table5" class="graphcs">
-                            <canvas></canvas>
-                            <table class="hidden">
-                            <thead>
-                                <tr>
-                                <th>'.$headtitle.'</th>'. $str
-                            .'  </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <th> '.$bodytitle.'</th>'.$str_2
-                            .'</tr> 
-                            </tbody>
-                            </table>
-                        </div>
-                        <script>
-                            new GGraphs("table5", {
-                            type: "pie",
-                                centerX: 50 + Math.round($G("table5").getHeight() / 2),
-                                labelOffset: 70,
-                                centerOffset: 60,
-                                strokeColor: null,
-                                colors: [
-                                    "#660000",
-                                    "#d940ff",
-                                    "#E65100",
-                                    "#FF992A",
-                                    "#06d628",
-                                    "#009ACD",
-                                    "#1B5E20",
-                                    "#263238",
-                                    "#120eeb",
-                                    "#06d628",
-                                    "#FF9999",
-                                    "#8B4513",
-                                    "#9999FF",
-                                    "#CC66FF",
-                                    "#FF3300",
-                                    "#FFA500",
-                                    "#336666",
-                                    "#FFDAB9",
-                                    "#CD5C5C",
-                                    "#FFD700",
-                                    "#9400D3",
-                                    "#CC6600",
-                                    "#FF9933",
-                                    "#FF0066",
-                                    "#CC3300",
-                                    "#66CCCC",
-                                    "#FFB90F",
-                                    "#00CC00",
-                                    "#BEBEBE",
-                                    "#00FF7F",
-                                ]
-                            });
-                        </script>
-                        </section>'; 
+                $content5 .= '<br><section class=clear>
+                    <h4>'.$title.' '.$list.'</h4>
+                    <div id="table5" class="graphcs">
+                        <canvas></canvas>
+                        <table class="hidden">
+                        <thead>
+                            <tr>
+                            <th>'.$headtitle.'</th>'. $str
+                        .'  </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <th> '.$bodytitle.'</th>'.$str_2
+                        .'</tr> 
+                        </tbody>
+                        </table>
+                    </div>
+                    <script>
+                        new GGraphs("table5", {
+                        type: "pie",
+                            centerX: 50 + Math.round($G("table5").getHeight() / 2),
+                            labelOffset: 70,
+                            centerOffset: 60,
+                            strokeColor: null,
+                            colors: [
+                                "#660000",
+                                        "#d940ff",
+                                        "#E65100",
+                                        "#FF992A",
+                                        "#06d628",
+                                        "#009ACD",
+                                        "#1B5E20",
+                                        "#263238",
+                                        "#120eeb",
+                                        "#FF1493",
+                                        "#FF9999",
+                                        "#8B4513",
+                                        "#9999FF",
+                                        "#CC66FF",
+                                        "#FF3300",
+                                        "#FFA500",
+                                        "#336666",
+                                        "#FFDAB9",
+                                        "#CD5C5C",
+                                        "#FFD700",
+                                        "#9400D3",
+                                        "#CC6600",
+                                        "#FF9933",
+                                        "#FF0066",
+                                        "#CC3300",
+                                        "#66CCCC",
+                                        "#FFB90F",
+                                        "#00CC00",
+                                        "#BEBEBE",
+                                        "#00FF7F",
+                            ]
+                        });
+                    </script>
+                    </section>'; 
 
-        //ต่อ string render html    
-            $result = $content. ' ' .$content2. ' ' .$content3. ' ' .$content4; //. ' ' .$content5;
+            
+    $result = $content. ' ' .$content2. ' ' .$content3. ' ' .$content4. ' ' .$content5;
                     return  $result ;
 
 

@@ -40,6 +40,7 @@ return array(
   ),
   'destination' => 'Destination',
   'Disapproved' => 'Disapproved',
+  'email_cc' => 'CC',
   'Emailing' => 'Email',
   'End date' => 'End date',
   'End date must be greater than begin date' => 'End date must be greater than begin date',

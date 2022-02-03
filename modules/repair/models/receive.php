@@ -52,6 +52,12 @@ class Model extends \Kotchasan\Model
                     'type_id' => '',
                     'model_id' => '',
                     'urgency' => '',
+<<<<<<< HEAD
+=======
+                    'category' => '',
+                    'type_repair' => '',
+                    'model' => '',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                     'approve_id' => '',
                     'approve' => '',
                 );
@@ -238,6 +244,7 @@ class Model extends \Kotchasan\Model
                                 // คืนค่า
                                 $ret['alert'] = Language::get('Saved successfully');
                                 }
+<<<<<<< HEAD
                                 if ($can_manage_repair && $index->id > 0) {
                                     // สามารถจัดการรายการซ่อมได้
                                     $ret['location'] = $request->getUri()->postBack('index.php', array('module' => 'repair-setup', 'id' => null));
@@ -247,6 +254,44 @@ class Model extends \Kotchasan\Model
                                 }
                             // clear
                             $request->removeToken();
+=======
+                                
+
+                            
+                            // บันทึกรายการแจ้งซ่อม
+                            $log = array(
+                                'repair_id' => $db->insert($repair_table, $repair),
+                                'member_id' => $login['id'],
+                                'comment' => $request->post('comment')->topic(),
+                                //'urgency' => $request->post('urgency')->topic(),
+                                'status' => isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1,
+                                'create_date' => $repair['create_date'],
+                                'operator_id' => 0,
+                            );
+                                                
+                            // บันทึกประวัติการทำรายการ แจ้งซ่อม
+                            $db->insert($repair_status_table, $log);
+                            // ใหม่ ส่งอีเมลไปยังผู้ที่เกี่ยวข้อง
+                            $ret['alert'] = \Repair\Email\Model::send($log['repair_id']);    
+                        } else {
+
+                        
+                            // แก้ไขรายการแจ้งซ่อม
+                            $db->update($repair_table, $index->id, $repair);
+                            // คืนค่า
+                            $ret['alert'] = Language::get('Saved successfully');
+
+                        }
+                        if ($can_manage_repair && $index->id > 0) {
+                            // สามารถจัดการรายการซ่อมได้
+                            $ret['location'] = $request->getUri()->postBack('index.php', array('module' => 'repair-setup', 'id' => null));
+                        } else {
+                            // ใหม่
+                            $ret['location'] = $request->getUri()->postBack('index.php', array('module' => 'repair-history', 'id' => null));
+                        }
+                        // clear
+                        $request->removeToken();
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                     }
                 }
             } catch (\Kotchasan\InputItemException $e) {

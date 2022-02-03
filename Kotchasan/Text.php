@@ -290,4 +290,23 @@ class Text
     {
         return preg_replace('/[^a-zA-Z0-9@\.\-_]+/', '', $text);
     }
+
+      /**
+     * ฟังก์ชั่น ลบช่องว่าง และ ตัวอักษรขึ้นบรรทัดใหม่ 
+     *
+     *
+     * @assert ('Email :
+*chatchai.sin@tkschemical.co.th Pass
+*: GrU')
+     * @assert (Email :*chatchai.sin@tkschemical.co.th Pass*: GrU)
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    public static function trim_r($text)
+    {
+        return preg_replace('/[^a-zA-Z0-9@\.\-_]+/', '', $text);
+    }
+    
 }

@@ -48,6 +48,26 @@ class Model extends \Kotchasan\Model
             ->join('inventory_items I', 'LEFT', array('I.inventory_id', 'V.id'))
             ->where($where);
     }
+    public static function check_job($params)
+    {
+        $where = array();
+        if ($params['category_id'] > 0) {
+            $where[] = array('V.category_id', $params['category_id']);
+        }
+        if ($params['model_id'] > 0) {
+            $where[] = array('V.model_id', $params['model_id']);
+        }
+        if ($params['type_id'] > 0) {
+            $where[] = array('V.type_id', $params['type_id']);
+        }
+        return static::createQuery()
+        ->select('V.id', 'V.topic', 'I.product_no', 'V.category_id', 'V.type_id', 'V.model_id', 'I.stock', 'I.unit', 'V.inuse','R.job_id')
+            ->from('inventory V')
+            ->join('inventory_items I', 'LEFT', array('I.inventory_id', 'V.id'))
+            ->join('repair R', 'LEFT', array('I.product_no', 'R.product_no'))
+            ->where($where)
+            ->execute();
+    }
 
     /**
      * รับค่าจาก action (setup.php)

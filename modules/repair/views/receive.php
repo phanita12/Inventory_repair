@@ -23,6 +23,7 @@ class View extends \Gcms\View
      */
     public function render($index)
     {
+<<<<<<< HEAD
         //form resive
             $form = Html::create('form', array(
                 'id' => 'setup_frm',
@@ -39,6 +40,39 @@ class View extends \Gcms\View
             $groups_date = $fieldset->add('groups',); 
             $type_work_name = ['{LNG_Visit Customer}','{LNG_Contact the government}','{LNG_Seminar}','{LNG_Deliver goods}','{LNG_Other}'];
             $type_easy_pass= ['{LNG_not_use}','{LNG_Use}'];
+=======
+         $form = Html::create('form', array(
+            'id' => 'setup_frm',
+            'class' => 'setup_frm',
+            'autocomplete' => 'off',
+            'action' => 'index.php/repair/model/receive/submit',
+            'onsubmit' => 'doFormSubmit',
+            'ajax' => true,
+            'token' => true,
+        ));
+        $fieldset = $form->add('fieldset', array('title' => '{LNG_Repair job description}', ));  
+        $groups = $fieldset->add('groups',); //, array('comment' => '{LNG_Find equipment by}  {LNG_Serial/Registration No.}' ) array('urgency' => '{LNG_Find equipment by}  {LNG_Serial/Registration No.}', )
+        $groups_type = $fieldset->add('groups',); //, array('comment' => '{LNG_Find equipment by} {LNG_Type},  {LNG_Category}, {LNG_Model}' )
+       
+        /*-------------------------------------------St moomai----------------------------------------*/
+       
+        // Category_id
+         $groups_type->add('text', array(
+            'id' => 'category_id',
+            'labelClass' => 'g-input icon-edit',
+            'itemClass' => 'displaynone',
+            'label' => '{LNG_Category}',  
+            'maxlength' => 20,
+            'value' => $index->category_id,));
+         $groups_type->add('text', array(
+            'id' => 'category',
+            'labelClass' => 'g-input icon-tools',
+            'itemClass' => 'width25',
+            'label' => '{LNG_Category}', 
+            'disabled' => true,
+            'maxlength' => 20, 
+            'value' => $index->category,));
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
 
         // begin
             $groups_date->add('datetime', array(

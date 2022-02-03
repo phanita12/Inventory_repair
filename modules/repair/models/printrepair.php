@@ -55,6 +55,16 @@ class Model extends \Kotchasan\Model
             ->select('U1.name as send_approve2')
             ->from('user U1')
             ->where(array('U1.id', 'R.send_approve'));
+        $q0_end_date = static::createQuery()
+            ->select('S2.create_date')
+            ->from('repair_status S2')
+            ->where(array('S2.repair_id', 'R.id'))
+            ->andWhere(array('S2.status',array('6','7')));
+        $q0_date_approve = static::createQuery()
+            ->select('S3.create_date')
+            ->from('repair_status S3')
+            ->where(array('S3.repair_id', 'R.id'))
+            ->andWhere(array('S3.status',array('9','10')));
         $q0_group = static::createQuery()    
             ->select('U3.status as s_group')
             ->from('user U3')
@@ -68,8 +78,8 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
         $sql = static::createQuery()
-            ->select('R.*', 'U.name', 'U.username', 'V.topic' ,'U.id_card','U.id as user'
-            , 'S.create_date as date_approve', 'S.status', 'S.comment'
+            ->select('R.*', 'U.name', 'U.username', 'V.topic' ,'U.id_card','U.id as user' // , 'S.create_date as date_approve'
+           , 'S.status', 'S.comment'
             , 'S.operator_id', 'S.id status_id'
             ,array( $q0_name,'send_approve2')
             ,array( $q0_group,'s_group')
@@ -78,7 +88,8 @@ class Model extends \Kotchasan\Model
             ,array( $model,'model')
             ,array( $type,'type')
             ,array( $repairstatus,'repairstatus')
-            
+            ,array($q0_end_date,'end_date')
+            ,array($q0_date_approve,'date_approve')
             )
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))

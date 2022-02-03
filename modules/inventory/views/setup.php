@@ -50,6 +50,8 @@ class View extends \Gcms\View
         $this->category = \Inventory\Category\Model::init();
         // URL สำหรับส่งให้ตาราง
         $uri = $request->createUriWithGlobals(WEB_URL.'index.php');
+        //เช็คข้อมูล มีรายการที่เคยเปิดในระบบแจ้งซ่อมหรือไม่
+      //  $Check_product = \Repair\Printasset\Model::get($request->request('id')->toInt(),$request->request('tab')->topic());
         // ตาราง
         $table = new DataTable(array(
             /* Uri */
@@ -63,7 +65,7 @@ class View extends \Gcms\View
             /* ฟังก์ชั่นจัดรูปแบบการแสดงผลแถวของตาราง */
             'onRow' => array($this, 'onRow'),
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
-            'hideColumns' => array('unit'),
+            'hideColumns' => array('unit'), //,'job_id'
             /* คอลัมน์ที่สามารถค้นหาได้ */
             'searchColumns' => array('topic', 'product_no'),
             /* ตั้งค่าการกระทำของของตัวเลือกต่างๆ ด้านล่างตาราง ซึ่งจะใช้ร่วมกับการขีดถูกเลือกแถว */
@@ -80,7 +82,7 @@ class View extends \Gcms\View
                 ),
             ),
             /* ตัวเลือกด้านบนของตาราง ใช้จำกัดผลลัพท์การ query */
-            'filters' => array(
+                'filters' => array(
                 array(
                     'name' => 'category_id',
                     'text' => '{LNG_Category}',
@@ -101,7 +103,7 @@ class View extends \Gcms\View
                 ),
             ),
             /* ส่วนหัวของตาราง และการเรียงลำดับ (thead) */
-            'headers' => array(
+                'headers' => array(
                 'id' => array(
                     'text' => '{LNG_Image}',
                     'sort' => 'id',
@@ -141,7 +143,7 @@ class View extends \Gcms\View
                 ),
             ),
             /* รูปแบบการแสดงผลของคอลัมน์ (tbody) */
-            'cols' => array(
+                'cols' => array(
                 'category_id' => array(
                     'class' => 'center',
                 ),
@@ -160,11 +162,18 @@ class View extends \Gcms\View
             ),
             /* ปุ่มแสดงในแต่ละแถว */
             'buttons' => array(
+                'printasset' => array(
+                    'class' => 'icon-print button brown notext',
+                    'href' =>  $uri->createBackUri(array('module' => 'repair-printasset', 'tab' => ':product_no','id' => ':id' )),
+                    'target' => '_export',
+                    'title' => '{LNG_Print}',
+                ),
                 array(
                     'class' => 'icon-edit button green',
                     'href' => $uri->createBackUri(array('module' => 'inventory-write', 'tab' => 'product', 'id' => ':id')),
                     'text' => '{LNG_Edit}',
                 ),
+               
             ),
             /* ปุ่มเพิ่ม */
             'addNew' => array(

@@ -34,6 +34,8 @@ class Model extends \Kotchasan\Model
      */
     public static function all()
     {
+
+        $login = Login::notDemoMode(Login::isMember());
         return  \Kotchasan\Model::createQuery() //return
             ->select('id', 'name')
             ->from('user')
@@ -41,7 +43,8 @@ class Model extends \Kotchasan\Model
                 array('active', 1),
                 /*array('permission', 'LIKE', '%,can_repair,%'),*/
             ))
-            ->order('id')
+            ->andWhere(array('id','!=',$login['id']))
+            ->order('name')
             ->toArray()
             ->execute();
            
@@ -56,6 +59,7 @@ class Model extends \Kotchasan\Model
     {
         $obj = new static();
         $obj->userrepair = array();
+        
         foreach (self::all() as $item) {
             $obj->userrepair[$item['id']] = $item['name'];
         }
@@ -284,11 +288,20 @@ class Model extends \Kotchasan\Model
     public static function toDataTable2($params)
     {
 
+<<<<<<< HEAD
         $login = Login::isMember();
         if($login["status"] != 1 && $login["status"] != 2){
             $where2[] = (array('U.status',$login["status"]));
         }
+=======
+        // สามารถดูรายงาน
+        $login =  Login::checkPermission( Login::isMember(), array('report'));
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         $where = array();
+
+      /*  if($login["status"] != 1){
+            $where[] = (array('U.status',$login["status"]));
+        }*/
         if (!empty($params['type_id'])) {
             $where[] = array('V.type_id', $params['type_id']); 
         }
@@ -329,7 +342,11 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
+<<<<<<< HEAD
             return static::createQuery()
+=======
+            return static::createQuery() //return
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
             , 'R.product_no'
             , 'V.topic'
@@ -371,8 +388,16 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
+<<<<<<< HEAD
             ->andWhere($where2)
             ->execute();
+=======
+            //->andWhere($where2)
+           ->execute()  
+            ;  
+
+
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
     }
    
     /**

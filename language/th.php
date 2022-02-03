@@ -37,8 +37,14 @@ return array(
   'Browse file' => 'เลือกไฟล์',
   'Browse image uploaded, type :type' => 'เลือกรูปภาพอัปโหลดชนิด :type',
   'Browse image uploaded, type :type size :width*:height pixel' => 'เลือกรูปภาพอัปโหลด ชนิด :type ขนาด :width*:height พิกเซล',
+<<<<<<< HEAD
   'Can approve manage Booking' => 'สามารถจัดการอนุมัติการจองได้',
+=======
+  'Can approve manage repair' => 'สามารถจัดการอนุมัติการซ่อมได้',
+  'Can be approve' => 'อนุมัติห้องประชุม',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'Can manage repair' => 'สามารถจัดการเครื่องซ่อมได้',
+  'Can manage room' => 'จัดการห้องประชุม',
   'Can manage the' => 'สามารถจัดการ',
   'Can manage the inventory' => 'สามารถจัดการคลังสินค้าได้',
   'Can not be performed this request. Because they do not find the information you need or you are not allowed' => 'ไม่สามารถดำเนินการตามที่ร้องขอได้ เนื่องจากไม่พบข้อมูลที่ต้องการ หรือ คุณไม่มีสิทธิ์',
@@ -59,6 +65,7 @@ return array(
   'Created' => 'สร้างเมื่อ',
   'Current staff' => 'พนักงานปัจจุบัน',
   'Customer' => 'ลูกค้า',
+  'Customer list' => 'รายชื่อลูกค้า',
   'Customer Name' => 'ชื่อลูกค้า',
   'Date' => 'วันที่',
   'DATE_FORMAT' => 'd M Y เวลา H:i น.',
@@ -96,6 +103,7 @@ return array(
   'Email addresses for sender and do not reply such as no-reply@domain.tld' => 'ทีอยู่อีเมลใช้เป็นผู้ส่งจดหมาย สำหรับจดหมายที่ไม่ต้องการตอบกลับ เช่น no-reply@domain.tld',
   'Email encoding' => 'รหัสภาษาของจดหมาย',
   'Email settings' => 'ตั้งค่าอีเมล',
+  'email_cc' => 'สำเนาถึง',
   'Emailing' => 'การส่งอีเมล',
   'Enable SSL encryption for sending email' => 'เปิดใช้งานการเข้ารหัส SSL สำหรับการส่งอีเมล',
   'End date' => 'วันที่สิ้นสุด',
@@ -222,6 +230,7 @@ return array(
     12 => 'ธ.ค.'
   ),
   'Name' => 'ชื่อ นามสกุล',
+  'New Job' => 'แจ้งงาน',
   'No need to fill in English text. If the English text matches the Key' => 'ไม่จำเป็นต้องกรอกข้อความในภาษาอังกฤษ หากข้อความในภาษาอังกฤษตรงกับคีย์',
   'No_file_attachment' => 'ไม่พบไฟล์แนบ',
   'not a registered user' => 'ไม่พบสมาชิกนี้ลงทะเบียนไว้',
@@ -261,18 +270,39 @@ return array(
     0 => 'ระงับการเผยแพร่',
     1 => 'เผยแพร่'
   ),
+<<<<<<< HEAD
   'Ready to use' => 'พร้อมใช้',
   'Received date' => 'วันที่แจ้ง',
+=======
+  'Purchase company' => 'บริษัท',
+  'Purchase contact' => 'เบอร์โทรติดต่อ',
+  'Purchase date' => 'วัน/เดือน/ปี ที่ซื้อ',
+  'Purchase price' => 'ราคาซื้อ',
+  'Received date' => 'วันที่แจ้งซ่อม',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'Register' => 'สมัครสมาชิก',
   'Register successfully Please log in' => 'ลงทะเบียนเรียบร้อยแล้วกรุณาเข้าสู่ระบบ',
   'Register successfully, We have sent complete registration information to :email' => 'ลงทะเบียนสมาชิกใหม่เรียบร้อย เราได้ส่งข้อมูลการลงทะเบียนไปยัง :email',
   'Registration No.' => 'หมายเลขทะเบียนรถ',
   'Remove' => 'ลบ',
+<<<<<<< HEAD
+=======
+  'Repair' => 'แจ้งซ่อม',
+  'Repair company' => 'บริษัทที่ซ่อม',
+  'Repair details' => 'รายละเอียดใบรับซ่อม',
+  'Repair job description' => 'รายละเอียดการซ่อม',
+  'Repair jobs' => 'งานซ่อม',
+  'Repair list' => 'รายการซ่อม',
+  'Repair note' => 'หมายเหตุการซ่อม',
+  'Repair process' => 'สถานะการซ่อมปัจจุบัน',
+  'Repair status' => 'สถานะการซ่อม',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'Repair system' => 'ระบบแจ้งซ่อม',
   'Repassword' => 'ยืนยันรหัสผ่าน',
   'report' => 'รายงาน',
   'Reset' => 'รีเซ็ต',
   'resized automatically' => 'ปรับขนาดอัตโนมัติ',
+  'Room' => 'ระบบจองห้องประชุม',
   'Save' => 'บันทึก',
   'Saved successfully' => 'บันทึกเรียบร้อย',
   'scroll to top' => 'เลื่อนขึ้นด้านบน',
@@ -310,8 +340,14 @@ return array(
   'Status for general members' => 'สถานะสำหรับสมาชิกทั่วไป',
   'Stock' => 'คงเหลือ',
   'Style' => 'รูปแบบ',
+<<<<<<< HEAD
   'Summary' => 'สรุปรายการจองรถ',
   'Task status' => 'สถานะงาน',
+=======
+  'Summary' => 'สรุปรายการแจ้งซ่อม',
+  'Technical Service jobs' => 'แจ้งงาน',
+  'Technical Service system' => 'ระบบเทคนิคอลเซอร์วิส',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'The members status of the site' => 'สถานะของสมาชิกของเว็บไซต์',
   'The name of the mail server as localhost or smtp.gmail.com (To change the settings of your email is the default. To remove this box entirely.)' => 'ชื่อของเมล์เซิร์ฟเวอร์ เช่น localhost หรือ smtp.gmail.com (ต้องการเปลี่ยนค่ากำหนดของอีเมลทั้งหมดเป็นค่าเริ่มต้น ให้ลบข้อความในช่องนี้ออกทั้งหมด)',
   'The name of the repairs, eg Computers' => 'ชื่อของที่นำมาซ่อม เช่น คอมพิวเตอร์',
@@ -338,6 +374,7 @@ return array(
   'Vehicles cannot be used at the selected time' => 'ยานพาหนะไม่สามารถใช้งานได้ในเวลาที่เลือก',
   'Visit Customer' => 'เข้าพบลูกค้า',
   'WaitParts' => 'รออะไหล่',
+  'Warranty' => 'การรับประกัน',
   'Website title' => 'ชื่อเว็บ',
   'Welcome' => 'สวัสดี',
   'Welcome %s, login complete' => 'สวัสดี คุณ %s ยินดีต้อนรับเข้าสู่ระบบ',

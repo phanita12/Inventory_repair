@@ -92,6 +92,7 @@ class Model extends \Kotchasan\KBase
                     }    
                 }
                 //ส่งอีเมลกรณี ส่งขออนุมัติรายการแจ้งซ่อม
+<<<<<<< HEAD
                     if (!empty(self::$cfg->noreply_email) || !empty(self::$cfg->line_api_key)) {
                         //เช็คสถานะขออนุมัติ
                         if($order->status == 8){
@@ -148,6 +149,64 @@ class Model extends \Kotchasan\KBase
                                         if ($err->error()) {
                                             $ret[] = strip_tags($err->getErrorMessage());
                                         }
+=======
+                if($order->status == 8){
+                        // ข้อความ
+                        $content = array(
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_List of}'.'{LNG_Repair} '.$order->category.'</b>'.$order->job_id,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Serial/Registration No.} :'.'</b>'.$order->product_no,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Equipment} :'.'</b>'.$order->topic,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Problems and repairs details} :'.'</b>'.$order->job_description,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Received date} :'.'</b>'.Date::format($order->create_date, 'd M Y H:i'),
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Informer} :'.'</b>'.$order->name,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Member status} :'.'</b>'.$gmember,
+                            '<br>',
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Approve} :'.'</b>'.$order->username_approve,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Status} :'.$order->category.'</b>',//Language::get('approve_wait')
+                            '<br>',
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Repair note} :'.'</b>'.$order->comment,
+                            
+                        );   
+                        //เช็คส่งเมลสถานะ ส่งขออนุมัติ
+                        $msg = Language::trans(implode("\n", $content));
+                        $send_approve_msg = $msg."\nLink url: ".WEB_URL.'index.php?module=repair-approve';
+                        // หัวข้ออีเมล
+                        $subject = '['.self::$cfg->web_title.'] '.Language::get('Repair');
+                      
+                        // อีเมลของผู้ดูแล
+                        $query = \Kotchasan\Model::createQuery()
+                            ->select('username', 'name')
+                            ->from('user')
+                            ->where(array(
+                                array('social', 0),
+                                array('active', 1),
+                                array('username', '!=', $order->username),
+                            ))
+                            ->andWhere(array(
+                                array('status', 1),
+                                array('permission', 'LIKE', '%,can_config%'), //can_manage_repair
+                            ), 'OR')
+                            ->cacheOn();
+                        $emails = array();
+                        foreach ($query->execute() as $item) {
+                            $emails[$item->username] = $item->name.'<'.$item->username.'>';
+                        }
+                        if (!empty($emails)) {
+                            $err = \Kotchasan\Email::send(implode(',', $emails), self::$cfg->noreply_email, $subject, nl2br($send_approve_msg));
+                            if ($err->error()) {
+                                $ret[] = strip_tags($err->getErrorMessage());
+                            }
+                        }
+
+                          
+                        // ส่งอีเมลไปยังผู้อนุมัติ    
+                        $err = \Kotchasan\Email::send($order->username_approve.' <'.$order->send_approve.'>', self::$cfg->noreply_email, $subject, nl2br($msg),implode(',', $emails));
+                        //print_r($err);
+
+                        if ($err->error()) {
+                            $ret[] = strip_tags($err->getErrorMessage());
+                        }
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
 
 
                                         if (!empty(self::$cfg->line_api_key)) {
@@ -158,6 +217,98 @@ class Model extends \Kotchasan\KBase
                                             }
                                         } 
 
+<<<<<<< HEAD
+=======
+                        
+
+                 //เช็คส่งเมลสถานะ ไม่อนุมัติ/อนุมัติ/ส่งมอบเรียบร้อย/ยกเลิกการซ่อม/ซ่อมไม่สำเร็จ/ซ่อมสำเร็จ/รออะไหล่/กำลังดำเนินการ
+                }elseif($order->status == 10 || $order->status == 9 || $order->status == 5 || $order->status == 4 || $order->status == 3 || $order->status == 2 ){
+
+                        // ข้อความ
+                        $content = array(
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_List of}'.'{LNG_Repair} '.$order->category.' : </b>'.$order->job_id,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Serial/Registration No.} :'.'</b>'.$order->product_no,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Equipment} :'.'</b>'.$order->topic,
+                           // '<b style="font-family":"Kanit";"font-size":"30px";"color:red">'.'{LNG_Lavel Urgency} :'.'</b>'.$order->urgency,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Problems and repairs details} :'.'</b>'.$order->job_description,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Received date} :'.'</b>'.Date::format($order->create_date, 'd M Y H:i'),
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Informer} :'.'</b>'.$order->name,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Member status} :'.'</b>'.$gmember,
+                            '<br>',
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Approve} :'.'</b>'.$order->username_approve,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Status} :'.'</b>'.$order->category,
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Transaction date} :'.'</b>'.Date::format($order->approve_date, 'd M Y H:i'),
+                            '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Repair note} :'.'</b>'.$order->comment,
+                        );
+            
+                            //เช็คส่งเมลสถานะ อนุมัติ/ไม่อนุมัติ
+                            $msg = Language::trans(implode("\n", $content));
+                            //$send_approve_msg = $msg."\nURL: ".WEB_URL.'index.php?module=repair-approve';
+                            $admin_msg = $msg."\nLink url: ".WEB_URL.'index.php?module=repair-setup';
+                            
+            
+                            // หัวข้ออีเมล
+                            $subject = '['.self::$cfg->web_title.'] '.Language::get('Repair');                
+                            // ส่งอีเมลไปยังผู้ทำรายการเสมอ
+                            $err = \Kotchasan\Email::send($order->name.'<'.$order->username.'>', self::$cfg->noreply_email, $subject, nl2br($msg));
+                            if ($err->error()) {
+                                $ret[] = strip_tags($err->getErrorMessage());
+                            }
+            
+                            // อีเมลของผู้ดูแล
+                            $query = \Kotchasan\Model::createQuery()
+                                ->select('username', 'name')
+                                ->from('user')
+                                ->where(array(
+                                    array('social', 0),
+                                    array('active', 1),
+                                    array('username', '!=', $order->username),
+                                ))
+                                ->andWhere(array(
+                                    array('status', 1),
+                                    array('permission', 'LIKE', '%,can_config%'),//can_manage_repair
+                                ), 'OR')
+                                ->cacheOn();
+                            $emails = array();
+            
+                            foreach ($query->execute() as $item) {
+                                $emails[$item->username] = $item->name.'<'.$item->username.'>';
+                            }
+                            if (!empty($emails)) {
+                                $err = \Kotchasan\Email::send(implode(',', $emails), self::$cfg->noreply_email, $subject, nl2br($admin_msg));
+                                if ($err->error()) {
+                                    $ret[] = strip_tags($err->getErrorMessage());
+                                }
+                            }
+                            if (!empty(self::$cfg->line_api_key)) {
+                                // ส่งไลน์
+                                $err = \Gcms\Line::send($admin_msg);
+                                if ($err != '') {
+                                    $ret[] = $err;
+                                }
+                            } 
+                     //เช็คส่งเมลสถานะ ส่งมอบเรียบร้อย/ยกเลิกการซ่อม
+                }elseif($order->status == 7 || $order->status == 6){
+    
+                            // ข้อความ
+                            $content = array(
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_List of}'.'{LNG_Repair} '.$order->category.' : </b>'.$order->job_id,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Serial/Registration No.} :'.'</b>'.$order->product_no,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Equipment} :'.'</b>'.$order->topic,
+                               // '<b style="font-family":"Kanit";"font-size":"30px";"color:red">'.'{LNG_Lavel Urgency} :'.'</b>'.$order->urgency,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Problems and repairs details} :'.'</b>'.$order->job_description,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Received date} :'.'</b>'.Date::format($order->create_date, 'd M Y H:i'),
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Informer} :'.'</b>'.$order->name,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Member status} :'.'</b>'.$gmember,
+                                '<br>',
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Approve} :'.'</b>'.$order->username_approve,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Status} :'.'</b>'.$order->category,
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Transaction date} :'.'</b>'.Date::format($order->approve_date, 'd M Y H:i'),
+                                '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Repair note} :'.'</b>'.$order->comment,
+                                //'File Download :'.'<a href="'.WEB_URL.'index.php?_module=repair-setup&module=repair-printrepair&id='.$order->id.'>ไฟล์แบบฟอร์มแจ้งปัญหาการใช้งานไอที (IT)</a></b>',
+                            );
+                
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                                 
 
                         //เช็คส่งเมลสถานะ ไม่อนุมัติ/อนุมัติ/ส่งมอบเรียบร้อย/ยกเลิกการซ่อม/ซ่อมไม่สำเร็จ/ซ่อมสำเร็จ/รออะไหล่/กำลังดำเนินการ
@@ -323,7 +474,36 @@ class Model extends \Kotchasan\KBase
                                 // หัวข้ออีเมล
                                     $subject = '['.self::$cfg->web_title.'] '.Language::get('Repair');
                                 // ส่งอีเมลไปยังผู้ทำรายการเสมอ
+<<<<<<< HEAD
                                     $err = \Kotchasan\Email::send($order->name.'<'.$order->username.'>', self::$cfg->noreply_email, $subject, nl2br($msg));
+=======
+                                $err = \Kotchasan\Email::send($order->name.'<'.$order->username.'>', self::$cfg->noreply_email, $subject, nl2br($msg2));
+                                if ($err->error()) {
+                                    $ret[] = strip_tags($err->getErrorMessage());
+                                }
+                
+                                // อีเมลของผู้ดูแล
+                                $query = \Kotchasan\Model::createQuery()
+                                    ->select('username', 'name')
+                                    ->from('user')
+                                    ->where(array(
+                                        array('social', 0),
+                                        array('active', 1),
+                                        array('username', '!=', $order->username),
+                                    ))
+                                    ->andWhere(array(
+                                        array('status', 1),
+                                        array('permission', 'LIKE', '%,can_config%'),//can_manage_repair
+                                    ), 'OR')
+                                    ->cacheOn();
+                                $emails = array();
+                
+                                foreach ($query->execute() as $item) {
+                                    $emails[$item->username] = $item->name.'<'.$item->username.'>';
+                                }
+                                if (!empty($emails)) {
+                                    $err = \Kotchasan\Email::send(implode(',', $emails), self::$cfg->noreply_email, $subject, nl2br($admin_msg));
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                                     if ($err->error()) {
                                         $ret[] = strip_tags($err->getErrorMessage());
                                     }
@@ -354,6 +534,7 @@ class Model extends \Kotchasan\KBase
                                     }
                                     
 
+<<<<<<< HEAD
                                     if (!empty(self::$cfg->line_api_key)) {
                                         // ส่งไลน์
                                         $err = \Gcms\Line::send($admin_msg);
@@ -361,6 +542,60 @@ class Model extends \Kotchasan\KBase
                                             $ret[] = $err;
                                         }
                                     } 
+=======
+                    // ข้อความ
+                    $content = array(
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Repair} :'.'</b> '.$order->job_id,
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Serial/Registration No.} :'.'</b>'.$order->product_no,
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Equipment} :'.'</b>'.$order->topic,
+                        //'<b style="font-family":"Kanit";"font-size":"30px";"color:red">'.'{LNG_Lavel Urgency} :'.'</b>'.$order->urgency,
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Problems and repairs details} :'.'</b>'.$order->job_description,
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Received date} :'.'</b>'.Date::format($order->create_date, 'd M Y H:i'),
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Informer} :'.'</b>'.$order->name,
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Member status} :'.'</b>'.$gmember,
+                        '<br>',
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Approve} :'.'</b>'.$order->username_approve,
+                        '<b style="font-family":"Kanit";"font-size":"30px">'.'{LNG_Status} : {LNG_Repair} </b>', //.Language::get('pending')
+                        
+                        
+                    );
+
+                    //เช็คส่งเมลสถานะ ส่งขออนุมัติ
+                    $msg = Language::trans(implode("\n", $content));
+                    $admin_msg = $msg."\nLink url: ".WEB_URL.'index.php?module=repair-setup';
+
+                    // หัวข้ออีเมล
+                        $subject = '['.self::$cfg->web_title.'] '.Language::get('Repair');
+                        
+                        // ส่งอีเมลไปยังผู้ทำรายการเสมอ
+                        $err = \Kotchasan\Email::send($order->name.'<'.$order->username.'>', self::$cfg->noreply_email, $subject, nl2br($msg));
+                        if ($err->error()) {
+                            $ret[] = strip_tags($err->getErrorMessage());
+                        }
+                        // อีเมลของผู้ดูแล
+                        $query = \Kotchasan\Model::createQuery()
+                            ->select('username', 'name')
+                            ->from('user')
+                            ->where(array(
+                                array('social', 0),
+                                array('active', 1),
+                                array('username', '!=', $order->username),
+                            ))
+                            ->andWhere(array(
+                                array('status', 1),
+                                array('permission', 'LIKE', '%,can_config%'),//can_manage_repair
+                            ), 'OR')
+                            ->cacheOn();
+                        $emails = array();
+
+                        foreach ($query->execute() as $item) {
+                            $emails[$item->username] = $item->name.'<'.$item->username.'>';
+                        }
+                        if (!empty($emails)) {
+                            $err = \Kotchasan\Email::send(implode(',', $emails), self::$cfg->noreply_email, $subject, nl2br($admin_msg));
+                            if ($err->error()) {
+                                $ret[] = strip_tags($err->getErrorMessage());
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                             }
                     }
                 // คืนค่า

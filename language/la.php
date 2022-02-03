@@ -96,6 +96,7 @@ return array(
   'Email addresses for sender and do not reply such as no-reply@domain.tld' => 'ທີ່ຢູ່ອີເມວໃຊ້ເປັນຜູ້ສົ່ງຈົດໝາຍ ສຳລັບຈົດໝາຍທີ່ບໍ່ຕ້ອງການຕອບກັບເຊັ່ນ no-reply@domain.tld',
   'Email encoding' => 'ລະຫັດພາສາຂອງຈົດໝາຍ',
   'Email settings' => 'ຕັ້ງຄ່າອີເມວ',
+  'email_cc' => 'CC',
   'Emailing' => 'ການສົ່ງອີເມວ',
   'Enable SSL encryption for sending email' => 'ເປີດໃຊ້ການເຂົ້າລະຫັດ SSL ສຳລັບການສົ່ງອີເມວ',
   'End date' => 'ວັນສິ້ນສຸດ',
@@ -261,13 +262,33 @@ return array(
     0 => 'ລະງັບການເຜີຍແຜ່',
     1 => 'ເຜີຍແຜ່'
   ),
+<<<<<<< HEAD
   'Ready to use' => 'ພ້ອມ​ທີ່​ຈະ​ນໍາ​ໃຊ້​',
   'Received date' => 'ວັນທີ່ແຈ້ງ',
+=======
+  'Purchase company' => 'ບໍລິສັດ',
+  'Purchase contact' => 'ຕິດຕໍ່ຊື້',
+  'Purchase date' => 'ວັນ​ທີ່​ຊື້',
+  'Purchase price' => 'ລາ​ຄາ​ການ​ຊື້',
+  'Received date' => 'ວັນທີ່ແຈ້ງຊ່ອມ',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'Register' => 'ສະໝັກສະມາຊິກ',
   'Register successfully Please log in' => 'ລົງທະບຽນຢ່າງສຳເລັດຜົນກະລຸນາເຂົ້າສູ່ລະບົບ',
   'Register successfully, We have sent complete registration information to :email' => 'ລົງທະບຽນສຳເລັດແລ້ວ ເຮົາໄດ້ສົ່ງຂໍ້ມູນການລົງທະບຽນໄປທີ່ :email',
   'Registration No.' => 'ໝາຍເລກທະບຽນລົດ',
   'Remove' => 'ລຶບ',
+<<<<<<< HEAD
+=======
+  'Repair' => 'ວຽກຊ່ອມ',
+  'Repair company' => 'ບໍລິສັດສ້ອມແປງ',
+  'Repair details' => 'ສ້ອມແປງລາຍລະອຽດ',
+  'Repair job description' => 'ລາຍະລະອຽດການຊ່ອມ',
+  'Repair jobs' => 'ວຽກຊ່ອມ',
+  'Repair list' => 'ລາຍະການຊ່ອມ',
+  'Repair note' => 'ຫມາຍເຫດການຊ່ອມ',
+  'Repair process' => 'ສະຖານະພາບການສ້ອມແປງໃນປະຈຸບັນ',
+  'Repair status' => 'ສະຖານະການຊ່ອມ',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'Repair system' => 'ລະບົບແຈ້ງຊ່ອມ',
   'Repassword' => 'ຢືນຢັນລະຫັດຜ່ານ',
   'report' => 'ລາຍງານ',
@@ -310,8 +331,13 @@ return array(
   'Status for general members' => 'ສະຖານະສຳລັບສະມາຊິກທົ່ວໄປ',
   'Stock' => 'ທີ່ຍັງເຫຼືອ',
   'Style' => 'ຮູບແບບ',
+<<<<<<< HEAD
   'Summary' => 'ສະຫຼຸບການຈອງລົດ',
   'Task status' => 'ສະຖານະວຽກ',
+=======
+  'Summary' => 'ສະຫຼຸບລະບົບການສ້ອມແປງ',
+  'Technical Service jobs' => 'ວຽກແຈ້ງຂໍ',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
   'The members status of the site' => 'ສະຖານະຂອງສະມາຂິກຂອງເວັບໄຊ',
   'The name of the mail server as localhost or smtp.gmail.com (To change the settings of your email is the default. To remove this box entirely.)' => 'ຊື່ຂອງເມວເຊີບເວີເຊັ່ນ localhost หรือ chitdpt@gmail.com (ຕ້ອງປ່ຽນຄ່າກຳນົດຂອງອີເມວທັງໝົດເປັນຄ່າເລີ່ມຕົ້ນ ໃຫ້ລຶບຂໍ້ຄວາມໃນຊ່ອງນີ້ອອກທັງໝົດ)',
   'The name of the repairs, eg Computers' => 'ຊື່ຂອງສິ່ງທີ່ໄດ້ຮັບການສ້ອມແປງ, ເຊັ່ນ: ຄອມພິວເຕີ້',
@@ -338,6 +364,7 @@ return array(
   'Vehicles cannot be used at the selected time' => 'ບໍ່ສາມາດໃຊ້ຍານພາຫະນະໄດ້ໃນເວລາທີ່ເລືອກ',
   'Visit Customer' => 'ຢ້ຽມຢາມລູກຄ້າ',
   'WaitParts' => 'ລໍຖ້າອາໄຫຼ່',
+  'Warranty' => 'ຮັບປະກັນ',
   'Website title' => 'ຊື່ເວັບ',
   'Welcome' => 'ສະບາຍດີ',
   'Welcome %s, login complete' => 'ສະບາຍດີທ່ານ %s ຍິນດີຕ້ອນຮັບເຂົ້າສູ່ລະບົບ',

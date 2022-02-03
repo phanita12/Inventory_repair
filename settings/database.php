@@ -5,8 +5,13 @@
     array (
       'dbdriver' => 'mysql',
       'username' => 'root',
+<<<<<<< HEAD
       'password' => '', //31M@ssw0rd
       'dbname' => 'it_management',
+=======
+      'password' => '',//31M@ssw0rd
+      'dbname' => 'it_management', // it_management
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
       'prefix' => 'pit',
       'hostname' => 'localhost',
     ),

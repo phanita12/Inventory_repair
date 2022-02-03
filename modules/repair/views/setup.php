@@ -113,6 +113,7 @@ class View extends \Gcms\View
                 'types_objective' => array(
                     'text' => '{LNG_Types of objective}',
                 ),
+<<<<<<< HEAD
                 'begin_date' => array(
                     'text' => '{LNG_Begin date}',
                 ),
@@ -122,6 +123,12 @@ class View extends \Gcms\View
                /* 'destination' => array(
                     'text' => '{LNG_destination}',
                 ),*/
+=======
+                'product_no' => array(
+                    'text' => '{LNG_Serial/Registration No.}',
+                    'sort' => 'product_no',
+                ),
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                 'create_date' => array(
                     'text' => '{LNG_Received date}',
                     'sort' => 'create_date',

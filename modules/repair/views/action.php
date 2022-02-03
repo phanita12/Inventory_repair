@@ -39,12 +39,20 @@ class View extends \Gcms\View
         ));
         $fieldset = $form->add('fieldset');
         $status = \Repair\Status\Model::create()->toSelect();
+<<<<<<< HEAD
+=======
+        if($index->operator_id == 0){$operator = $login['id']; }else{ $operator =  $index->operator_id;  }
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // status
             $fieldset->add('select', array(
                 'id' => 'status',
                 'labelClass' => 'g-input icon-star0',
                 'itemClass' => 'item',
+<<<<<<< HEAD
                 'label' => '{LNG_Task status}',
+=======
+                'label' => '{LNG_Repair status}',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                 'options' => array(0 => '{LNG_Please select}') + $status,
                 'value' => $index->status,
             ));
@@ -60,6 +68,7 @@ class View extends \Gcms\View
         // Cost
             $fieldset->add('number', array(
                 'id' => 'cost',
+<<<<<<< HEAD
                 'labelClass' => 'g-input icon-money',
                 'itemClass' => 'item',
                 'label' => '{LNG_count_Easy_Pass}',
@@ -81,6 +90,27 @@ class View extends \Gcms\View
                 'label' => '{LNG_Mileage End}',
                 'class'=> 'currency'
             )); 
+=======
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'item',
+                'label' => '{LNG_Cost}',
+                'class'=> 'currency'
+            ));
+        // warranty
+            $fieldset->add('number', array(
+                'id' => 'warranty',
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'item',
+                'label' => '{LNG_Warranty}',
+            ));
+         // Repair company
+            $fieldset->add('number', array(
+                'id' => 'repair_company',
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'item',
+                'label' => '{LNG_Repair company}',
+            ));
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
          // File attachment
             $fieldset->add('file', array(
                 'id' => 'file_attachment',
@@ -90,16 +120,20 @@ class View extends \Gcms\View
                 'comment' => Language::replace('Upload :type files no larger than :size', array(':type' => '.pdf', ':size' => \Kotchasan\Http\UploadedFile::getUploadSize())),
                 'accept' => array('pdf'), 
             ));  
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if (Login::checkPermission($login, 'can_manage_repair')) {
             // operator_id
-            $fieldset->add('select', array( //select
-                'id' => 'operator_id',
-              'labelClass' => 'g-input icon-customer',
-                'itemClass' => 'item',
-                'label' => '{LNG_Operator}',
-                'options' => \Repair\Operator\Model::create()->toSelect(),
-                'value' => $index->operator_id,
-            ));
+                $fieldset->add('select', array( 
+                    'id' => 'operator_id',
+                    'labelClass' => 'g-input icon-customer',
+                    'itemClass' => 'item',
+                    'label' => '{LNG_Operator}',
+                    'options' => \Repair\Operator\Model::create()->toSelect(),
+                    'value' => $operator 
+                ));
         }
             $fieldset = $form->add('fieldset', array(
                 'class' => 'submit',
@@ -169,7 +203,7 @@ class View extends \Gcms\View
             'accept' => array('jpg', 'jpeg', 'png'), 
         ));  
 
-        if (Login::checkPermission($login, 'approve_manage_repair')) {
+        if (Login::checkPermission($login, 'approve_repair')) {
             // operator_id
             $fieldset->add('hidden', array( //select
                 'id' => 'operator_id',

@@ -183,7 +183,7 @@ class Controller extends \Gcms\Controller
             </thead>
             <tbody>
               <tr>
-                <th> '.$bodytitle.'</th>
+                <th> '.$value[0]['YEAR'].'</th>  
                 <td>'.$value[0]['1'].'</td>
                 <td>'.$value[0]['2'].'</td>
                 <td>'.$value[0]['3'].'</td>
@@ -196,24 +196,24 @@ class Controller extends \Gcms\Controller
                 <td>'.$value[0]['10'].'</td>
                 <td>'.$value[0]['11'].'</td>
                 <td>'.$value[0]['12'].'</td>
-              </tr>'
-              /* ต้องกลับมาเขียนเพิ่มถ้าข้ามปี
+              </tr>
+             
               <tr>
-                <th> '.$bodytitle.'</th>
+              <th> '.$value[1]['YEAR'].'</th> 
                 <td>'.$value[1]['1'].'</td>
-                <td>'.$value[2]['2'].'</td>
-                <td>'.$value[3]['3'].'</td>
-                <td>'.$value[4]['4'].'</td>
-                <td>'.$value[5]['5'].'</td>
-                <td>'.$value[6]['6'].'</td>
-                <td>'.$value[7]['7'].'</td>
-                <td>'.$value[8]['8'].'</td>
-                <td>'.$value[9]['9'].'</td>
-                <td>'.$value[10]['10'].'</td>
-                <td>'.$value[11]['11'].'</td>
-                <td>'.$value[12]['12'].'</td>
-              </tr>*/
-              .'
+                <td>'.$value[1]['2'].'</td>
+                <td>'.$value[1]['3'].'</td>
+                <td>'.$value[1]['4'].'</td>
+                <td>'.$value[1]['5'].'</td>
+                <td>'.$value[1]['6'].'</td>
+                <td>'.$value[1]['7'].'</td>
+                <td>'.$value[1]['8'].'</td>
+                <td>'.$value[1]['9'].'</td>
+                <td>'.$value[1]['10'].'</td>
+                <td>'.$value[1]['11'].'</td>
+                <td>'.$value[1]['12'].'</td>
+              </tr>
+              
             </tbody>
           </table>
         </div>
@@ -226,7 +226,7 @@ class Controller extends \Gcms\Controller
             ]
           });
         </script>
-      </section>';
+      </section>'; 
           $card->set(\Kotchasan\Password::uniqid(), $content2); 
 
           

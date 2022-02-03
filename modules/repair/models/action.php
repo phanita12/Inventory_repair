@@ -29,7 +29,11 @@ class Model extends \Kotchasan\Model
         $ret = array();
         // session, token, can_manage_repair, can_repair
         if ($request->initSession() && $request->isSafe() && $login = Login::isMember()) {
+<<<<<<< HEAD
             if (Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
+=======
+            if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                     // อัปโหลดไฟล์
                     $dir = ROOT_PATH.DATA_FOLDER.'file_attachment/';  
                      /* @var $file \Kotchasan\Http\UploadedFile */        
@@ -63,13 +67,18 @@ class Model extends \Kotchasan\Model
                             'comment' => $request->post('comment')->topic(),
                             'status' => $request->post('status')->toInt(),
                             'operator_id' => $login['id'],
-                            'cost' => $request->post('cost')->toDouble(),
+                            'cost' => $request->post('cost')->toFloat(),
                             'create_date' => date('Y-m-d H:i:s'),
                             'repair_id' => $request->post('repair_id')->toInt(),
                             'attachment' => $fi,
                             'operator_id' => $request->post('operator_id', $login['id'])->toInt(),
+<<<<<<< HEAD
                             'car_mileage_start' => $request->post('car_mileage_start')->toDouble(),
                             'car_mileage_end' => $request->post('car_mileage_end')->toDouble(),
+=======
+                            'r_warranty' => $request->post('warranty')->toInt(),
+                            'r_company' => $request->post('repair_company')->toInt(),
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                         );
                     if (empty($save['status'])) {
                             // ไม่ได้เลือก status
@@ -103,7 +112,7 @@ class Model extends \Kotchasan\Model
         // session, token, approve_manage_repair, approve_repair
 
         if ($request->initSession() && $request->isSafe() && $login = Login::isMember()) {
-            if (Login::checkPermission($login, array('approve_manage_repair', 'approve_repair'))) {
+            if (Login::checkPermission($login, array('approve_repair'))) {
                 try {
                     $save = array(
                         'member_id' => $login['id'],

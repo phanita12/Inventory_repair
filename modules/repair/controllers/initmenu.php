@@ -32,7 +32,7 @@ class Controller extends \Kotchasan\KBase
      */
     public static function execute(Request $request, $menu, $login)
     {
-        $submenus = array(
+        /*$submenus = array(
             array(
                 'text' => '{LNG_Get a Job}',
                 'url' => 'index.php?module=repair-receive',
@@ -41,24 +41,50 @@ class Controller extends \Kotchasan\KBase
                 'text' => '{LNG_History}',
                 'url' => 'index.php?module=repair-history',
             ),
-        );
+        );*/
+            $submenus = array();
+           // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
+           if (Login::checkPermission($login, array( 'can_repair'))) {
+            $submenus = array(
+                array(
+                    'text' => '{LNG_Get a repair}',
+                    'url' => 'index.php?module=repair-receive',
+                ),
+                array(
+                    'text' => '{LNG_History}',
+                    'url' => 'index.php?module=repair-history',
+                ),
+            );
+        } 
         // อนุมัติรายการซ่อม 
-        if (Login::checkPermission($login, array('approve_manage_repair', 'approve_repair'))) {
+        if (Login::checkPermission($login, array( 'approve_repair'))) {
             $submenus[] = array(
                 'text' => '{LNG_Booking list} ({LNG_approve_wait})',
                 'url' => 'index.php?module=repair-approve',
             );
         }
         // สามารถจัดการรายการซ่อมได้, ช่างซ่อม
+<<<<<<< HEAD
         if (Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
+=======
+        if (Login::checkPermission($login, array('can_manage_repair'))) { //, 'can_repair'
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             $submenus[] = array(
                 'text' => '{LNG_Booking list} ({LNG_all items})', 
                 'url' => 'index.php?module=repair-setup',
             );
         } 
+
         // เมนูแจ้งซ่อม
+<<<<<<< HEAD
         $menu->add('repair', '{LNG_Booking jobs}', null, $submenus);
         $menu->addTopLvlMenu('repair', '{LNG_Booking jobs}', null, $submenus, 'member');
+=======
+        $menu->add('repair', '{LNG_Repair jobs}', null, $submenus);
+        $menu->addTopLvlMenu('repair', '{LNG_Repair jobs}', null, $submenus, 'member');
+        
+
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // สามารถตั้งค่าระบบได้
         if (Login::checkPermission($login, 'can_config')) {
             $menu->add('settings', '{LNG_Booking}', null, array(
@@ -71,6 +97,11 @@ class Controller extends \Kotchasan\KBase
                     'url' => 'index.php?module=repair-repairstatus',
                 ),
             ), 'repair');
+        }
+         // จุดประสงค์ 
+         if (Login::checkPermission($login,'can_manage_inventory')) {
+            $menu->add('types', '{nage}  {LNG_List of} {LNG_Inventory}',  'index.php?module=inventory-setup',null   );
+            $menu->addTopLvlMenu('types', ' {LNG_List of} {LNG_Inventory}',  'index.php?module=inventory-setup',null   );
         }
 
         // รายงาน 
