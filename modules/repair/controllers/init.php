@@ -67,6 +67,10 @@ class Controller extends \Kotchasan\KBase
         $permissions['can_manage_room'] = '{LNG_Can manage room} ({LNG_Room})';
         $permissions['can_approve_room'] = '{LNG_Can be approve} ({LNG_Room})';
 
+        //**********Car************** */
+        $permissions['can_manage_car_booking'] = '{LNG_Can manage Car booking} ({LNG_Car booking})';
+        $permissions['report_car_booking'] = '{LNG_Report for Car booking} ({LNG_Car booking})';
+
         return $permissions;
     }
 }

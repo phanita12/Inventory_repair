@@ -43,10 +43,10 @@ class Model extends \Kotchasan\Model
             $where[] = array('V.type_id', $params['type_id']);
         }
         return static::createQuery()
-            ->select('V.id', 'V.topic', 'I.product_no', 'V.category_id', 'V.type_id', 'V.model_id', 'I.stock', 'I.unit', 'V.inuse')
-            ->from('inventory V')
-            ->join('inventory_items I', 'LEFT', array('I.inventory_id', 'V.id'))
-            ->where($where);
+        ->select('V.id', 'V.topic', 'I.product_no', 'V.category_id', 'V.type_id', 'V.model_id', 'I.stock', 'I.unit', 'V.inuse')
+        ->from('inventory V')
+        ->join('inventory_items I', 'LEFT', array('I.inventory_id', 'V.id'))
+        ->where($where);
     }
     public static function check_job($params)
     {

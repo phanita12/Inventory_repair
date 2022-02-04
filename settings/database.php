@@ -6,7 +6,7 @@
       'dbdriver' => 'mysql',
       'username' => 'root',
       'password' => '',//31M@ssw0rd
-      'dbname' => 'it_management', // it_management
+      'dbname' => 'it_management_local', // it_management
       'prefix' => 'pit',
       'hostname' => 'localhost',
     ),

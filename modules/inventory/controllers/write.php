@@ -41,6 +41,8 @@ class Controller extends \Gcms\Controller
         if (Login::checkPermission(Login::isMember(), 'can_manage_inventory')) {
             // อ่านข้อมูลที่เลือก
             $product = \Inventory\Write\Model::get($request->request('id')->toInt());
+            $get_qr = array( $product->id, $product->category_id,$product->model_id,$product->type_id);
+            $item2 =  \Inventory\Write\Model::get_data_qrcode($get_qr);
             if ($product) {
                 // ข้อความ title bar
                 if ($product->id == 0) {
@@ -91,7 +93,7 @@ class Controller extends \Gcms\Controller
                 // menu
                 $section->appendChild(\Index\Tabmenus\View::render($request, 'settings', 'inventory'));
                 // แสดงฟอร์ม
-                $section->appendChild(createClass($tabs[$tab][1])->render($request, $product));
+                $section->appendChild(createClass($tabs[$tab][1])->render($request, $product,  $item2 ));
                 // คืนค่า HTML
                 return $section->render();
             }

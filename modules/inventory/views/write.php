@@ -31,8 +31,19 @@ class View extends \Gcms\View
      *
      * @return string
      */
-    public function render(Request $request, $product)
+    public function render(Request $request, $product,$item )
     {
+        $topic  = isset($item[0]->topic) ? $item[0]->topic : '-'; 
+        $type_name =  str_replace(array('_','-',' '), '', $item[0]->type_name) ;
+        $model_name= isset($item[0]->model_name) ? $item[0]->model_name : '-';  
+        $product_no = str_replace(array('_','-',' '), '', $item[0]->product_no) ;
+        $gmember = \Index\Member\Model::getMemberstatus($item[0]->s_group);
+        $gmember = isset($gmember) ? $gmember  : '-' ;
+        $user_name =  isset($item[0]->name) ? $item[0]->name : '-' ;
+        if(empty($item[0]->serial_no)){  $serial_no = "-"; }else{   $serial_no  = $item[0]->serial_no;   }
+        if($user_name == '-'){ $gmember = "-"; }
+
+    //ฟอร์มแสดง    
         $form = Html::create('form', array(
             'id' => 'product',
             'class' => 'setup_frm',
@@ -45,7 +56,17 @@ class View extends \Gcms\View
         $fieldset = $form->add('fieldset', array(
             'title' => '{LNG_Details of} {LNG_Equipment}',
         ));
+        if ($product->id != 0) {
+         // Qr
+            $img_qr = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=Code : '.$product_no."%0D".'Type : '.$type_name."%0D".'Brand Name : '. $model_name."%0D".'Model : '.$topic."%0D".'Serial no. : '.$serial_no."%0D".'Location : '.$gmember."%0D".'Owner : '. $user_name;
+            $fieldset->add('img', array(
+                'id' => 'Qrc',
+                'itemClass' => 'item',
+                'previewSrc_img' => $img_qr,
+            ));
+        }
         $groups = $fieldset->add('groups');
+        $groups_2 = $fieldset->add('groups');
         $groups_purchase = $fieldset->add('groups_purchase');
         if ($product->id == 0) {
             // product_no
@@ -59,7 +80,7 @@ class View extends \Gcms\View
                 ));
         }
         // topic
-            $groups->add('text', array(
+            $groups_2->add('text', array(
                 'id' => 'topic',
                 'labelClass' => 'g-input icon-edit',
                 'itemClass' => 'width50',
@@ -68,6 +89,15 @@ class View extends \Gcms\View
                 'maxlength' => 64,
                 'value' => isset($product->topic) ? $product->topic : '',
             ));
+         // serial_no 
+              $groups_2->add('text', array(
+                'id' => 'purchase_price',
+                'labelClass' => 'g-input icon-edit',
+                'itemClass' => 'width50',
+                'label' => '{LNG_serial number}',
+                'maxlength' => 50,
+                'value' => isset($product->serial_no) ? $product->serial_no : '',
+            )); 
         // category
             $category = \Inventory\Category\Model::init();
             $n = 0;
@@ -106,48 +136,48 @@ class View extends \Gcms\View
                     'value' => isset($product->{$key}) ? $product->{$key} : '',
                 ));
             }
-        }
+        }    
         $groups_purchase = $fieldset->add('groups');
         $groups_purchase2 = $fieldset->add('groups');
         // purchase company
-        $groups_purchase->add('text', array(
-            'id' => 'purchase_company',
-            'labelClass' => 'g-input icon-edit',
-            'itemClass' => 'width50',
-            'label' => '{LNG_Purchase company}',
-            'maxlength' => 50,
-            'value' => isset($product->purchase_company) ? $product->purchase_company : '',
-        ));
-    // purchase contact
-        $groups_purchase->add('text', array(
-            'id' => 'purchase_contact',
-            'labelClass' => 'g-input icon-edit',
-            'itemClass' => 'width50',
-            'label' => '{LNG_Purchase contact}',
-            'maxlength' => 50,
-            'value' => isset($product->purchase_contact) ? $product->purchase_contact : '',
-        ));
-    // purchase date
-        $groups_purchase2->add('date', array(
-            'id' => 'purchase_date',
-            'labelClass' => 'g-input icon-edit',
-            'itemClass' => 'width20',
-            'label' => '{LNG_Purchase date}',
-            'maxlength' => 50,
-            'value' => isset($product->purchase_date) ? $product->purchase_date : '',
-        ));
-    // purchase price
-        $groups_purchase2->add('number', array(
-            'id' => 'purchase_price',
-            'labelClass' => 'g-input icon-edit',
-            'itemClass' => 'width20',
-            'label' => '{LNG_Purchase price}',
-            'maxlength' => 50,
-            'value' => isset($product->purchase_price) ? $product->purchase_price : '0',
-        ));     
+            $groups_purchase->add('text', array(
+                'id' => 'purchase_company',
+                'labelClass' => 'g-input icon-edit',
+                'itemClass' => 'width50',
+                'label' => '{LNG_Purchase company}',
+                'maxlength' => 50,
+                'value' => isset($product->purchase_company) ? $product->purchase_company : '',
+            ));
+        // purchase contact
+            $groups_purchase->add('text', array(
+                'id' => 'purchase_contact',
+                'labelClass' => 'g-input icon-edit',
+                'itemClass' => 'width50',
+                'label' => '{LNG_Purchase contact}',
+                'maxlength' => 50,
+                'value' => isset($product->purchase_contact) ? $product->purchase_contact : '',
+            ));
+        // purchase date
+            $groups_purchase2->add('date', array(
+                'id' => 'purchase_date',
+                'labelClass' => 'g-input icon-edit',
+                'itemClass' => 'width20',
+                'label' => '{LNG_Purchase date}',
+                'maxlength' => 50,
+                'value' => isset($product->purchase_date) ? $product->purchase_date : '',
+            ));
+        // purchase price
+            $groups_purchase2->add('number', array(
+                'id' => 'purchase_price',
+                'labelClass' => 'g-input icon-edit',
+                'itemClass' => 'width20',
+                'label' => '{LNG_Purchase price}',
+                'maxlength' => 50,
+                'value' => isset($product->purchase_price) ? $product->purchase_price : '0',
+            )); 
+       
         if ($product->id == 0) {
             $groups = $fieldset->add('groups');
-           
             // stock
                 $groups->add('number', array(
                     'id' => 'stock',
@@ -166,7 +196,7 @@ class View extends \Gcms\View
                     'nameValue' => 10,
                 ));    
         }      
-        // picture
+       // picture
         if (is_file(ROOT_PATH.DATA_FOLDER.'inventory/'.$product->id.'.jpg')) {
             $img = WEB_URL.DATA_FOLDER.'inventory/'.$product->id.'.jpg?'.time();
         } else {
@@ -182,6 +212,8 @@ class View extends \Gcms\View
             'previewSrc' => $img,
             'accept' => array('jpg', 'jpeg', 'png'),
         ));
+  
+        
         // inuse
         $fieldset->add('select', array(
             'id' => 'inuse',

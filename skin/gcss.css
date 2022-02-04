@@ -531,6 +531,7 @@ button {
   color: #333;
 }
 .input-select,
+input[type="img"],
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -579,6 +580,7 @@ html[dir="rtl"] textarea {
 .input-select,
 .g-input>select,
 textarea,
+input[type="img"],
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -600,6 +602,7 @@ ul.inputgroups.g-input,
 fieldset.search,
 select,
 textarea,
+input[type="img"],
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -651,6 +654,7 @@ input[type="submit"] {
   appearance: button;
   cursor: pointer;
 }
+input[type="img"],
 input[type="checkbox"],
 input[type="radio"],
 input[type="file"] {
@@ -659,6 +663,7 @@ input[type="file"] {
   background-image: url() !important;
 }
 select,
+input[type="img"],
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -671,6 +676,10 @@ input[type="color"] {
   height: 2.3em;
 }
 .file-preview {
+  overflow: hidden;
+  clear: both;
+}
+.img-preview {
   overflow: hidden;
   clear: both;
 }

@@ -47,6 +47,7 @@ class Model extends \Kotchasan\Model
                 'category_id' => 0,
                 'type_id' => 0,
                 'model_id' => 0,
+                'serial_no' => '',
             );
         } else {
             // แก้ไข อ่านรายการที่เลือก
@@ -63,6 +64,51 @@ class Model extends \Kotchasan\Model
             }
             return $query->first($select);
         }
+    }
+    
+    public static function get_data_qrcode($params)
+    {
+        //เงื่อนไข
+            $where = array();
+            if ($params[1] > 0) {
+                $where[] = array('V.category_id', $params[1]);
+            }
+            if ($params[2] > 0) {
+                $where[] = array('V.model_id', $params[2]);
+            }
+            if ($params[3] > 0) {
+                $where[] = array('V.type_id', $params[3]);
+            }
+            $catagory = static::createQuery()
+            ->select('C.topic')
+            ->from('category C')
+            ->where(array('C.category_id', 'V.category_id'))
+            ->andwhere(array('C.type', 'category_id'));
+        $model = static::createQuery()
+            ->select('C.topic')
+            ->from('category C')
+            ->where(array('C.category_id', 'V.model_id'))
+            ->andwhere(array('C.type', 'model_id'));
+        $type= static::createQuery()
+            ->select('C.topic')
+            ->from('category C')
+            ->where(array('C.category_id', 'V.type_id'))
+            ->andwhere(array('C.type', 'type_id'));
+        $q0_group = static::createQuery()    
+        ->select('U3.status as s_group')
+        ->from('user U3')
+        ->where(array('U3.id', 'R.customer_id'));
+        return static::createQuery()  
+            ->select('V.id', 'V.topic',  'I.product_no' , 'V.category_id', 'V.type_id', 'V.model_id', 'I.stock', 'I.unit', 'V.inuse' ,array( $catagory,'catagory_name'),array( $model,'model_name'),array( $type,'type_name'),'U.name' ,array( $q0_group,'s_group'),'V.serial_no')
+            ->from('inventory_items I')
+            ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
+            ->join('repair R', 'LEFT', array('R.product_no', 'I.product_no'))
+            ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+            ->where( $where)    
+            ->andWhere(array('V.id', $params[0]))    
+            ->limit(1)
+            ->execute()
+            ;
     }
 
     /**
@@ -85,6 +131,7 @@ class Model extends \Kotchasan\Model
                         'purchase_contact' => $request->post('purchase_contact')->topic(),
                         'purchase_date' => $request->post('purchase_date')->date(),
                         'purchase_price' => $request->post('purchase_price')->toFloat(),
+                        'serial_no' => $request->post('serial_no')->topic(),
                     );
                     // ตรวจสอบรายการที่เลือก
                     $index = self::get($request->post('id')->toInt());

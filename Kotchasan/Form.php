@@ -158,6 +158,21 @@ class Form extends \Kotchasan\KBase
         return $obj;
     }
 
+      /**
+     * @param array $attributes
+     *
+     * @return \static
+     */
+    public static function img($attributes = array())
+    {
+        $obj = new static();
+        $obj->tag = 'img';
+        $attributes['type'] = 'img';
+        $attributes['class'] = 'g-img';
+        $obj->attributes = $attributes;
+        return $obj;
+    }
+
     /**
      * ฟังก์ชั่นสร้าง input ชนิด hidden สำหรับใช้ในฟอร์ม
      * ใช้ประโยชน์ในการสร้าง URL เพื่อส่งกลับไปยังหน้าเดิมหลังจาก submit แล้ว
@@ -296,6 +311,7 @@ class Form extends \Kotchasan\KBase
                 case 'dataPreview':
                 case 'previewSrc':
                 case 'previewSrc_disable':
+                case 'previewSrc_img':
                 case 'accept':
                 case 'options':
                 case 'optgroup':
@@ -485,6 +501,7 @@ class Form extends \Kotchasan\KBase
             if (isset($type) && $type === 'checkbox') {
                 $input .= self::create('label', '', (empty($labelClass) ? '' : $labelClass), $element.'&nbsp;'.(isset($label) ? $label : ''));
             } else {
+
                 if (isset($dataPreview)) {
                     $input .= '<div class="file-preview" id="'.$dataPreview.'">';
                    
@@ -513,7 +530,23 @@ class Form extends \Kotchasan\KBase
                             }
                         }
                     }
+                    if (isset($previewSrc_img)) {
+                        if (preg_match_all('/\.([a-z0-9]+)(\?|$)/i', $previewSrc_img, $match)) {
+                                $input .= '<img src="'.$previewSrc_img.'&choe=UTF-8" target="preview" class="file-thumb" style="background-image:url('.$previewSrc_img.')" />'; 
+                        }
+                    } 
                     $input .= '</div>';
+
+                }else  if (isset($previewSrc_img)) {
+                   
+                    if (isset($previewSrc_img)) {
+                        //if (preg_match_all('/\.([a-z0-9]+)(\?|$)/i', $previewSrc_img, $match)) {
+                            
+                               $input .= '<a href="'.$previewSrc_img.'" target="preview" class="file-thumb" title="คลิกเพื่อดาวน์โหลด" ><img src="'.$previewSrc_img.'&choe=UTF-8" target="preview" class="file-thumb" style="background-image:url('.$previewSrc_img.')" /></a>'; 
+                                
+                       // }
+                    }
+
                 }
                 if (isset($label) && isset($id)) {
                     $input .= '<label for="'.$id.'">'.$label.'</label>';

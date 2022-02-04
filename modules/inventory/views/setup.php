@@ -51,7 +51,7 @@ class View extends \Gcms\View
         // URL สำหรับส่งให้ตาราง
         $uri = $request->createUriWithGlobals(WEB_URL.'index.php');
         //เช็คข้อมูล มีรายการที่เคยเปิดในระบบแจ้งซ่อมหรือไม่
-      //  $Check_product = \Repair\Printasset\Model::get($request->request('id')->toInt(),$request->request('tab')->topic());
+            //  $Check_product = \Repair\Printasset\Model::get($request->request('id')->toInt(),$request->request('tab')->topic());
         // ตาราง
         $table = new DataTable(array(
             /* Uri */
@@ -65,7 +65,7 @@ class View extends \Gcms\View
             /* ฟังก์ชั่นจัดรูปแบบการแสดงผลแถวของตาราง */
             'onRow' => array($this, 'onRow'),
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
-            'hideColumns' => array('unit'), //,'job_id'
+            'hideColumns' => array('unit','catagory_name','model_name','type_name'), 
             /* คอลัมน์ที่สามารถค้นหาได้ */
             'searchColumns' => array('topic', 'product_no'),
             /* ตั้งค่าการกระทำของของตัวเลือกต่างๆ ด้านล่างตาราง ซึ่งจะใช้ร่วมกับการขีดถูกเลือกแถว */
@@ -161,27 +161,27 @@ class View extends \Gcms\View
                 ),
             ),
             /* ปุ่มแสดงในแต่ละแถว */
-            'buttons' => array(
-                'printasset' => array(
-                    'class' => 'icon-print button brown notext',
-                    'href' =>  $uri->createBackUri(array('module' => 'repair-printasset', 'tab' => ':product_no','id' => ':id' )),
-                    'target' => '_export',
-                    'title' => '{LNG_Print}',
+                'buttons' => array(
+                    'printasset' => array(
+                        'class' => 'icon-print button brown notext',
+                        'href' =>  $uri->createBackUri(array('module' => 'repair-printasset', 'tab' => ':product_no','id' => ':id' )),
+                        'target' => '_export',
+                        'title' => '{LNG_Print}',
+                    ),
+                    array(
+                        'class' => 'icon-edit button green',
+                        'href' => $uri->createBackUri(array('module' => 'inventory-write', 'tab' => 'product', 'id' => ':id')),
+                        'text' => '{LNG_Edit}',
+                    ),
+                
                 ),
-                array(
-                    'class' => 'icon-edit button green',
-                    'href' => $uri->createBackUri(array('module' => 'inventory-write', 'tab' => 'product', 'id' => ':id')),
-                    'text' => '{LNG_Edit}',
-                ),
-               
-            ),
             /* ปุ่มเพิ่ม */
-            'addNew' => array(
-                'class' => 'float_button icon-new',
-                'href' => $uri->createBackUri(array('module' => 'inventory-write', 'id' => 0)),
-                'title' => '{LNG_Add} {LNG_Equipment}',
-            ),
-        ));
+                    'addNew' => array(
+                        'class' => 'float_button icon-new',
+                        'href' => $uri->createBackUri(array('module' => 'inventory-write', 'id' => 0)),
+                        'title' => '{LNG_Add} {LNG_Equipment}',
+                    ),
+                ));
         // save cookie
         setcookie('inventorySetup_perPage', $table->perPage, time() + 2592000, '/', HOST, HTTPS, true);
         setcookie('inventorySetup_sort', $table->sort, time() + 2592000, '/', HOST, HTTPS, true);
@@ -200,12 +200,13 @@ class View extends \Gcms\View
      */
     public function onRow($item, $o, $prop)
     {
+       
         $item['category_id'] = $this->category->get('category_id', $item['category_id']);
         $item['type_id'] = $this->category->get('type_id', $item['type_id']);
         $item['model_id'] = $this->category->get('model_id', $item['model_id']);
         $item['inuse'] = '<a id=inuse_'.$item['id'].' class="icon-valid '.($item['inuse'] == 0 ? 'disabled' : 'access').'" title="'.$this->inventory_status[$item['inuse']].'"></a>';
-        $thumb = is_file(ROOT_PATH.DATA_FOLDER.'inventory/'.$item['id'].'.jpg') ? WEB_URL.DATA_FOLDER.'inventory/'.$item['id'].'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';
         $item['stock'] .= ' '.$item['unit'];
+        $thumb = is_file(ROOT_PATH.DATA_FOLDER.'inventory/'.$item['id'].'.jpg') ? WEB_URL.DATA_FOLDER.'inventory/'.$item['id'].'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';
         $item['id'] = '<img src="'.$thumb.'" style="max-height:50px;max-width:50px" alt=thumbnail>';
         return $item;
     }
