@@ -385,7 +385,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return array|bool
      */
-    public function resizeImage($exts, $target, $name, $width, $watermark = 'tks')
+    public function resizeImage($exts, $target, $name, $width, $watermark = '')
     {
         $this->check($exts, $target);
         $ret = Image::resize($this->tmp_name, $target, $name, $width, $watermark);

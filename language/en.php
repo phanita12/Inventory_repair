@@ -9,14 +9,16 @@ return array(
   'approve_wait' => 'pending for approval.',
   'Approved' => 'Approved',
   'Begin date' => 'Begin date',
+  'Begin time' => 'Begin time',
   'BOOLEANS' => array(
     0 => 'Disable',
     1 => 'Enabled'
   ),
-  'Can approve manage repair' => 'Can approve manage repair',
+  'Can approve manage Booking' => 'Can approve manage Booking',
   'Canceljob' => 'Cancel job',
   'Closejob' => 'Close job',
   'Comment' => 'Comment',
+  'count_Easy_Pass' => 'Easy Pass total',
   'DATE_FORMAT' => 'd M Y, H:i',
   'DATE_LONG' => array(
     0 => 'Sunday',
@@ -36,17 +38,20 @@ return array(
     5 => 'Fr',
     6 => 'Sa'
   ),
+  'destination' => 'Destination',
   'Disapproved' => 'Disapproved',
   'email_cc' => 'CC',
   'Emailing' => 'Email',
   'End date' => 'End date',
+  'End date must be greater than begin date' => 'End date must be greater than begin date',
   'file_attachment' => 'file attachment',
+  'Find equipment by' => 'Find Car by',
   'from' => 'from',
   'Graph monthly report' => 'monthly report',
   'Graph report' => 'Graph report',
   'Graph-report' => 'Graph monthly report',
   'hour' => 'hour',
-  'Inventory' => 'Inventory',
+  'Inventory' => 'Car management',
   'INVENTORY_CATEGORIES' => array(
     'category_id' => 'Category',
     'type_id' => 'Type',
@@ -107,6 +112,7 @@ return array(
   ),
   'Name' => 'Name Surname',
   'No_file_attachment' => 'file not found',
+  'not_use' => 'Not in use',
   'pending' => 'pending',
   'Per Month' => 'Per Month',
   'per year' => 'Per year',
@@ -114,12 +120,13 @@ return array(
     'can_config' => 'Can configure the system'
   ),
   'please select the user for approval' => 'please select the user for approval',
+  'Please select Types of objective' => 'Please select Types of objective',
   'position' => 'Position',
-  'Problems and repairs details' => 'Problems and repairs details',
   'PUBLISHEDS' => array(
     0 => 'Unpublished',
     1 => 'Published'
   ),
+  'Registration No.' => 'Car Registration No.',
   'report' => 'Report',
   'Reset' => 'Reset',
   'SEXES' => array(
@@ -131,9 +138,10 @@ return array(
     '' => 'Clear Text',
     'ssl' => 'Server using a secure connection (SSL)'
   ),
-  'Summary' => 'Summary of repair system',
+  'Summary' => 'Summary of car bookings',
   'type_repair' => 'Type Repair',
+  'Vehicles cannot be used at the selected time' => 'Vehicles cannot be used at the selected time',
   'WaitParts' => 'Wait Parts',
-  'working_hours' => 'Working hours(d:h:i)',
+  'working_hours' => 'Working hours(d/h/i)',
   'YEAR_OFFSET' => 0
 );

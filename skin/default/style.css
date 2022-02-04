@@ -323,6 +323,7 @@ div.dashboard,
   margin: 10px auto;
   width: 960px;
   max-width: 100%;
+ 
 }
 .tab_menus {
   margin: 0 auto;
@@ -581,9 +582,14 @@ header .inline {
   color: rgba(0, 0, 0, 0.4);
 }
 .card {
-  padding: 5px;
+ padding: 5px;
   float: left;
   width: 25%;
+  /* padding: 5px;
+  float: left;*/
+  /*  width: 25%;
+   margin-left: -27%;*/
+
 }
 .card .card-item {
   color: #fff;
@@ -779,9 +785,11 @@ header .inline {
 @media only screen and (min-width: 961px) {
   .card:nth-child(4n+1) {
     padding: 5px 5px 5px 0;
+   /*padding: 5px 5px 5px 5px;*/
   }
   .card:nth-child(4n+4) {
-    padding: 5px 0 5px 5px;
+   padding: 5px 0 5px 5px;
+     /*padding: 5px 5px 5px 5px;*/
   }
 }
 

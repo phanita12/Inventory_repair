@@ -35,13 +35,13 @@ class Controller extends \Gcms\Controller
     {
         
         // ข้อความ title bar
-        $this->title = Language::trans('{LNG_report}{LNG_Graph-report}');
+        $this->title = Language::trans('{LNG_Graph-report}');
         // เลือกเมนู
         $this->menu = 'report';
         // สมาชิก
         $login = Login::isMember();
         // สามารถดูรายงาน
-        if (Login::checkPermission($login, array('report'))) {
+        if (Login::checkPermission($login, array('report_car_booking'))) {
             // แสดงผล
             $section = Html::create('section', array(
                 'class' => 'content_bg',
@@ -52,7 +52,7 @@ class Controller extends \Gcms\Controller
             ));
             $ul = $breadcrumbs->add('ul');
             $ul->appendChild('<li><span class="icon-tools">{LNG_Module}</span></li>');
-            $ul->appendChild('<li><span>{LNG_report}</span></li>');
+            $ul->appendChild('<li><span>{LNG_report} </span></li>');
             $section->add('header', array(
                 'innerHTML' => '<h2 class="icon-list">'.$this->title.'</h2>',
             ));

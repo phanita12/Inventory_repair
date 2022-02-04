@@ -332,7 +332,9 @@ final class Language extends \Kotchasan\KBase
                     $list[] = '\''.$key.'\' => '.$value;
                 }
             }
-            $f = @fopen($language_folder.$lang.'.'.$type, 'wb');
+            $file = $language_folder.$lang.'.'.$type;
+            // save
+            $f = @fopen($file, 'wb');
             if ($f !== false) {
                 if ($type == 'php') {
                     $content = '<'."?php\n/* language/$lang.php */\nreturn array(\n  ".implode(",\n  ", $list)."\n);";
@@ -341,6 +343,10 @@ final class Language extends \Kotchasan\KBase
                 }
                 fwrite($f, $content);
                 fclose($f);
+                if (function_exists('opcache_invalidate')) {
+                    // reset file cache
+                    opcache_invalidate($file);
+                }
             } else {
                 return sprintf(self::get('File %s cannot be created or is read-only.'), $lang.'.'.$type);
             }

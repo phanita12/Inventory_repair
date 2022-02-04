@@ -41,7 +41,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
         return static::createQuery()
-            ->select('R.id', 'R.job_id', 'V.topic', 'R.create_date', 'S.operator_id', 'S.status')
+            ->select('R.id', 'R.job_id','R.product_no',SQL::CASE_WHEN('R.types_objective','types_objective'), 'R.create_date', 'S.operator_id', 'S.status') //, 'R.destination','R.job_description','V.topic'
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
             ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
@@ -50,3 +50,4 @@ class Model extends \Kotchasan\Model
             ->where($where);
     }
 }
+

@@ -1,11 +1,6 @@
 <?php
 /**
  * @filesource modules/repair/views/action.php
- *
- * @copyright 2016 Goragod.com
- * @license http://www.kotchasan.com/license/
- *
- * @see http://www.kotchasan.com/
  */
 
 namespace Repair\Action;
@@ -16,10 +11,6 @@ use Kotchasan\Language;
 
 /**
  * module=repair-action
- *
- * @author Goragod Wiriya <admin@goragod.com>
- *
- * @since 1.0
  */
 class View extends \Gcms\View
 {
@@ -44,17 +35,24 @@ class View extends \Gcms\View
             'token' => true,
         ));
         $form->add('header', array(
-            'innerHTML' => '<h3 class=icon-tools>{LNG_Update repair status} '.$index->job_id.'</h3>',
+            'innerHTML' => '<h3 class=icon-tools>{LNG_Update status} '.$index->job_id.'</h3>',
         ));
         $fieldset = $form->add('fieldset');
         $status = \Repair\Status\Model::create()->toSelect();
+<<<<<<< HEAD
+=======
         if($index->operator_id == 0){$operator = $login['id']; }else{ $operator =  $index->operator_id;  }
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // status
             $fieldset->add('select', array(
                 'id' => 'status',
                 'labelClass' => 'g-input icon-star0',
                 'itemClass' => 'item',
+<<<<<<< HEAD
+                'label' => '{LNG_Task status}',
+=======
                 'label' => '{LNG_Repair status}',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                 'options' => array(0 => '{LNG_Please select}') + $status,
                 'value' => $index->status,
             ));
@@ -70,6 +68,29 @@ class View extends \Gcms\View
         // Cost
             $fieldset->add('number', array(
                 'id' => 'cost',
+<<<<<<< HEAD
+                'labelClass' => 'g-input icon-money',
+                'itemClass' => 'item',
+                'label' => '{LNG_count_Easy_Pass}',
+                'class'=> 'currency'
+            ));
+        // car_mileage_start
+            $fieldset->add('number', array(
+                'id' => 'car_mileage_start',
+                'labelClass' => 'g-input icon-location',
+                'itemClass' => 'item',
+                'label' => '{LNG_Mileage starting}',
+                'class'=> 'currency'
+            )); 
+        // car_mileage_start
+            $fieldset->add('number', array(
+                'id' => 'car_mileage_end',
+                'labelClass' => 'g-input icon-location',
+                'itemClass' => 'item',
+                'label' => '{LNG_Mileage End}',
+                'class'=> 'currency'
+            )); 
+=======
                 'labelClass' => 'g-input icon-number',
                 'itemClass' => 'item',
                 'label' => '{LNG_Cost}',
@@ -89,6 +110,7 @@ class View extends \Gcms\View
                 'itemClass' => 'item',
                 'label' => '{LNG_Repair company}',
             ));
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
          // File attachment
             $fieldset->add('file', array(
                 'id' => 'file_attachment',
@@ -98,7 +120,10 @@ class View extends \Gcms\View
                 'comment' => Language::replace('Upload :type files no larger than :size', array(':type' => '.pdf', ':size' => \Kotchasan\Http\UploadedFile::getUploadSize())),
                 'accept' => array('pdf'), 
             ));  
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if (Login::checkPermission($login, 'can_manage_repair')) {
             // operator_id
                 $fieldset->add('select', array( 
@@ -110,24 +135,22 @@ class View extends \Gcms\View
                     'value' => $operator 
                 ));
         }
-        $fieldset = $form->add('fieldset', array(
-            'class' => 'submit',
-        ));
-        // submit
-        $fieldset->add('submit', array(
-            'id' => 'save',
-            'class' => 'button save large icon-save',
-            'value' => '{LNG_Save}',
-        ));
-        // repair_id
-        $fieldset->add('hidden', array(
-            'id' => 'repair_id',
-            'value' => $index->id,
-        ));
+            $fieldset = $form->add('fieldset', array(
+                'class' => 'submit',
+            ));
+            // submit
+            $fieldset->add('submit', array(
+                'id' => 'save',
+                'class' => 'button save large icon-save',
+                'value' => '{LNG_Save}',
+            ));
+            $fieldset->add('hidden', array(
+                'id' => 'repair_id',
+                'value' => $index->id,
+            ));
         // คืนค่า HTML
-        return $form->render();
+            return $form->render();
     }
-
     public function render2($index, $login)
     {
    
@@ -141,7 +164,7 @@ class View extends \Gcms\View
             'token' => true,
         ));
         $form->add('header', array(
-            'innerHTML' => '<h3 class=icon-tools>{LNG_Update repair status} '.$index->job_id.'</h3>',
+            'innerHTML' => '<h3 class=icon-tools>{LNG_Update status} '.$index->job_id.'</h3>',
         ));
         $fieldset = $form->add('fieldset');
        // $status = \Repair\Status\Model::create()->toSelect();
@@ -152,7 +175,7 @@ class View extends \Gcms\View
             'id' => 'status',
             'labelClass' => 'g-input icon-star0',
             'itemClass' => 'item',
-            'label' => '{LNG_Repair status}',
+            'label' => '{LNG_Task status}',
             'options' => array(0 => '{LNG_Please select}') + $status_approve,
             'value' => $index->status,
         ));

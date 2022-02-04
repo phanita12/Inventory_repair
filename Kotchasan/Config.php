@@ -125,13 +125,13 @@ class Config
      *
      * @var string
      */
-    public $web_description = ''; //PHP Framework พัฒนาโดยคนไทย
+    public $web_description = 'PHP Framework พัฒนาโดยคนไทย';
     /**
      * ชื่อเว็บไซต์
      *
      * @var string
      */
-    public $web_title = '';//Kotchasan PHP Framework
+    public $web_title = 'Kotchasan PHP Framework';
     /**
      * @var Singleton สำหรับเรียกใช้ class นี้เพียงครั้งเดียวเท่านั้น
      */
@@ -216,8 +216,14 @@ class Config
             }
             fwrite($f, '<'."?php\n/* $match[1].php */\nreturn ".var_export((array) $config, true).';');
             fclose($f);
-            // หน่วงเวลาเล็กน้อย
-            usleep(1000000);
+            if (function_exists('opcache_invalidate')) {
+                // reset file cache
+                opcache_invalidate($file);
+            } else {
+                // หน่วงเวลาเล็กน้อย
+                usleep(1000000);
+            }
+            // success
             return true;
         } else {
             return false;

@@ -44,24 +44,38 @@ class Model extends \Kotchasan\Model
         }else{
             $where[] = array('S.status', 'IN', array(8 ,9, 10));
         }
+        $where[] =  array('S.status', 'IN', array(8 ,9, 10));
+        $where[] =  array('R.send_approve',$login['id']);
         $q1 = static::createQuery()
             ->select('repair_id', Sql::MAX('id', 'max_id'))
             ->from('repair_status')
             ->groupBy('repair_id');
+<<<<<<< HEAD
+     
+        return static::createQuery()
+            ->select('R.id', 'R.job_id', 'U.name', 'U.phone', 'R.product_no',SQL::CASE_WHEN('R.types_objective','types_objective'),'R.create_date', 'S.operator_id', 'S.status') //'V.topic'
+=======
             return  static::createQuery()
             ->select('R.id', 'R.job_id', 'U.name', 'U.phone', 'V.topic', 'R.create_date', 'S.operator_id', 'S.status')
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
             ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
             ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+<<<<<<< HEAD
+            ->where($where);
+            //->andwhere(array('S.status', 'IN', array(8 ,9, 10)))
+            //->andWhere(array('R.send_approve',$login['id']));
+=======
             ->where($where)
            // ->andwhere(array('S.status', 'IN', array(8 ,9, 10),))
             ->andWhere(array('R.send_approve',$login['id']))
             ->order('S.status');
 
 
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
     }
    
     /**

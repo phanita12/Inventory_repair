@@ -41,8 +41,12 @@ class Model extends \Kotchasan\Model
                 array(Sql::DATE('S.create_date'), date('Y-m-d')),
             );
             // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'));
+=======
         $isStaff = Login::checkPermission($login, 'can_config'); //'can_manage_repair',
         
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
             $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
             $where[] = array('S.status', $status);
@@ -82,9 +86,13 @@ class Model extends \Kotchasan\Model
             array(Sql::DATE('S.create_date'), date('Y-m-d')),
         );*/
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'));
+=======
         $isStaff = Login::checkPermission($login, array('can_config'));  //'can_manage_repair',can_repair
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
-            $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
+            $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 9;
             $where[] = array('S.status', $status);
         } else {
             $where[] = array('R.customer_id', $login['id']);
@@ -118,18 +126,26 @@ class Model extends \Kotchasan\Model
         }
         return 0;
     }
+<<<<<<< HEAD
+
+=======
         /**
      * อ่านงาน Close job
      *
      * @return object
      */
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
     public static function getStatusclose($login)
     {
         /*$where = array(
             array(Sql::DATE('S.create_date'), date('Y-m-d')),
         );*/
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'));
+=======
         $isStaff = Login::checkPermission($login, array( 'can_config')); //'can_manage_repair',can_repair
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
             $status = array('7'); 
             $where[] = array('S.status', $status);
@@ -174,7 +190,11 @@ class Model extends \Kotchasan\Model
             array(Sql::DATE('S.create_date'), date('Y-m-d')),
         );*/
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'));
+=======
         $isStaff = Login::checkPermission($login, array(',can_config')); //'can_manage_repair', can_repair
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
           //  $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
             $status = array('6'); 
@@ -219,7 +239,11 @@ class Model extends \Kotchasan\Model
     public static function getStatuswaitParts($login)
     {
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'));
+=======
         $isStaff = Login::checkPermission($login, array( 'can_config')); //'can_manage_repair',can_repair
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
           //  $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
             $status = array('3'); 
@@ -269,7 +293,11 @@ class Model extends \Kotchasan\Model
             // array(Sql::DATE('S.create_date'), date('Y-m-d')),
         );
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'));
+=======
         $isStaff = Login::checkPermission($login, array( 'can_config')); //'can_manage_repair',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
            /* $status = isset(self::$cfg->repair_first_status) ? self::$cfg->repair_first_status : 1;
             $where[] = array('S.status', $status);*/
@@ -314,7 +342,11 @@ class Model extends \Kotchasan\Model
     {
         $where = array();
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair', 'approve_manage_repair', 'approve_repair'));
+=======
         $isStaff = Login::checkPermission($login, array( 'can_config')); //'can_manage_repair','can_repair', 'approve_repair',
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         if ($isStaff) {
 
             $status = isset(self::$cfg->repair_status) ? self::$cfg->repair_status : 8;
@@ -435,12 +467,55 @@ class Model extends \Kotchasan\Model
             }
             return 0;
         }*/
+
+        public static function getReady($login)
+        {
+            $where = array();
+            // พนักงาน
+            $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair', 'approve_manage_repair', 'approve_repair'));
+            if ($isStaff) {
+                $where[] = array('S.status', 2);
+            } else {
+                $where[] = array('R.customer_id', $login['id']);
+            }
+            $q1 = static::createQuery()
+                ->select('repair_id', Sql::MAX('id', 'id'))
+                ->from('repair_status')
+                ->groupBy('repair_id');
+            $query = static::createQuery()
+                ->selectCount()
+                ->from('repair_status S')
+                ->join(array($q1, 'T'), 'INNER', array(array('T.repair_id', 'S.repair_id'), array('T.id', 'S.id')))
+                ->where($where);
+            if ($isStaff) { //if (!$isStaff) {
+                $query->join('repair R', 'INNER', array('R.id', 'S.repair_id'));
+                $q3 =  date('Y-m' . '-01 00:00:00');
+                $q2 = SQL::LAST_DAY(date('Y-m-d 23:59:59'));
+                $query->andwhere(SQL::BETWEEN('R.create_date', $q3, $q2));
+            }
+            $search = $query->toArray()
+                ->execute();
+    
+            if (!empty($search)) {
+                return (object) array(
+                    'isStaff' => $isStaff,
+                    'count' => $search[0]['count'],
+                );
+            }
+            return 0;
+        }
+
     public static function getApprove($login)
     {
         $where = array();
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair', 'approve_manage_repair', 'approve_repair'));
+        if ($isStaff) {
+=======
         $isStaff = Login::checkPermission($login, array('can_repair')); //'can_manage_repair','can_repair', 'approve_repair',
         /*if ($isStaff) {
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             $where[] = array('S.status', 9);
         } else {
             $where[] = array('R.customer_id', $login['id']);
@@ -485,8 +560,13 @@ class Model extends \Kotchasan\Model
     {
         $where = array();
         // พนักงาน
+<<<<<<< HEAD
+        $isStaff = Login::checkPermission($login, array('can_manage_car_booking', 'can_repair', 'approve_manage_repair', 'approve_repair'));
+        if ($isStaff) {
+=======
         $isStaff = Login::checkPermission($login, array('can_config'));  //'can_manage_repair','can_repair', 'approve_repair',
        /* if ($isStaff) {
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             $where[] = array('S.status', 10);
         } else {
             $where[] = array('R.customer_id', $login['id']);
@@ -690,10 +770,10 @@ class Model extends \Kotchasan\Model
             return static::createQuery() 
             ->select(
                 (array(
+                    Sql::SUM(Sql::IF('V.category_id', 1, 1, 0), '1'),
                     Sql::SUM(Sql::IF('V.category_id', 2, 1, 0), '2'),
                     Sql::SUM(Sql::IF('V.category_id', 3, 1, 0), '3'),
                     Sql::SUM(Sql::IF('V.category_id', 4, 1, 0), '4'),
-                    Sql::SUM(Sql::IF('V.category_id', 5, 1, 0), '5'),
                 ))
             )
             ->from('repair R')
@@ -769,6 +849,28 @@ class Model extends \Kotchasan\Model
             ->execute(); 
        
     }
+
+    public static function getbooking()
+    {
+  
+            $q1 = static::createQuery()
+            ->select('repair_id', Sql::MAX('id', 'max_id'))
+            ->from('repair_status')
+            ->groupBy('repair_id');
+            return static::createQuery() 
+            ->select('R.id','R.types_objective','R.begin_date','R.end_date','R.product_no' ,'S.status' )
+            ->from('repair R')
+            ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
+            ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
+            ->join('inventory_items I', 'LEFT', array('I.product_no', 'R.product_no'))
+            ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
+            ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
+            ->where(array('S.status','in',array('7','2')))
+            ->toArray()
+           ->execute()  ;
+       
+    }
+
 
     
     

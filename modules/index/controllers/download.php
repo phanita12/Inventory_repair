@@ -56,7 +56,7 @@ class Controller extends \Kotchasan\Controller
                     $header['time']             = Language::get('working_hours');
                     $header['user_id']          = Language::get('Informer');
                     $header['memberstatus']     = Language::get('Member');
-                    $header['product_no']       = Language::get('Serial/Registration No.');
+                    $header['product_no']       = Language::get('Registration No.');
                     $header['category_id']      = Language::get('Category');
                     //$header['model_id']         = Language::get('Model');
                     $header['type_id']          = Language::get('Type');
@@ -68,6 +68,8 @@ class Controller extends \Kotchasan\Controller
                     $header['date_approve']     = Language::get('Approve_date');
                     $header['comment']          = Language::get('Comment');
                     $header['cost']             = Language::get('Cost');
+
+                   
                
                     /*   1 วัน=24 ชั่วโมง / 24 ชั่วโมง=3,600 นาที / 3,600 นาที=86,400 วินาที */$i=0;
                     foreach(\index\Report\Model::toDataTable2($params) as $value){
@@ -148,9 +150,10 @@ class Controller extends \Kotchasan\Controller
 
                     $datas[] = $person;
                 }
-                //mb_convert_encoding($header, 'Windows-874','utf-8');
+                //mb_convert_encoding($header, 'utf-8','Windows-874');
                 // export
                 return \Kotchasan\Csv::send('Report Repair Online', $header, $datas, self::$cfg->csv_language); 
+                
                 
             }else {
                     // 404
@@ -181,48 +184,60 @@ class Controller extends \Kotchasan\Controller
         exit;
     }*/
 
-    /**
-     * ส่งออกรายชื่อนักเรียน.
-     *
-     * @param Request $request
-     */
-   /* public function report(Request $request)
-    {
+    public static function w1250_to_utf8($text) {
+        // map based on:
+        // http://konfiguracja.c0.pl/iso02vscp1250en.html
+        // http://konfiguracja.c0.pl/webpl/index_en.html#examp
+        // http://www.htmlentities.com/html/entities/
 
-        var_dump('MC');
+       
+        $map = array(
+            chr(0x8A) => chr(0xA9),
+            chr(0x8C) => chr(0xA6),
+            chr(0x8D) => chr(0xAB),
+            chr(0x8E) => chr(0xAE),
+            chr(0x8F) => chr(0xAC),
+            chr(0x9C) => chr(0xB6),
+            chr(0x9D) => chr(0xBB),
+            chr(0xA1) => chr(0xB7),
+            chr(0xA5) => chr(0xA1),
+            chr(0xBC) => chr(0xA5),
+            chr(0x9F) => chr(0xBC),
+            chr(0xB9) => chr(0xB1),
+            chr(0x9A) => chr(0xB9),
+            chr(0xBE) => chr(0xB5),
+            chr(0x9E) => chr(0xBE),
+            chr(0x80) => '&euro;',
+            chr(0x82) => '&sbquo;',
+            chr(0x84) => '&bdquo;',
+            chr(0x85) => '&hellip;',
+            chr(0x86) => '&dagger;',
+            chr(0x87) => '&Dagger;',
+            chr(0x89) => '&permil;',
+            chr(0x8B) => '&lsaquo;',
+            chr(0x91) => '&lsquo;',
+            chr(0x92) => '&rsquo;',
+            chr(0x93) => '&ldquo;',
+            chr(0x94) => '&rdquo;',
+            chr(0x95) => '&bull;',
+            chr(0x96) => '&ndash;',
+            chr(0x97) => '&mdash;',
+            chr(0x99) => '&trade;',
+            chr(0x9B) => '&rsquo;',
+            chr(0xA6) => '&brvbar;',
+            chr(0xA9) => '&copy;',
+            chr(0xAB) => '&laquo;',
+            chr(0xAE) => '&reg;',
+            chr(0xB1) => '&plusmn;',
+            chr(0xB5) => '&micro;',
+            chr(0xB6) => '&para;',
+            chr(0xB7) => '&middot;',
+            chr(0xBB) => '&raquo;',
+        );
 
-        $header = array();
-        $header[] = Language::get('status');
-        $header[] = Language::get('product_no');
-        //$header[] = Language::trans('{LNG_Name}');
-        $header[] = Language::get('category_id');
-        $header[] = Language::get('model_id');
-        $header[] = Language::get('type_id');
-        $header[] = Language::get('topic_id');
-        $header[] = Language::trans('user_id');
-        $header[] = Language::trans('memberstatus');
-        $header[] = Language::trans('operator_id');
-        $header[] = Language::trans('begindate');
-        $header[] = Language::trans('enddate');
-
-        $params = array();
-        foreach (Language::get('SCHOOL_CATEGORY') as $k => $v) {
-            $params[$k] = $request->get($k)->toInt();
-            $header[] = $v;
-        }
-       $sexes = Language::get('SEXES');
-        $category = \School\Category\Model::init();
-        $datas = array();
-        foreach (\School\Download\Model::student($params, $request->get('active')->toInt()) as $item) {
-            foreach ($params as $k => $v) {
-                $item[$k] = $category->get($k, $item[$k]);
-            }
-            if (isset($sexes[$item['sex']])) {
-                $item['sex'] = $sexes[$item['sex']];
-            }
-            $datas[] = $item;
-        }
-        return \Kotchasan\Csv::send('report', $header, $datas, self::$cfg->csv_language);
-    }*/
+      //  print_r(mb_convert_encoding(strtr($text, $map), 'utf-8','Windows-874'));
+        return html_entity_decode(mb_convert_encoding(strtr($text, $map), 'UTF-8', 'ISO-8859-2'), ENT_QUOTES, 'UTF-8');
+    }
+  
 
 }

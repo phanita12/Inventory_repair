@@ -145,7 +145,7 @@ class Text
     /**
      * รับค่าสำหรับ password อักขระทุกตัวไม่มีช่องว่าง
      *
-     * @assert (" 0\n12   34\r\r6\t5ทดสอบ@#$&{}!?+_-=") [==] '0123465ทดสอบ@#$&{}!?+_-='
+     * @assert (" 0\n12   34\r\r6\t5ทดสอบ@#$&{}!?+_-=*") [==] '0123465ทดสอบ@#$&{}!?+_-=*'
      *
      * @param string $text
      *
@@ -153,7 +153,7 @@ class Text
      */
     public static function password($text)
     {
-        return preg_replace('/[^\w\@\#\$\&\{\}\!\?\+_\-=ก-ฮ]+/', '', $text);
+        return preg_replace('/[^\w\@\#\*\$\&\{\}\!\?\+_\-=ก-ฮ]+/', '', $text);
     }
 
     /**

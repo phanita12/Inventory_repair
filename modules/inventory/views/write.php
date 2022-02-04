@@ -54,7 +54,7 @@ class View extends \Gcms\View
             'token' => true,
         ));
         $fieldset = $form->add('fieldset', array(
-            'title' => '{LNG_Details of} {LNG_Equipment}',
+            'title' => '{LNG_Details of} {LNG_Car information}',
         ));
         if ($product->id != 0) {
          // Qr
@@ -70,6 +70,32 @@ class View extends \Gcms\View
         $groups_purchase = $fieldset->add('groups_purchase');
         if ($product->id == 0) {
             // product_no
+            $groups->add('text', array(
+                'id' => 'product_no',
+                'labelClass' => 'g-input icon-number',
+                'itemClass' => 'width50',
+                'label' => '{LNG_Registration No.}',
+                'maxlength' => 20,
+                'value' => isset($product->product_no) ? $product->product_no : '',
+            ));
+        }
+        // topic
+        $groups->add('text', array(
+            'id' => 'topic',
+            'labelClass' => 'g-input icon-edit',
+            'itemClass' => 'width50',
+            'label' => '{LNG_Car information}',
+            'placeholder' => '{LNG_Details of} {LNG_Car information}',
+            'maxlength' => 64,
+            'value' => isset($product->topic) ? $product->topic : '',
+        ));
+        // category
+        $category = \Inventory\Category\Model::init();
+        $n = 0;
+        foreach (Language::get('INVENTORY_CATEGORIES', array()) as $key => $label) {
+            if ($n % 2 == 0) {
+                $groups = $fieldset->add('groups');
+            }
                 $groups->add('text', array(
                     'id' => 'product_no',
                     'labelClass' => 'g-input icon-number',

@@ -3,7 +3,9 @@
  * Javascript page load (Ajax)
  *
  * @filesource js/table.js
-
+ * @link http://www.kotchasan.com/
+ * @copyright 2016 Goragod.com
+ * @license http://www.kotchasan.com/license/
  */
 (function() {
   "use strict";
@@ -13,10 +15,14 @@
       this.myhistory = new Array();
       this.geturl = geturl || this.parseURL;
       this.req = new GAjax();
-      var my_location = location.toString();
-      var a = my_location.indexOf("?");
-      var b = my_location.indexOf("#");
-      var locs = my_location.split(/[\?\#]/);
+      this.reader = reader;
+      this.callback = callback;
+      this.onbeforeload = onbeforeload;
+      var self = this,
+        my_location = location.toString(),
+        a = my_location.indexOf("?"),
+        b = my_location.indexOf("#"),
+        locs = my_location.split(/[\?\#]/);
       if (a > -1 && b > -1) {
         this.lasturl = a < b ? locs[1] : locs[2];
       } else if (a > -1) {
@@ -24,49 +30,51 @@
       } else {
         this.lasturl = "";
       }
-      var temp = this;
-      window.setInterval(function() {
-        locs = window.location.toString().split("#");
-        if (locs[1]) {
-          if (locs[1] != temp.lasturl && locs[1].indexOf("=") > -1) {
-            temp.lasturl = locs[1];
-            temp.myhistory.push(locs[1]);
-            if (temp.myhistory.length > 2) {
-              temp.myhistory.shift();
-            }
-            var ret = locs[1];
-            if (Object.isFunction(onbeforeload)) {
-              ret = onbeforeload.call(ret);
-              if (ret === true || Object.isNull(ret)) {
-                ret = locs[1];
-              }
-            }
-            if (ret !== false) {
-              temp.req.send(reader, ret, callback);
+      window.addEvent('hashchange', function() {
+        self._hashChanged();
+      });
+    },
+    _hashChanged: function() {
+      var locs = window.location.toString().split("#");
+      if (locs[1]) {
+        if (locs[1] != this.lasturl && locs[1].indexOf("=") > -1) {
+          this.lasturl = locs[1];
+          this.myhistory.push(locs[1]);
+          if (this.myhistory.length > 2) {
+            this.myhistory.shift();
+          }
+          var ret = locs[1];
+          if (Object.isFunction(this.onbeforeload)) {
+            ret = this.onbeforeload.call(ret);
+            if (ret === true || Object.isNull(ret)) {
+              ret = locs[1];
             }
           }
-        } else {
-          locs = locs[0].split("?");
-          locs = locs[1] ? locs[1] : "module=" + FIRST_MODULE;
-          if (locs != temp.lasturl && temp.myhistory.length > 0) {
-            temp.lasturl = locs;
-            temp.myhistory.push(locs);
-            if (temp.myhistory.length > 2) {
-              temp.myhistory.shift();
-            }
-            temp.req.send(reader, locs, callback);
+          if (ret !== false) {
+            this.req.send(this.reader, ret, this.callback);
           }
         }
-      }, 100);
+      } else {
+        locs = locs[0].split("?");
+        locs = locs[1] ? locs[1] : "module=" + FIRST_MODULE;
+        if (locs != this.lasturl && this.myhistory.length > 0) {
+          this.lasturl = locs;
+          this.myhistory.push(locs);
+          if (this.myhistory.length > 2) {
+            this.myhistory.shift();
+          }
+          this.req.send(this.reader, locs, this.callback);
+        }
+      }
     },
     initLoading: function(loading, center) {
       this.req.initLoading(loading, center);
       return this;
     },
     init: function(obj) {
-      var temp = this;
-      var patt1 = new RegExp("^.*" + location.hostname + "/(.*?)$");
-      var patt2 = new RegExp(".*#.*?");
+      var temp = this,
+        patt1 = new RegExp("^.*" + location.hostname + "/(.*?)$"),
+        patt2 = new RegExp(".*#.*?");
       forEach($E(obj).getElementsByTagName("a"), function() {
         if (
           this.target == "" &&
@@ -83,6 +91,7 @@
           };
         }
       });
+      this._hashChanged();
       return this;
     },
     location: function(url) {

@@ -39,6 +39,12 @@ class Kotchasan extends Kotchasan\KBase
      */
     public $defaultRouter = 'Kotchasan\Router';
     /**
+     * เก็บข้อมูลการ DEBUG
+     *
+     * @var array
+     */
+    public static $debugger = null;
+    /**
      * @var Singleton สำหรับเรียกใช้ class นี้เพียงครั้งเดียวเท่านั้น
      */
     private static $instance = null;

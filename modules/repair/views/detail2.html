@@ -1,6 +1,7 @@
 <form class="setup_frm">
     <fieldset class="item">
       <table class="repair_detail">
+      
         <tr>
           <td scope="rowgroups" colspan="2">
             <h2> <b>{LNG_Details of} {LNG_Informer} %JOB%</b> </h2>
@@ -10,51 +11,73 @@
           <td class="icon-customer" >{LNG_Name}</td>
           <td>%NAME%</td>
         </tr>
-        
-      <!--  <tr>
-          <td class="icon-phone">{LNG_Phone}</td>
-          <td><a href="tel:%PHONE%">%PHONE%</a></td>
-        </tr> -->
-  
         <tr>
           <td class="icon-users">{LNG_Member status}</td>
           <td>%GROUP%</td>
         </tr>
         <tr>
           <td scope="rowgroups" colspan="2">
-            <h2><b>{LNG_Repair job description}</b></h2>
+            <h2><b>{LNG_job description}</b></h2>
           </td>
-        </tr>
-        <tr>
-          <td class="icon-modules" >{LNG_Equipment}</td>
-          <td>%TOPIC%</td>
-        </tr>
-        <tr>
-          <td class="icon-number">{LNG_Serial/Registration No.}</td>
-          <td>%PRODUCT_NO%</td>
         </tr>
         <tr>
           <td class="icon-calendar">{LNG_Received date}</td>
           <td>%CREATE_DATE%</td>
         </tr>
         <tr>
-          <td class="icon-tools">{LNG_Problems and repairs details}</td>
+          <td class="icon-number" style="width: 30%;">{LNG_Registration No.}</td>
+          <td>%PRODUCT_NO%</td>
+        </tr>
+        <tr>
+          <td class="icon-shipping" >{LNG_Car information}</td>
+          <td>%TOPIC%</td>
+        </tr>
+        <tr>
+          <td class="icon-file">{LNG_Image}</td>
+          <td><img src="%INVENTORYPIC%" class="resize"> </td>
+        </tr>
+        <tr>
+          <td class="icon-event">{LNG_Begin date} {LNG_Use}</td>
+          <td>%BEGIN_DATE%</td>
+          </tr>
+          <tr>
+            <td class="icon-event">{LNG_End date}  {LNG_Use}</td>
+            <td>%END_DATE%</td>
+        </tr>
+        <tr>
+          <td class="icon-list">{LNG_Types of objective}</td>
+          <td>%TYPE%</td>
+        </tr>
+       <tr>
+          <td class="icon-map">{LNG_destination}</td>
+          <td>%DESTINATION%</td>
+        </tr> 
+        <tr>
+          <td class="icon-pin">{LNG_Comment}</td> <!--Details-->
           <td>%JOB_DESCRIPTION%</td>
         </tr>
         <tr>
-          <td class="icon-number">{LNG_Approve}</td>
-          <td>%NAMEAPPROVE%</td>
-        </tr>
-        
-        <tr>
-          <td class="icon-calendar">{LNG_Approve_date}</td>
-          <td>%DATE_APPROVE%</td>
-        </tr> 
+          <td scope="rowgroups" colspan="2">
+            <h2><b>{LNG_Approval results}</b></h2>
+          </td>
+        </tr>        
         <tr>
             <td class="icon-file">{LNG_signature approve}{LNG_Approve}</td>
             <td><img src="%ESIG%" width="100" height="110"> </td>
           </tr>
-        
+          <tr>
+            <td class="icon-user">{LNG_Approve}</td>
+            <td>%NAMEAPPROVE%</td>
+          </tr>
+          <tr>
+            <td class="icon-calendar">{LNG_Approve_date}</td>
+            <td>%DATE_APPROVE%</td>
+          </tr> 
+        <tr>
+            <td class="icon-number">{LNG_Comment}</td>
+            <td>%COMMENT%</td>
+          </tr>
+          
         
       </table>
     </fieldset>
@@ -65,3 +88,15 @@
       %DETAILS%
     </fieldset>
   </form>
+  <style>
+    img.resize {
+    width: 100px;
+    height: 85px;
+    border: 0;
+    }
+    img:hover.resize {
+    width: 700px;
+    height: 400px;
+    border: 0;
+    }
+  </style>

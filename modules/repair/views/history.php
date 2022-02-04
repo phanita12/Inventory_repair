@@ -66,12 +66,12 @@ class View extends \Gcms\View
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
             'hideColumns' => array('id'),
             /* คอลัมน์ที่สามารถค้นหาได้ */
-            'searchColumns' => array('topic'),
+            'searchColumns' => array('job_id','product_no'),
             /* ตัวเลือกด้านบนของตาราง ใช้จำกัดผลลัพท์การ query */
             'filters' => array(
                 array(
                     'name' => 'status',
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'options' => array(-1 => '{LNG_all items}') + $this->statuses->toSelect(),
                     'value' => $params['status'],
                 ),
@@ -81,8 +81,17 @@ class View extends \Gcms\View
                 'job_id' => array(
                     'text' => '{LNG_Job No.}',
                 ),
-                'topic' => array(
-                    'text' => '{LNG_Equipment}',
+                'product_no' => array(
+                    'text' => '{LNG_Registration No.}',
+                ),
+                'types_objective' => array(
+                    'text' => '{LNG_Types of objective}',
+                ),
+              /*  'destination' => array(
+                    'text' => '{LNG_destination}',
+                ),*/
+                'job_description' => array(
+                    'text' => '{LNG_Comment}',
                 ),
                 'create_date' => array(
                     'text' => '{LNG_Received date}',
@@ -94,7 +103,7 @@ class View extends \Gcms\View
                     'class' => 'center',
                 ),
                 'status' => array(
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'class' => 'center',
                     'sort' => 'status',
                 ),
@@ -110,13 +119,16 @@ class View extends \Gcms\View
                 'status' => array(
                     'class' => 'center',
                 ),
+               /* 'destination' => array(
+                    'width' => '20%',
+                ), */
             ),
             /* ปุ่มแสดงในแต่ละแถว */
             'buttons' => array(
                 'description' => array(
                     'class' => 'icon-report button purple',
                     'href' => $uri->createBackUri(array('module' => 'repair-detail', 'id' => ':id')),
-                    'title' => '{LNG_Repair job description}',
+                    'title' => '{LNG_job description}',
                 ),
                 'printrepair' => array(
                     'class' => 'icon-print button brown notext',
@@ -144,7 +156,7 @@ class View extends \Gcms\View
      */
     public function onRow($item, $o, $prop)
     {
-        $item['create_date'] = Date::format($item['create_date'], 'd M Y');
+        $item['create_date'] = Date::format($item['create_date'], 'd M Y H:i');
         $item['status'] = '<mark class=term style="background-color:'.$this->statuses->getColor($item['status']).'">'.$this->statuses->get($item['status']).'</mark>';
         $item['operator_id'] = $this->operators->get($item['operator_id']);
         return $item;

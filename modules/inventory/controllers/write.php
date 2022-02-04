@@ -65,7 +65,7 @@ class Controller extends \Gcms\Controller
                 $ul->appendChild('<li><a href="{BACKURL?module=inventory-setup&id=0}">{LNG_Inventory}</a></li>');
                 $ul->appendChild('<li><span>'.$title.'</span></li>');
                 $header = $section->add('header', array(
-                    'innerHTML' => '<h2 class="icon-list">'.$title.' {LNG_Equipment}</h2>',
+                    'innerHTML' => '<h2 class="icon-list">'.$title.' {LNG_Car information}</h2>',
                 ));
                 $inline = $header->add('div', array(
                     'class' => 'inline',
@@ -82,7 +82,7 @@ class Controller extends \Gcms\Controller
                     'product' => array('{LNG_Inventory}', 'Inventory\Write\View'),
                 );
                 if ($product->id > 0) {
-                    $tabs['items'] = array('{LNG_Serial/Registration No.}', 'Inventory\Items\View');
+                    $tabs['items'] = array('{LNG_Registration No.}', 'Inventory\Items\View');
                 }
                 $tab = isset($tabs[$tab]) ? $tab : 'product';
                 foreach ($tabs as $k => $item) {

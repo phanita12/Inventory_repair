@@ -109,11 +109,11 @@ class View extends \Gcms\View
                     'sort' => 'id',
                 ),
                 'topic' => array(
-                    'text' => '{LNG_Equipment}',
+                    'text' => '{LNG_Car information}',
                     'sort' => 'topic',
                 ),
                 'product_no' => array(
-                    'text' => '{LNG_Serial/Registration No.}',
+                    'text' => '{LNG_Registration No.}',
                     'sort' => 'product_no',
                 ),
                 'category_id' => array(

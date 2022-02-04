@@ -45,14 +45,18 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-        $q3 = static::createQuery()
+       /* $q3 = static::createQuery()
             ->select('C.topic')
             ->from('category C')
             ->where(array('C.category_id','V.category_id'))
-            ->andWhere(array('C.type','category_id'));
-            
+            ->andWhere(array('C.type','category_id'));*/
+        
         return  static::createQuery() 
+<<<<<<< HEAD
+            ->select('R.id', 'R.job_id',  'R.create_date', 'U.name', 'U.phone','R.begin_date','R.end_date','R.product_no',SQL::CASE_WHEN('R.types_objective','types_objective'), 'S.operator_id', 'S.status'   ) //,'R.destination',array($q3,'category' ), 'R.destination',
+=======
             ->select('R.id', 'R.job_id', 'U.name', 'U.phone', array($q3,'category' ), 'V.topic', 'R.product_no', 'R.create_date', 'S.operator_id', 'S.status')
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
             ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
@@ -60,6 +64,8 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where);
+       
+
     }
    
     /**
@@ -78,13 +84,13 @@ class Model extends \Kotchasan\Model
 
                 // id ที่ส่งมา
                 if (preg_match_all('/,?([0-9]+),?/', $request->post('id')->toString(), $match)) {
-                    if ($action === 'delete' && Login::checkPermission($login, 'can_manage_repair')) {
+                    if ($action === 'delete' && Login::checkPermission($login, 'can_manage_car_booking')) {
                         // ลบรายการสั่งซ่อม
                         $this->db()->delete($this->getTableName('repair'), array('id', $match[1]), 0);
                         $this->db()->delete($this->getTableName('repair_status'), array('repair_id', $match[1]), 0);
                         // reload
                         $ret['location'] = 'reload';
-                    } elseif ($action === 'status' && Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+                    } elseif ($action === 'status' && Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
                         // อ่านข้อมูลรายการที่ต้องการ
                         $index = \Repair\Detail\Model::get($request->post('id')->toInt());
                         if ($index) {

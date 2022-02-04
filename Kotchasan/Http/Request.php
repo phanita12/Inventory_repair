@@ -223,6 +223,16 @@ class Request extends AbstractRequest implements \Psr\Http\Message\RequestInterf
     }
 
     /**
+     * อ่าน stream
+     *
+     * @return StreamInterface
+     */
+    public function getBody()
+    {
+        return new Stream('php://input');
+    }
+
+    /**
      * คืนค่าไฟล์อัปโหลด FILES
      *
      * @return \Kotchasan\Files

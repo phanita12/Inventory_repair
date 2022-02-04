@@ -42,7 +42,6 @@ class View extends \Gcms\View
         // สถานะการซ่อม
         $this->statuses = \Repair\Status\Model::create();
         // อ่านสถานะการทำรายการทั้งหมด
-        $statuses = \Repair\Detail\Model::getAllStatus($index->id);
         // URL สำหรับส่งให้ตาราง
         $uri = self::$request->createUriWithGlobals(WEB_URL.'index.php');
         /*เอารูปภาพE-sig มาแสดง  */
@@ -50,6 +49,27 @@ class View extends \Gcms\View
         //เช็คกลุ่มผู้ใช้งาน
         $gmember = \Index\Member\Model::getMemberstatus($index->s_group);
         if($index->status == '9' || $index->status == '10'){ // template for approve/none approve
+<<<<<<< HEAD
+            if (Login::checkPermission($login, array('can_manage_car_booking','can_repair','approve_manage_repair','approve_repair')) ){
+                           $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail2.html');
+            }else{      $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail3.html');  } 
+        }else{      $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail.html');   }// template standard All Status
+        /*เอารูปภาพแนบเปิดงานมาแสดง  */
+            $img2 = is_file(ROOT_PATH.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg') ? WEB_URL.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';  
+        //รูปรถบรรทุก
+            $thumb = is_file(ROOT_PATH.DATA_FOLDER.'inventory/'.$index->inventory_id.'.jpg') ? WEB_URL.DATA_FOLDER.'inventory/'.$index->inventory_id.'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';
+        //check type request
+        foreach (self::$cfg->type_request as $key => $value) {
+            if($index->types_objective == $key){
+                $types_objective = $value;
+                
+                if( $types_objective == "อื่นๆ (โปรดระบุลงในหมายเหตุ)"){
+                    $types_objective = 'อื่นๆ';
+                }
+            }    
+        }
+       
+=======
             if (Login::checkPermission($login, array('can_manage_repair','can_repair','approve_repair')) ){
                 $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail2.html');
             }else{  $template = Template::createFromFile(ROOT_PATH.'modules/repair/views/detail3.html');  } 
@@ -59,12 +79,13 @@ class View extends \Gcms\View
           /*เอารูปภาพแนบเปิดงานมาแสดง  */
           $img2 = is_file(ROOT_PATH.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg') ? WEB_URL.DATA_FOLDER.'file_attachment_user/'.'U_'.$index->job_id.'.jpg' : WEB_URL.'modules/inventory/img/noimage.png';  
           
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // ตาราง
         $table = new DataTable2(array(
             /* Uri */
             'uri' => $uri,
             /* array datas */
-            'datas' => $statuses,
+            'datas' => \Repair\Detail\Model::getAllStatus($index->id),//$statuses,
             /* ฟังก์ชั่นจัดรูปแบบการแสดงผลแถวของตาราง */
             'onRow' => array($this, 'onRow'),
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
@@ -78,7 +99,7 @@ class View extends \Gcms\View
                     'text' => '{LNG_Operator}',
                 ),
                 'status' => array(
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'class' => 'center',
                 ),
                 'create_date' => array(
@@ -88,9 +109,9 @@ class View extends \Gcms\View
                 'comment' => array(
                     'text' => '{LNG_Comment}',
                 ),
-                'attachment' => array(
+             /*  'attachment' => array(
                     'text' => '{LNG_file_attachment}',
-                ),
+                ),*/
                 'picture' => array(
                     'text' => '{LNG_Image}',
                 ),
@@ -107,7 +128,7 @@ class View extends \Gcms\View
             ),
         ));
 
-        if (Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+        if (Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
             /* ปุ่มแสดงในแต่ละแถว */
             $table->buttons = array(
             /*    'file_attachment' => array(
@@ -122,13 +143,17 @@ class View extends \Gcms\View
                 ),*/
             );
         }
+//var_dump( $index);
 
         $template->add(array(
             '/%NAME%/' => $index->name,
             '/%PHONE%/' => $index->phone,
             '/%TOPIC%/' => $index->topic,
             '/%PRODUCT_NO%/' => $index->product_no,
-            '/%JOB_DESCRIPTION%/' => nl2br($index->job_description),
+            '/%JOB_DESCRIPTION%/' => nl2br($index->job_description), 
+            '/%DESTINATION%/' => nl2br($index->destination),  
+            '/%BEGIN_DATE%/' =>  Date::format($index->begin_date, 'd M Y H:i'),
+            '/%END_DATE%/' =>  Date::format($index->end_date, 'd M Y H:i'),
             '/%CREATE_DATE%/' => Date::format($index->create_date, 'd M Y H:i'),
             '/%COMMENT%/' => $index->comment,
             '/%DETAILS%/' => $table->render(),
@@ -137,8 +162,10 @@ class View extends \Gcms\View
             '/%GROUP%/' => $gmember,
             '/%ESIG%/' => $img,
             '/%DATE_APPROVE%/' => Date::format($index->date_approve, 'd M Y H:i'),
-            '/%COST%/' => $index->COST,
-            '/%UPIC%/' => $img2,
+            '/%COST%/' => $index->cost,
+            '/%UPIC%/' => $img2, 
+            '/%INVENTORYPIC%/' => $thumb,
+            '/%TYPE%/' =>  $types_objective,
            // '/%FILE_ATTACHMENT%/' => $file_attachment,
         ));
         
@@ -147,8 +174,7 @@ class View extends \Gcms\View
 
 
     }
-
-   
+  
 
     /**
      * จัดรูปแบบการแสดงผลในแต่ละแถว

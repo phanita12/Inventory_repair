@@ -61,11 +61,11 @@ class View extends \Gcms\View
                     'text' => '{LNG_Operator}',
                 ),
                 'status' => array(
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'class' => 'center',
                 ),
                 'cost' => array(
-                    'text' => '{LNG_Cost}',
+                    'text' => '{LNG_count_Easy_Pass}',
                     'class' => 'center',
                 ),
                 'create_date' => array(

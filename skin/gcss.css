@@ -2961,6 +2961,7 @@ div.gcalendar td.month {
 }
 .event-calendar div.header {
   margin-bottom: 10px;
+  text-align: center;
 }
 .widget-calendar a,
 .widget-calendar a:hover,
@@ -3073,7 +3074,7 @@ div.gcalendar td.month {
 .event-calendar td a {
   display: block;
   position: relative;
-  font-size: 80%;
+  font-size: 72%;  /*80%*/
   padding: 0 2px;
   cursor: pointer;
 }

@@ -81,9 +81,9 @@ window.$K = (function() {
               }
               var autofocus = elem.get('autofocus');
               var text = elem;
-              if (obj.type == 'date') {
+              if (obj.type == 'date' || obj.type == 'datetime') {
                 new GCalendar(elem);
-              } else if (obj.type == 'number' || obj.type == 'integer' || obj.type == 'tel' || obj.type == 'email' || obj.type == 'url' || obj.type == 'color' || obj.type == 'currency' || obj.type == 'time') {
+              } else if (obj.dataset['keyboard'] || obj.type == 'number' || obj.type == 'integer' || obj.type == 'tel' || obj.type == 'email' || obj.type == 'url' || obj.type == 'color' || obj.type == 'currency') {
                 var o = {
                   type: 'text',
                   name: elem.name,
@@ -124,8 +124,6 @@ window.$K = (function() {
                     this.input.value = c;
                     this.input.callEvent('change');
                   });
-                } else if (obj.type == 'time') {
-                  new GTime(text);
                 } else if (obj.type == 'email' || obj.type == 'url') {
                   if (obj.pattern == null) {
                     if (obj.type == 'email') {
@@ -141,7 +139,7 @@ window.$K = (function() {
                     if (obj.type == 'integer') {
                       obj.dataset['keyboard'] = '1234567890-';
                     } else if (obj.type == 'currency') {
-                      obj.dataset['keyboard'] = '1234567890-.,';
+                      obj.dataset['keyboard'] = '1234567890.,';
                     } else if (obj.type == 'number' || obj.type == 'tel') {
                       obj.dataset['keyboard'] = '1234567890';
                     }
@@ -325,6 +323,13 @@ window.$K = (function() {
     } catch (e) {
       return val;
     }
+  };
+  window.jsonToParams = function(json, separator) {
+    var ret = [];
+    for (var k in json) {
+      ret.push(k + '=' + json[k]);
+    }
+    return ret.join(separator ? separator : '&');
   };
   window.debug = function(val) {
     var p = document.createElement('p'),
@@ -729,24 +734,24 @@ window.$K = (function() {
     return w(this);
   };
   String.prototype.toDate = function() {
-    var patt = /(([0-9]{4,4})-([0-9]{1,2})-([0-9]{1,2})|today|tomorrow|yesterday)([\s]{0,}([+-])[\s]{0,}([0-9]+))?/,
+    var patt = /(([0-9]{4,4})-([0-9]{1,2})-([0-9]{1,2})(\s([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?)?|today|tomorrow|yesterday)([\s]{0,}([+-])[\s]{0,}([0-9]+))?/,
       hs = patt.exec(this),
       d;
     if (hs) {
       if (typeof hs[2] == 'undefined') {
         d = new Date();
       } else {
-        d = new Date(floatval(hs[2]), floatval(hs[3]) - 1, hs[4], 0, 0, 0, 0);
+        d = new Date(floatval(hs[2]), floatval(hs[3]) - 1, hs[4], floatval(hs[6]), floatval(hs[7]), floatval(hs[9]), 0);
       }
       if (hs[1] == 'yesterday') {
         d.setDate(d.getDate() - 1);
       } else if (hs[1] == 'tomorrow') {
         d.setDate(d.getDate() + 1);
       }
-      if (hs[6] == '+' && floatval(hs[7]) > 0) {
-        d.setDate(d.getDate() + floatval(hs[7]));
-      } else if (hs[6] == '-' && floatval(hs[7]) > 0) {
-        d.setDate(d.getDate() - floatval(hs[7]));
+      if (hs[11] == '+' && floatval(hs[12]) > 0) {
+        d.setDate(d.getDate() + floatval(hs[12]));
+      } else if (hs[11] == '-' && floatval(hs[12]) > 0) {
+        d.setDate(d.getDate() - floatval(hs[12]));
       }
       return d;
     } else {
@@ -1617,6 +1622,7 @@ window.$K = (function() {
         cache: false,
         asynchronous: true,
         contentType: 'application/x-www-form-urlencoded',
+        CORS: false,
         encoding: 'UTF-8',
         Accept: 'all',
         onTimeout: $K.emptyFunction,
@@ -1633,17 +1639,7 @@ window.$K = (function() {
       this.loader = null;
     },
     xhr: function() {
-      var xmlHttp = null;
-      try {
-        xmlHttp = new XMLHttpRequest();
-      } catch (e) {
-        try {
-          xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
-        } catch (e) {
-          xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
-        }
-      }
-      return xmlHttp;
+      return new XMLHttpRequest();
     },
     send: function(url, parameters, callback) {
       var self = this;
@@ -1661,6 +1657,7 @@ window.$K = (function() {
           var match = /\?/;
           url += (match.test(url) ? '&' : '?') + new Date().getTime();
         }
+        this._xhr.withCredentials = option.CORS;
         this._xhr.open(option.method, url, option.asynchronous);
         if (option.method == 'post') {
           this._xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -1673,7 +1670,11 @@ window.$K = (function() {
           this._xhr.setRequestHeader(prop, option.headers[prop]);
         }
         if (option.timeout > 0) {
-          this.calltimeout = window.setTimeout(_calltimeout, option.timeout);
+          this._xhr.timeout = option.timeout;
+          this._xhr.ontimeout = function (e) {
+            self.hideLoading();
+            option.onTimeout.bind(self);
+          };
         }
         this._xhr.onreadystatechange = function() {
           if (self._xhr.readyState == 4) {
@@ -1693,15 +1694,14 @@ window.$K = (function() {
           }
         };
         if (this._xhr.upload) {
-          $G(this._xhr.upload).addEvent('progress', function(e) {
-            option.onProgress.call(e, Math.ceil((100 * e.loaded) / e.total));
-          });
+          this._xhr.upload.onprogress = function(e) {
+            if (e.lengthComputable) {
+              option.onProgress.call(e, e.loaded, e.total);
+            }else{
+              option.onProgress.call(e, e.loaded, 0);
+            }
+          };
         }
-        var _calltimeout = function() {
-          window.clearTimeout(self.calltimeout);
-          self.hideLoading();
-          option.onTimeout.bind(self);
-        };
         self.showLoading();
         this._xhr.send(parameters);
         if (!option.asynchronous) {
@@ -2109,16 +2109,18 @@ window.$K = (function() {
       return this;
     },
     hide: function() {
-      var self = this;
-      this.div.removeClass('show');
-      this.iframe.fadeOut(function() {
-        self._hide.call(self);
-      });
-      window.setTimeout(function() {
-        self.div.className = '';
-        self.div.style.top = null;
-        self.div.style.right = null;
-      }, 500);
+      if (this.div.hasClass('show')) {
+        var self = this;
+        this.div.removeClass('show');
+        this.iframe.fadeOut(function() {
+          self._hide.call(self);
+        });
+        window.setTimeout(function() {
+          self.div.className = '';
+          self.div.style.top = null;
+          self.div.style.right = null;
+        }, 500);
+      }
       return this;
     },
     overlay: function() {
@@ -2626,221 +2628,6 @@ window.$K = (function() {
       new GDrag(this.dragObj, o);
     }
   };
-  window.GTime = GClass.create();
-  GTime.prototype = {
-    initialize: function(id, onchanged) {
-      this.input = $G(id);
-      this.input.addClass('gtime ginput');
-      this.onchanged = onchanged || $K.emptyFunction;
-      this.firstKey = null;
-      this.highlight = '';
-      this.mouse_click = false;
-      if ($K.isMobile()) {
-        this.panel = new GDropdown(this.input);
-        this.input.readOnly = true;
-        $G(document.body).addEvent('click', function(e) {
-          if (!$G(GEvent.element(e)).hasClass('ginput')) {
-            self.panel.hide();
-          }
-        });
-      }
-      this.onchanged.call(this);
-      var self = this;
-      var doSetCaret = function() {
-        if (self.input.readOnly) {
-          self._draw();
-        }
-        var caret = self.input.getCaretPosition();
-        if (caret.start == 5 && caret.end == 5) {
-          caret.start = 0;
-          caret.end = 2;
-        }
-        self._setCaret(caret.start);
-        self.firstKey = null;
-      };
-      this.input.addEvent('focus', function() {
-        if (self.mouse_click === false) {
-          window.setTimeout(doSetCaret, 1);
-        }
-        self.mouse_click = false;
-      });
-      this.input.addEvent('click', doSetCaret);
-      this.input.addEvent('paste', function(e) {
-        GEvent.stop(e);
-      });
-      this.input.addEvent('keydown', function(e) {
-        var key = GEvent.keyCode(e);
-        var stop = false;
-        if (key == 8) {
-          self.input.value = '--:--';
-          self._setCaret(0);
-          self.firstKey = null;
-          stop = true;
-        } else if (key == 37) {
-          self._setCaret(0);
-          self.firstKey = null;
-          stop = true;
-        } else if (key == 38) {
-          var times = self.input.value.split(':');
-          var caret = 0;
-          if (self.highlight == 'hour') {
-            var t = Math.min(23, floatval(times[0]) + 1);
-            if (t < 10) {
-              times[0] = '0' + t;
-            } else {
-              times[0] = t;
-            }
-          } else if (self.highlight == 'minute') {
-            var t = Math.min(59, floatval(times[1]) + 1);
-            if (t < 10) {
-              times[1] = '0' + t;
-            } else {
-              times[1] = t;
-            }
-            caret = 3;
-          }
-          self.input.value = times[0] + ':' + times[1];
-          self._setCaret(caret);
-          stop = true;
-        } else if (key == 39) {
-          self._setCaret(3);
-          self.firstKey = null;
-          stop = true;
-        } else if (key == 40) {
-          var times = self.input.value.split(':');
-          var caret = 0;
-          if (self.highlight == 'hour') {
-            var t = Math.max(0, floatval(times[0]) - 1);
-            if (t < 10) {
-              times[0] = '0' + t;
-            } else {
-              times[0] = t;
-            }
-          } else if (self.highlight == 'minute') {
-            var t = Math.max(0, floatval(times[1]) - 1);
-            if (t < 10) {
-              times[1] = '0' + t;
-            } else {
-              times[1] = t;
-            }
-            caret = 3;
-          }
-          self.input.value = times[0] + ':' + times[1];
-          self._setCaret(caret);
-          stop = true;
-        }
-        if (stop) {
-          GEvent.stop(e);
-          return false;
-        }
-      });
-      new GMask(this.input, function(e) {
-        if (/[0-9]/.test(e.key)) {
-          self._set(floatval(e.key));
-          return true;
-        }
-        return false;
-      });
-      this.input.value = this._toTime(this.input.value);
-      this.input.time = this;
-    },
-    _set: function(c) {
-      var times = this.input.value.split(':');
-      var caret = 0;
-      if (this.highlight == 'hour') {
-        if (this.firstKey == null) {
-          times[0] = '0' + c;
-          if (c < 3) {
-            this.firstKey = c;
-            caret = 0;
-          } else {
-            caret = 3;
-            this.firstKey = null;
-          }
-        } else {
-          c = floatval(String(this.firstKey) + c);
-          times[0] = c < 10 ? '0' + c : String(Math.min(23, c));
-          caret = 3;
-          this.firstKey = null;
-        }
-      } else if (this.highlight == 'minute') {
-        if (this.firstKey == null) {
-          times[1] = '0' + c;
-          this.firstKey = c;
-        } else {
-          c = floatval(String(this.firstKey) + c);
-          times[1] = c < 10 ? '0' + c : String(Math.min(59, c));
-          this.firstKey = null;
-        }
-        caret = 3;
-      }
-      this.input.value = (times[0] == '' ? '--' : times[0]) + ':' + (times[1] || '--');
-      this._setCaret(caret);
-    },
-    getTime: function() {
-      return this.input.value == '--:--' ? '' : this.input.value + ':00';
-    },
-    setTime: function(time) {
-      this.input.value = this._toTime(time);
-      this.onchanged.call(this);
-      return this;
-    },
-    _toTime: function(time) {
-      if (time) {
-        time = /([0-9]{1,2})(:([0-9]{1,2}))?(:([0-9]{1,2}))?/.exec(time);
-        if (time) {
-          var h = Math.min(23, floatval(time[1]));
-          var m = Math.min(59, floatval(time[3]));
-          return (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
-        }
-      }
-      return '--:--';
-    },
-    _setCaret: function(pos) {
-      if (pos < 3) {
-        this.input.setCaretPosition(0, 2);
-        this.highlight = 'hour';
-      } else {
-        this.input.setCaretPosition(3, 2);
-        this.highlight = 'minute';
-      }
-    },
-    _draw: function() {
-      var dropdown = this.panel.getDropdown(),
-        panel = document.createElement('div');
-      self = this;
-      dropdown.innerHTML = '';
-      panel.className = 'ginput';
-      dropdown.appendChild(panel);
-      forEach(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '&crarr;', '&lArr;'], function() {
-        var a = document.createElement('a');
-        a.innerHTML = this;
-        if (this == '&crarr;') {
-          a.className = 'enter';
-        } else if (this == '&lArr;') {
-          a.className = 'backspace';
-        }
-        panel.appendChild(a);
-        $G(a).addEvent('click', function(e) {
-          var elem = GEvent.element(e);
-          if (elem.className == 'enter') {
-            self.panel.hide();
-          } else if (elem.className == 'backspace') {
-            self.input.value = '--:--';
-            self._setCaret(0);
-            self.firstKey = null;
-          } else {
-            self._set(floatval(elem.innerHTML));
-          }
-          self.mouse_click = true;
-          self.input.focus();
-          GEvent.stop(e);
-          return false;
-        });
-      });
-      this.panel.show();
-    }
-  };
   window.GMask = GClass.create();
   GMask.prototype = {
     initialize: function(id, onkeypress) {
@@ -2935,13 +2722,11 @@ window.$K = (function() {
       this.input = $G(id);
       this.input.addClass('ginput');
       this.keyboard = inputchar.split('');
-      this.keyboard.push('&crarr;');
-      this.keyboard.push('&lArr;');
       this.onchanged = onchanged || $K.emptyFunction;
       this.maxlength = floatval(this.input.maxlength);
       var self = this;
       if ($K.isMobile()) {
-        this.panel = new GDropdown(this.input);
+        this.panel = new GDropdown(this.input, { float: false });
         this.input.readOnly = true;
         this.input.addEvent('click', function(e) {
           self.input.setCaretPosition(self.input.value.length, 1);
@@ -2977,25 +2762,43 @@ window.$K = (function() {
     _dochanged: function() {
       this.onchanged.call(this.input);
     },
+    _createButton: function(parent, text, title, className) {
+      var a = document.createElement('a');
+      a.innerHTML = text;
+      a.title = title;
+      if (className) {
+        parent.className = className;
+      }
+      parent.appendChild(a);
+    },
     _draw: function() {
       var dropdown = this.panel.getDropdown(),
         self = this,
-        panel = document.createElement('div');
+        panel = document.createElement('table');
       dropdown.innerHTML = '';
       panel.className = 'ginput';
       dropdown.appendChild(panel);
+      var tr = document.createElement('tr'),
+        td = document.createElement('td');
+      td.className = 'buttons';
+      td.rowSpan = 2;
+      tr.appendChild(td);
       forEach(this.keyboard, function() {
-        var a = document.createElement('a');
-        a.innerHTML = this;
-        if (this == '&crarr;') {
-          a.className = 'enter';
-        } else if (this == '&lArr;') {
-          a.className = 'backspace';
-        }
-        panel.appendChild(a);
-        $G(a).addEvent('click', function(e) {
+        self._createButton(td, this, this);
+      });
+      td = document.createElement('td');
+      tr.appendChild(td);
+      panel.appendChild(tr);
+      self._createButton(td, 'x', 'Backspace', 'backspace');
+      tr = document.createElement('tr');
+      td = document.createElement('td');
+      tr.appendChild(td);
+      panel.appendChild(tr);
+      self._createButton(td, '&crarr;', 'Enter', 'enter');
+      forEach(panel.getElementsByTagName('a'), function() {
+        $G(this).addEvent('click', function(e) {
           var elem = GEvent.element(e);
-          if (elem.className == 'backspace') {
+          if (elem.parentNode.className == 'backspace') {
             if (document.selection) {
               self.input.focus();
               document.selection.empty();
@@ -3013,7 +2816,7 @@ window.$K = (function() {
               self.input.focus();
             }
             GEvent.stop(e);
-          } else if (elem.className != 'enter') {
+          } else if (elem.parentNode.className != 'enter') {
             var text = this.innerHTML;
             self.input.focus();
             if (document.selection) {
@@ -3058,6 +2861,7 @@ window.$K = (function() {
       this.src = src;
       this.options = {
         autoHeight: false,
+        float: true,
         id: 'gdropdown',
         className: 'gdropdown'
       };
@@ -3085,36 +2889,44 @@ window.$K = (function() {
       return position == 'fixed' ? 'fixed' : 'absolute';
     },
     show: function() {
-      this.dropdown.style.position = this.getPosition();
-      this.dropdown.style.zIndex = 1001;
       if (this.options.className) {
         this.dropdown.classList.add(this.options.className);
       }
-      var vpo = this.src.viewportOffset(),
-        input_height = this.src.getHeight(),
-        dm = this.dropdown.getDimensions(),
-        scrolltop = document.viewport.getscrollTop(),
-        doc_height = document.viewport.getHeight(),
-        top_space = vpo.top - scrolltop,
-        bottom_space = doc_height - top_space - input_height;
-      if (this.options.autoHeight) {
-        var space = Math.max(top_space, bottom_space);
-        if (dm.height > space) {
-          this.dropdown.style.height = (space - 10) + 'px';
-          dm = this.dropdown.getDimensions();
+      this.dropdown.style.zIndex = 1001;
+      if (this.options.float === true || (this.options.float === 'auto' && !$K.isMobile())) {
+        this.dropdown.style.position = this.getPosition();
+        var vpo = this.src.viewportOffset(),
+          input_height = this.src.getHeight(),
+          dm = this.dropdown.getDimensions(),
+          scrolltop = document.viewport.getscrollTop(),
+          doc_height = document.viewport.getHeight(),
+          top_space = vpo.top - scrolltop,
+          bottom_space = doc_height - top_space - input_height;
+        if (this.options.autoHeight) {
+          var space = Math.max(top_space, bottom_space);
+          if (dm.height > space) {
+            this.dropdown.style.height = (space - 10) + 'px';
+            dm = this.dropdown.getDimensions();
+          }
         }
-      }
-      if (top_space >= bottom_space) {
-        this.dropdown.style.top = Math.max(vpo.top - dm.height - 5, 0) + 'px';
+        if (top_space >= bottom_space) {
+          this.dropdown.style.top = Math.max(vpo.top - dm.height - 5, 0) + 'px';
+        } else {
+          this.dropdown.style.top = (vpo.top + input_height + 5) + 'px';
+        }
+        var l = Math.max(
+          vpo.left + dm.width > document.viewport.getWidth() ?
+          vpo.left + this.src.getWidth() - dm.width :
+          vpo.left, document.viewport.getscrollLeft() + 5
+        );
+        this.dropdown.style.left = l + 'px';
       } else {
-        this.dropdown.style.top = (vpo.top + input_height + 5) + 'px';
+        this.dropdown.style.left = 0;
+        this.dropdown.style.right = 0;
+        this.dropdown.style.bottom = 0;
+        this.dropdown.style.position = 'fixed';
+        this.dropdown.classList.add('mobile_fixed');
       }
-      var l = Math.max(
-        vpo.left + dm.width > document.viewport.getWidth() ?
-        vpo.left + this.src.getWidth() - dm.width :
-        vpo.left, document.viewport.getscrollLeft() + 5
-      );
-      this.dropdown.style.left = l + 'px';
       this.dropdown.style.display = 'block';
     },
     hide: function() {
@@ -3155,13 +2967,21 @@ window.$K = (function() {
       this.placeholder.className = 'placeholder';
       this.placeholder.style.position = 'absolute';
       this.input.appendChild(this.placeholder);
-      this.calendar = new GDropdown(this.input);
+      this.calendar = new GDropdown(this.input, { float: 'auto' });
       this.mdate = null;
       this.xdate = null;
       this.mode = 0;
-      this.displayFormat = 'd M Y';
-      this.format = 'y-m-d';
+      this.datetime = elem.type.toLowerCase() != 'date';
+      if (this.datetime) {
+        this.displayFormat = 'd M Y H:I';
+        this.format = 'y-m-d H:I';
+      } else {
+        this.displayFormat = 'd M Y';
+        this.format = 'y-m-d';
+      }
       this.date = null;
+      this.hour = 0;
+      this.minute = 0;
       this.cdate = new Date();
       var self = this;
       $G(this.input).addEvent('click', function(e) {
@@ -3326,6 +3146,8 @@ window.$K = (function() {
         } else {
           this.cdate.setTime(new Date());
         }
+        this.hour = this.cdate.getHours();
+        this.minute = this.cdate.getMinutes();
         this._draw();
       }
       GEvent.stop(e);
@@ -3349,16 +3171,7 @@ window.$K = (function() {
           GEvent.stop(e);
           return false;
         });
-        if (this.mode < 2) {
-          a = document.createElement('a');
-          a.innerHTML = this.cdate.format(this.mode == 1 ? 'Y' : 'M Y');
-          $G(a).addEvent('click', function(e) {
-            self.mode++;
-            self._draw();
-            GEvent.stop(e);
-            return false;
-          });
-        } else {
+        if (this.mode == 2) {
           var start_year = this.cdate.getFullYear() - 6;
           a = document.createElement('span');
           a.appendChild(
@@ -3369,9 +3182,74 @@ window.$K = (function() {
               (start_year + 11 + Date.yearOffset)
             )
           );
+          p.appendChild(a);
+          a.style.cursor = 'pointer';
+        } else {
+          a = document.createElement('a');
+          a.innerHTML = this.cdate.format('M');
+          a.style.cursor = 'pointer';
+          $G(a).addEvent('click', function(e) {
+            self.mode++;
+            self._draw();
+            GEvent.stop(e);
+            return false;
+          });
+          p.appendChild(a);
+          a = document.createElement('a');
+          a.innerHTML = this.cdate.format('Y');
+          a.style.cursor = 'pointer';
+          $G(a).addEvent('click', function(e) {
+            self.mode = 2;
+            self._draw();
+            GEvent.stop(e);
+            return false;
+          });
+          p.appendChild(a);
+          if (this.datetime && this.mode == 0) {
+            var i, x, option, span,
+              hour = document.createElement('select'),
+              minute = document.createElement('select');
+            for (i = 0; i < 24; i++) {
+              x = i.toString().leftPad(2, '0');
+              option = document.createElement('option');
+              if (x == self.hour) {
+                option.selected = true;
+              }
+              option.innerHTML = x;
+              option.value = x;
+              hour.appendChild(option);
+            }
+            p.appendChild(hour);
+            span = document.createElement('span');
+            span.innerText = ':';
+            p.appendChild(span);
+            for (i = 0; i < 60; i++) {
+              x = i.toString().leftPad(2, '0');
+              option = document.createElement('option');
+              if (x == self.minute) {
+                option.selected = true;
+              }
+              option.innerHTML = x;
+              option.value = x;
+              minute.appendChild(option);
+            }
+            p.appendChild(minute);
+            var timeClicked = function(e) {
+              GEvent.stop(e);
+              return false;
+            };
+            $G(hour).addEvent('click', timeClicked);
+            $G(minute).addEvent('click', timeClicked);
+            var timeChange = function() {
+              self.hour = parseInt(hour.value);
+              self.minute = parseInt(minute.value);
+              self.date.setHours(self.hour, self.minute, 0);
+              self._dochanged();
+            };
+            $G(hour).addEvent('change', timeChange);
+            $G(minute).addEvent('change', timeChange);
+          }
         }
-        p.appendChild(a);
-        a.style.cursor = 'pointer';
         a = document.createElement('a');
         p.appendChild(a);
         a.innerHTML = '&rarr;';
@@ -3381,25 +3259,25 @@ window.$K = (function() {
           GEvent.stop(e);
           return false;
         });
-        var table = document.createElement('table');
-        div.appendChild(table);
-        var thead = document.createElement('thead');
+        var table = document.createElement('table'),
+          thead = document.createElement('thead'),
+          tbody = document.createElement('tbody'),
+          intmonth = this.cdate.getMonth() + 1,
+          intyear = this.cdate.getFullYear(),
+          cls = '',
+          today = new Date(),
+          today_month = today.getMonth() + 1,
+          today_year = today.getFullYear(),
+          today_date = today.getDate(),
+          sel_month = this.date ? this.date.getMonth() + 1 : today_month,
+          sel_year = this.date ? this.date.getFullYear() : today_year,
+          sel_date = this.date ? this.date.getDate() : today_date,
+          r = 0,
+          c = 0,
+          bg, row, cell;
         table.appendChild(thead);
-        var tbody = document.createElement('tbody');
         table.appendChild(tbody);
-        var intmonth = this.cdate.getMonth() + 1;
-        var intyear = this.cdate.getFullYear();
-        var cls = '';
-        var today = new Date();
-        var today_month = today.getMonth() + 1;
-        var today_year = today.getFullYear();
-        var today_date = today.getDate();
-        var sel_month = this.date ? this.date.getMonth() + 1 : today_month;
-        var sel_year = this.date ? this.date.getFullYear() : today_year;
-        var sel_date = this.date ? this.date.getDate() : today_date;
-        var r = 0;
-        var c = 0;
-        var bg, row, cell;
+        div.appendChild(table);
         if (this.mode == 2) {
           for (var i = start_year; i < start_year + 12; i++) {
             c = (i - start_year) % 4;
@@ -3534,6 +3412,7 @@ window.$K = (function() {
                   self.date = new Date();
                 }
                 self.date.setTime(this.oDate.valueOf());
+                self.date.setHours(self.hour, self.minute, 0);
               } else if (c == 'ex') {
                 self.date = null;
               }
@@ -3599,10 +3478,14 @@ window.$K = (function() {
       return this;
     },
     setDate: function(date) {
-      if (date === null || !/[0-9]{2,4}\-[0-9]{1,2}\-[0-9]{1,2}(\s[0-9:]+)?/.test(date)) {
+      if (date === null || date === '' || !/[0-9]{2,4}\-[0-9]{1,2}\-[0-9]{1,2}(\s[0-9:]+)?/.test(date)) {
         this.date = null;
+        this.hour = 0;
+        this.minute = 0;
       } else {
         this.date = this._toDate(date);
+        this.hour = this.date.getHours();
+        this.minute = this.date.getMinutes();
       }
       this._dochanged();
       return this;
@@ -3873,7 +3756,7 @@ window.$K = (function() {
       this.onchanged = onchanged || $K.emptyFunction;
       this.color = '';
       this.color_format = /^((transparent)|(\#[0-9a-fA-F]{6,6}))$/i;
-      this.ddcolor = new GDropdown(this.input);
+      this.ddcolor = new GDropdown(this.input, { float: 'auto' });
       var self = this;
       this.input.addEvent('click', function(e) {
         self.createColors();
@@ -3956,25 +3839,20 @@ window.$K = (function() {
           x = floatval(hs[4]);
         if (key > 36 && key < 41) {
           if (key == 37) {
-            x = x - 1;
+            x--;
           } else if (key == 38) {
-            if (z == self.cols + 1) {
-              x = x < 5 ? 0 : 1;
-            }
-            z = z - 1;
+            z--;
           } else if (key == 39) {
-            x = x + 1;
+            x++;
           } else if (key == 40) {
-            if (z == self.cols - 1) {
-              x = x < 5 ? 0 : 1;
-            }
-            z = z + 1;
+            z++;
           }
           var el = $E(hs[2] + z + '_' + x);
           if (el) {
             el.focus();
             self.showDemo(el.title);
           }
+          GEvent.stop(e);
         } else if (key == 13) {
           self.doClick(this.title);
           GEvent.stop(e);
@@ -3992,12 +3870,11 @@ window.$K = (function() {
       };
       var c = 0,
         a,
-        p,
+        p = document.createElement('p'),
         z;
+      ddcolor.appendChild(p);
       forEach(this.Colors, function(color, n) {
         if (n % self.cols == 0) {
-          p = document.createElement('p');
-          ddcolor.appendChild(p);
           c++;
         }
         a = $G(document.createElement('a'));
@@ -4127,6 +4004,7 @@ window.$K = (function() {
       this.onshow = null;
       this.onhide = null;
       this.onclose = null;
+      this.ondownload = null;
       for (var property in options) {
         this[property] = options[property];
       }
@@ -4198,6 +4076,15 @@ window.$K = (function() {
         callClick(this.next, function() {
           self.showNext();
         });
+        this.download = doc.createElement('a');
+        div.appendChild(this.download);
+        this.download.title = trans('Download');
+        if (Object.isFunction(this.ondownload)) {
+          callClick(this.download, function() {
+            self.ondownload(this.href);
+            return false;
+          });
+        }
       }
       this.zoom = $E('GLightbox_zoom');
       this.div = $G(container_div);
@@ -4218,7 +4105,6 @@ window.$K = (function() {
       this.imgs.push(img);
       var self = this;
       callClick(img, function() {
-        console.log(this.drag);
         if (this.drag !== true) {
           self.currentId = floatval(this['data-id']);
           self.show(this, false);
@@ -4279,6 +4165,14 @@ window.$K = (function() {
         this.next.addClass('hide');
       } else if (this.next.className != 'btnnav next') {
         this.next.className = 'btnnav next hide';
+      }
+      var ds = /.*\/([^\/]+\.[a-zA-Z]{3,4})$/.exec(img);
+      if (ds) {
+        this.download.className = 'btnnav download';
+        this.download.href = img;
+        this.download.download = ds[1];
+      } else {
+        this.download.className = 'hidden';
       }
       window.setTimeout(function() {
         if (self.currentId == 0) {

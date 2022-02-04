@@ -141,12 +141,36 @@ class Model extends \Kotchasan\Model
                             foreach (Language::get('INVENTORY_CATEGORIES', array()) as $key => $label) {
                                 $save[$key] = $category->save($key, $request->post($key.'_text')->topic());
                             }
+<<<<<<< HEAD
+                        }
+                        // Database
+                        $db = $this->db();
+                        // ตาราง
+                        $table_inventory = $this->getTableName('inventory');
+                        $inventory_items = $this->getTableName('inventory_items');
+                        $table_meta = $this->getTableName('inventory_meta');
+                        if ($index->id == 0) {
+                            $items = array(
+                                'product_no' => $request->post('product_no')->topic(),
+                                'stock' => $request->post('stock')->toDouble(),
+                                'unit' => $request->post('unit')->topic(),
+                            );
+                            if ($items['product_no'] == '') {
+                                // ไม่ได้กรอก product_no
+                                $ret['ret_product_no'] = 'Please fill in';
+                            } else {
+                                // ค้นหา product_no ซ้ำ
+                                $search = $db->first($inventory_items, array('product_no', $items['product_no']));
+                                if ($search && ($index->id == 0 || $index->id != $search->inventory_id)) {
+                                    $ret['ret_product_no'] = Language::replace('This :name already exist', array(':name' => Language::get('Registration No.')));
+=======
                             $meta = array();
                             foreach (Language::get('INVENTORY_METAS', array()) as $key => $label) {
                                 if ($key == 'detail') {
                                     $meta[$key] = $request->post($key)->textarea();
                                 } else {
                                     $meta[$key] = $request->post($key)->topic();
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
                                 }
                             }
                             // Database

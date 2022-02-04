@@ -49,7 +49,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
         $sql = static::createQuery()
-            ->select('R.*', 'U.name', 'U.phone', 'V.topic', 'S.create_date as date_approve', 'S.status', 'S.comment', 'S.operator_id', 'S.id status_id',array( $q0_name,'send_approve2'),array( $q0_group,'s_group'),SQL::SUM('S.cost','COST'))
+            ->select('R.*', 'U.name', 'U.phone', 'V.topic', 'S.create_date as date_approve', 'S.status', 'S.comment', 'S.operator_id', 'S.id status_id',array( $q0_name,'send_approve2'),array( $q0_group,'s_group'),SQL::SUM('S.cost','cost'),'S.car_mileage_start','S.car_mileage_end','I.inventory_id')
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
             ->join('repair_status S', 'LEFT', array('S.id', 'T.max_id'))
@@ -77,7 +77,7 @@ class Model extends \Kotchasan\Model
     public static function getAllStatus($id)
     {
         return static::createQuery()
-            ->select('S.id', 'U.name', 'S.status', 'S.create_date', 'S.comment','S.attachment') //
+            ->select('S.id', 'U.name', 'S.status', 'S.create_date', 'S.comment') //,'S.attachment'
             ->from('repair_status S')
             ->join('user U', 'LEFT', array('U.id', 'S.operator_id'))
             ->where(array('S.repair_id', $id))
@@ -113,7 +113,7 @@ class Model extends \Kotchasan\Model
                         $ret['remove'] = 'item_' . $match[1];
                     }
                 } elseif (preg_match_all('/,?([0-9]+),?/', $id, $match)) {
-                    if ($action === 'delete' && Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+                    if ($action === 'delete' && Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
                         // ลบรายละเอียดซ่อม
                         $this->db()->delete($this->getTableName('repair_status'), array('id', (int) $match[1][0]));
                         // reload

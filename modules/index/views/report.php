@@ -2,10 +2,6 @@
 /**
  * @filesource modules/index/views/report.php
  *
- * @copyright 2016 Goragod.com
- * @license http://www.kotchasan.com/license/
- *
- * @see http://www.kotchasan.com/
  */
 
 namespace Index\Report;
@@ -20,9 +16,6 @@ use function PHPSTORM_META\type;
 /**
  * module=report
  *
- * @author Goragod Wiriya <admin@goragod.com>
- *
- * @since 1.0
  */
 class View extends \Gcms\View
 {
@@ -45,13 +38,12 @@ class View extends \Gcms\View
      */
     public function render(Request $request, $login)
     {
-        
 		/*// สำหรับปุ่ม export
         $export = array();*/
         $params = array(
             'status' => $request->request('status', -1)->toInt(),
         );
-        $isAdmin = Login::checkPermission($login, 'report');
+        $isAdmin = Login::checkPermission($login, 'report_car_booking');
         // สถานะการซ่อม
         $this->statuses     = \Repair\Status\Model::create();
         $this->operators    = \Repair\Operator\Model::create();
@@ -75,7 +67,7 @@ class View extends \Gcms\View
                   $product_no[$k] = $v;
               }
           }
-
+         
          // ดึงข้อมูล หมวดหมู่ มาแสดงให้เลือก
          $catagory_id = array();
          $model_id = array();
@@ -116,7 +108,7 @@ class View extends \Gcms\View
                 $topic_id[$k] = $v;
             }
         }
-
+      
         //ดึงข้อมูล User มาแสดงให้เลือก
         $userrepair = array();
         if ($isAdmin) {
@@ -153,36 +145,44 @@ class View extends \Gcms\View
                 $operators[$k] = $v;
             }
         }
+<<<<<<< HEAD
+        $params['begindate'] = $request->request('begindate', date('Y-m-d', strtotime('-7 days')))->date();
+        $params['enddate'] =  $request->request('enddate', date('Y-m-d'))->date();
+     
+=======
        /* $params['begindate'] = $request->request('begindate')->topic();
         $params['enddate'] = $request->request('enddate')->topic();*/
         $params['begindate'] = $request->request('begindate', date('Y-m-d', strtotime('-7 days')))->date();
         $params['enddate'] =  $request->request('enddate', date('Y-m-d'))->date();
        
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         // URL สำหรับส่งให้ตาราง
         $uri = self::$request->createUriWithGlobals(WEB_URL.'index.php');
         
-            /*   1 วัน=24 ชั่วโมง / 24 ชั่วโมง=3,600 นาที / 3,600 นาที=86,400 วินาที */$i=0;
+            /*   1 วัน=24 ชั่วโมง / 24 ชั่วโมง=3,600 นาที / 3,600 นาที=86,400 วินาที */
+            $i=0;
             foreach(\index\Report\Model::toDataTable2($params) as $value){
-                
                 $time = DATE::DATEDiff($value->create_date,$value->end_date);
                 $Alltime = $time['d'].':'.$time['h'].':'.$time['i'];//.':'.$time['s']; $time['m'].':'.
-                
-                if( $Alltime <> ''){
-                        $in[$i]["id"]       = $value->id;
-                        $in[$i]["job_id"]   = $value->job_id;
-                        $in[$i]["status"]   = $value->status;
-                        $in[$i]["create_date"]  = $value->create_date;
-                      //  $in[$i]["end_date"]     = $value->end_date;
-                        $in[$i]["product_no"]   = $value->product_no;
-                        $in[$i]["topic"]        = $value->topic;
-                        $in[$i]["cost"]         = $value->cost ;
-                        //$in[$i]["Alltime2"]      = $value->Alltime2;
-                        $in[$i]["Alltime"]      = $Alltime;
+                   if( $Alltime <> ''){
+                            $in[$i]["id"]       = $value->id;
+                            $in[$i]["job_id"]   = $value->job_id;
+                            $in[$i]["create_date"]  = $value->create_date;
+                            $in[$i]["status"]   = $value->status;
+                           
+                            $in[$i]["begin_date"]     = $value->begin_date;
+                            $in[$i]["end_date"]     = $value->end_date;
+                            $in[$i]["product_no"]   = $value->product_no;
+                            $in[$i]["destination"]        = $value->destination;
+                            //$in[$i]["topic"]        = $value->topic;
+                            $in[$i]["cost"]         = $value->cost ;
+                            //$in[$i]["Alltime2"]      = $value->Alltime2;
+                          //  $in[$i]["Alltime"]         = $Alltime ;
+                        $i+=1;
+                    } 
+                }  
 
-                    $i+=1;
-                } 
-                } 
-
+           
         // ตาราง
         $table = new DataTable(array(
             /* Uri */
@@ -198,17 +198,16 @@ class View extends \Gcms\View
             /* คอลัมน์ที่ไม่ต้องแสดงผล */
             'hideColumns' => array('id', 'today', 'end', 'remain' , 'active'),
             /* คอลัมน์ที่สามารถค้นหาได้ */
-            'searchColumns' => array('job_id','topic','product_no','cost','Alltime'),
+            'searchColumns' => array('job_id','product_no','cost','destination','begin_date','end_date'), 
             /* ตั้งค่าการกระทำของของตัวเลือกต่างๆ ด้านล่างตาราง ซึ่งจะใช้ร่วมกับการขีดถูกเลือกแถว */
             'action' => 'index.php/index/model/report/action',
-            //'action' => 'index.php/repair/model/report/action',
             'actionCallback' => 'dataTableActionCallback',
             
             'actions' => array(
                   array(
                     'class' => 'button orange icon-excel',
                     'id' => 'export&'.http_build_query($params),
-                    'text' => '{LNG_Download} {LNG_List of }{LNG_Repair}',   
+                    'text' => '{LNG_Download} {LNG_List of} {LNG_Booking}',   
                 ),
             ),
             /* ตัวเลือกด้านบนของตาราง ใช้จำกัดผลลัพท์การ query */
@@ -224,11 +223,11 @@ class View extends \Gcms\View
                     'name' => 'enddate',
                     'type' => 'date',
                     'text' => '{LNG_to}',
-                    'value' => $params['enddate'],
+                    'value' =>  $params['enddate'],
                 ), 
                 array(
                     'name' => 'status',
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
                     'options' => array(-1 => '{LNG_all items}') + $this->statuses->toSelect(),
                     'value' => $params['status'],
                 ),
@@ -274,14 +273,14 @@ class View extends \Gcms\View
                 ),
                 array(
                     'name' => 'product_no',
-                    'text' => '{LNG_Serial/Registration No.}',
+                    'text' => '{LNG_Registration No.}',
                     'options' => $product_no,
                     'maxlength' => 20,
                     'value' => $params['product_no'],
                 ),
                 array(
                     'name' => 'topic_id',
-                    'text' => '{LNG_Equipment}',
+                    'text' => '{LNG_Car information}',
                     'options' => $topic_id,
                     'maxlength' => 50,
                     'value' => $params['topic_id'],
@@ -300,7 +299,17 @@ class View extends \Gcms\View
                     'text' => '{LNG_Job No.}',
                 ),
                 'status' => array(
-                    'text' => '{LNG_Repair status}',
+                    'text' => '{LNG_Task status}',
+                    'class' => 'center',
+                    'sort' => 'status',
+                ),
+                'begin_date' => array(
+                    'text' => '{LNG_Begin date} {LNG_Booking}',
+                    'class' => 'center',
+                    'sort' => 'status',
+                ),
+                'end_date' => array(
+                    'text' => '{LNG_End date} {LNG_Booking}',
                     'class' => 'center',
                     'sort' => 'status',
                 ),
@@ -310,29 +319,24 @@ class View extends \Gcms\View
                     'sort' => 'create_date',
                 ),
                 'product_no' => array(
-                    'text' => '{LNG_Serial/Registration No.}',
-                    'class' => 'left',
-                ),
-                'Alltime' => array(
-                    'text' => '{LNG_working_hours} (d:h:i)',
-                    'class' => 'right',
+                    'text' => '{LNG_Registration No.}',
+                    'class' => 'center',
                 ),
                 'name' => array(
                     'text' => '{LNG_Informer}',
                     'sort' => 'name',
                 ),
 
-                'topic' => array(
-                    'text' => '{LNG_Equipment}',
-                   
+                'destination' => array(
+                    'text' => '{LNG_destination}',
+                    'class' => 'center',
                 ),
                   
                 'cost' => array(
-                    'text' => '{LNG_Cost}',
+                    'text' => '{LNG_count_Easy_Pass}',
                     'class' => 'center',
                 ),
-                
-                
+
                 'operator_id' => array(
                     'text' => '{LNG_Operator}',
                     'class' => 'center',
@@ -353,22 +357,16 @@ class View extends \Gcms\View
                 'cost' => array(
                     'class' => 'right',
                 ),
-                'Alltime' => array(
-                    'class' => 'right',
-                   
-                ),
+                'product_no' => array(
+                    'class' => 'center',
+                ), 
             ),
             /* ปุ่มแสดงในแต่ละแถว */
             'buttons' => array(
-                /*'status' => array(
-                    'class' => 'icon-list button orange',
-                    'id' => ':id',
-                    'title' => '{LNG_Repair status}',
-                ),*/
                 'description' => array(
                     'class' => 'icon-report button purple',
                     'href' => $uri->createBackUri(array('module' => 'repair-detail', 'id' => ':id')),
-                    'title' => '{LNG_Repair job description}',
+                    'title' => '{LNG_job description}',
                 ),
                /*'printrepair' => array(
                     'class' => 'icon-print button brown notext',
@@ -379,30 +377,13 @@ class View extends \Gcms\View
             ),
         ));
 
-        
-        // สามารถแก้ไขใบรับซ่อมได้
-       /* if ($isAdmin) {
-            $table->actions[] = array(
-                'id' => 'action',
-                'class' => 'ok',
-                'text' => '{LNG_With selected}',
-                'options' => array(
-                    'delete' => '{LNG_Delete}',
-                ),
-            );
-            $table->buttons['edit'] = array(
-                'class' => 'icon-edit button green',
-                'href' => $uri->createBackUri(array('module' => 'repair-receive', 'id' => ':id')),
-                'title' => '{LNG_Edit} {LNG_Repair details}',
-            );
-        }*/
     
         // save cookie
         setcookie('report_perPage', $table->perPage, time() + 2592000, '/', HOST, HTTPS, true);
         setcookie('report_sort', $table->sort, time() + 2592000, '/', HOST, HTTPS, true);
         // คืนค่า HTML
         
-        return $table->render2();
+        return $table->render2(); 
         
     }
 
@@ -418,12 +399,14 @@ class View extends \Gcms\View
     public function onRow($item, $o, $prop)
     {
         $item['create_date']    = Date::format($item['create_date'], 'd M Y H:i');
+        $item['begin_date']    = Date::format($item['begin_date'], 'd M Y H:i');
+        $item['end_date']    = Date::format($item['end_date'], 'd M Y H:i');
         $item['status']         = '<mark class=term style="background-color:'.$this->statuses->getColor($item['status']).'">'.$this->statuses->get($item['status']).'</mark>';
       /*  $item['operator_id']    = $this->operators->get($item['operator_id']);
         $item['user_id']        = $this->userrepair->getuser($item['user_id']);
         $item['memberstatus']   = isset(self::$cfg->member_status[$item['status']]) ? '<span class=status'.$item['status'].'>{LNG_'.self::$cfg->member_status[$item['status']].'}</span>' : '';
-        $item['begindate']      = Date::format($item['begindate'], 'd M Y H:i');
-        $item['enddate']        = Date::format($item['enddate'], 'd M Y H:i'); 
+        //$item['begindate']      = Date::format($item['begindate'], 'd M Y H:i');
+        //$item['enddate']        = Date::format($item['enddate'], 'd M Y H:i'); 
         $item['category_id']    = $this->catagory_id->getCategory($item['category_id'],'category_id'); 
         $item['model_id']       = $this->model_id->getCategory($item['model_id'],'model_id'); 
         $item['type_id']        = $this->type_id->getCategory($item['type_id'],'type_id'); 

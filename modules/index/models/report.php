@@ -241,7 +241,7 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
-            return  static::createQuery() //return  $a =
+            return  static::createQuery() 
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as enddate'
             , 'R.product_no'
             , 'V.topic'
@@ -288,8 +288,15 @@ class Model extends \Kotchasan\Model
     public static function toDataTable2($params)
     {
 
+<<<<<<< HEAD
+        $login = Login::isMember();
+        if($login["status"] != 1 && $login["status"] != 2){
+            $where2[] = (array('U.status',$login["status"]));
+        }
+=======
         // สามารถดูรายงาน
         $login =  Login::checkPermission( Login::isMember(), array('report'));
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
         $where = array();
 
       /*  if($login["status"] != 1){
@@ -304,13 +311,13 @@ class Model extends \Kotchasan\Model
         if (!empty($params['operator_id'])) {
             $where[] = array('S.operator_id', $params['operator_id']);
         }
-        if ($params['status'] > -1) {
+        if ($params['status'] > -1 ) {
             $where[] = array('S.status', $params['status']);
         }
         if (!empty($params['user_id'])) {
             $where[] = array('R.customer_id', $params['user_id']);
         }
-        if ($params['memberstatus'] > -1) {
+        if ($params['memberstatus'] > -1 ) {
             $where[] = array('U.status', $params['memberstatus']); 
         }
        if (!empty($params['category_id'])) {
@@ -326,7 +333,6 @@ class Model extends \Kotchasan\Model
             $where[] = Sql::BETWEEN('R.create_date', $params['begindate']." 00:00:00", $params['enddate']." 23:59:59");
          }
         
-
         $endtime = static::createQuery()
             ->select('create_date')
             ->from('repair_status')
@@ -336,37 +342,44 @@ class Model extends \Kotchasan\Model
             ->from('repair_status')
             ->groupBy('repair_id');
 
+<<<<<<< HEAD
+            return static::createQuery()
+=======
             return static::createQuery() //return
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
             ->select('R.id', 'R.job_id','S.status', 'R.create_date'  ,'S.create_date as end_date'
             , 'R.product_no'
             , 'V.topic'
-   
-           ,'S.cost' //'S.operator_id',
+           ,'S.cost' 
+           ,'R.job_description'
+           ,'R.destination'
+           ,'R.types_objective'
+           ,'R.begin_date'
+           ,'R.end_date'
            ,SQL::CONCAT(
-            array(
-                SQL::IFOVER(
-                    SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,
-                    SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
+                array(
+                            SQL::IFOVER(
+                                SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0,
+                                SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
 
-                    SQL::IFHOUR(
-                        SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
-                        SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
-                        SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
-                        
-                        (SQL::IFMINUTES(
-                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
-                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
-                            SQL::TIMESTAMPDIFF('HOUR','R.create_date',$endtime),0)
-                        ),
-                        
-                        (SQL::IFSECOND(
-                            SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
-                            SQL::TIMESTAMPDIFF('MINUTE','R.create_date',$endtime)
+                            SQL::IFHOUR(
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('DAY','R.create_date',$endtime),0),
+                                
+                            (SQL::IFMINUTES(
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('HOUR','R.create_date',$endtime),0)
+                            ),
+                            
+                            (SQL::IFSECOND(
+                                SQL::TIMESTAMPDIFF('SECOND','R.create_date',$endtime),
+                                SQL::TIMESTAMPDIFF('MINUTE','R.create_date',$endtime)
+                            )
                         )
-                    )
-                ),'Alltime2', ':'
+                    ),'Alltime2', ':'
                 )
-            
             )
             ->from('repair R')
             ->join(array($q1, 'T'), 'LEFT', array('T.repair_id', 'R.id'))
@@ -375,11 +388,16 @@ class Model extends \Kotchasan\Model
             ->join('inventory V', 'LEFT', array('V.id', 'I.inventory_id'))
             ->join('user U', 'LEFT', array('U.id', 'R.customer_id'))
             ->where($where)
+<<<<<<< HEAD
+            ->andWhere($where2)
+            ->execute();
+=======
             //->andWhere($where2)
            ->execute()  
             ;  
 
 
+>>>>>>> 8eab65cd19e996f68c2857d36f83c28403366036
     }
    
     /**
@@ -398,13 +416,13 @@ class Model extends \Kotchasan\Model
 
                 // id ที่ส่งมา
                 if (preg_match_all('/,?([0-9]+),?/', $request->post('id')->toString(), $match)) {
-                    if ($action === 'delete' && Login::checkPermission($login, 'can_manage_repair')) {
+                    if ($action === 'delete' && Login::checkPermission($login, 'can_manage_car_booking')) {
                         // ลบรายการสั่งซ่อม
                         $this->db()->delete($this->getTableName('repair'), array('id', $match[1]), 0);
                         $this->db()->delete($this->getTableName('repair_status'), array('repair_id', $match[1]), 0);
                         // reload
                         $ret['location'] = 'reload';
-                    } elseif ($action === 'status' && Login::checkPermission($login, array('can_manage_repair', 'can_repair'))) {
+                    } elseif ($action === 'status' && Login::checkPermission($login, array('can_manage_car_booking', 'can_repair'))) {
                         // อ่านข้อมูลรายการที่ต้องการ
                         $index = \Repair\Detail\Model::get($request->post('id')->toInt());
                         if ($index) {

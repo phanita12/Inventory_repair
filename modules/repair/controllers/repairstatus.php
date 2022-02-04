@@ -34,7 +34,7 @@ class Controller extends \Gcms\Controller
     public function render(Request $request)
     {
         // ข้อความ title bar
-        $this->title = Language::get('Repair status');
+        $this->title = Language::get('Booking status');
         // เลือกเมนู
         $this->menu = 'settings';
         // สามารถตั้งค่าระบบได้
@@ -49,13 +49,13 @@ class Controller extends \Gcms\Controller
             ));
             $ul = $breadcrumbs->add('ul');
             $ul->appendChild('<li><span class="icon-tools">{LNG_Settings}</span></li>');
-            $ul->appendChild('<li><span>{LNG_Repair}</span></li>');
-            $ul->appendChild('<li><span>{LNG_Repair status}</span></li>');
+            $ul->appendChild('<li><span>{LNG_Booking}</span></li>');
+            $ul->appendChild('<li><span>{LNG_Task status}</span></li>');
             $section->add('header', array(
                 'innerHTML' => '<h2 class="icon-valid">'.$this->title.'</h2>',
             ));
             // menu
-            $section->appendChild(\Index\Tabmenus\View::render($request, 'settings', 'repair'));
+            $section->appendChild(\Index\Tabmenus\View::render($request, 'settings', 'Booking'));
             // แสดงฟอร์ม
             $section->appendChild(\Repair\Repairstatus\View::create()->render($request));
             // คืนค่า HTML

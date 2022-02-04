@@ -93,7 +93,7 @@ table.collapse td {
 }
 
 td.stamp {
-    border-style: solid solid dotted none;
+    border-style: groove groove dotted none;
     height: 100px;
     position: relative;
     text-align: center;
@@ -101,11 +101,11 @@ td.stamp {
 
 img.logo {
     width: auto;
-    max-height: 4.8em;
+    max-height: 5.3em;
 }
 img.logo2 {
     width: auto;
-    max-height: 4.8em;
+    max-height: 5.3em;
     margin-left: 50%;
 }
 img.logo3 {
@@ -125,7 +125,7 @@ img.stamp {
 
 img.signature {
     position: relative;
-    width: 100px;
+    width: 90px;
     height: 45px;
 }
 
@@ -137,7 +137,7 @@ img.signature {
 .border-all,
 /* th,*/
 .detail td {
-    border-right-style: solid;
+    border-right-style: groove;
     border-bottom-style: groove;
 }
 
@@ -145,7 +145,7 @@ th:nth-child(1),
 .detail td:nth-child(1),
 .border-all,
 .border-left {
-    border-left-style: solid;
+    border-left-style: groove;
     
 }
 

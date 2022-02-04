@@ -111,10 +111,12 @@ class Tab
                 $prop[] = 'target="'.$item['target'].'"';
             }
             if ($select == $item['id'] || ($i == 0 && $select == '')) {
-                $prop[] = 'class="select"';
+                $sel = ' class=select';
                 $this->select = $item['id'];
+            } else {
+                $sel = '';
             }
-            $html .= '<li><a '.implode(' ', $prop).'>'.$item['title'].'</a></li>';
+            $html .= '<li'.$sel.'><a '.implode(' ', $prop).'>'.$item['title'].'</a></li>';
         }
         return $html.'</ul></div></div>';
     }
